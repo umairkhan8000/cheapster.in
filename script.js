@@ -521,31 +521,30 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// 2. Custom App Install Button Logic
 let deferredPrompt;
 const installBtn = document.getElementById('installAppBtn');
 
+// Sirf Android OS detect karne ka logic
+const isAndroid = /android/i.test(navigator.userAgent || navigator.vendor || window.opera);
+
 if (installBtn) {
   window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent Chrome's default bottom mini-infobar from appearing
     e.preventDefault();
-    // Stash the event to trigger it on button click
     deferredPrompt = e;
-    // Un-hide our custom button in the footer
-    installBtn.style.display = 'inline-flex';
+    
+    // Agar phone Android hai, tabhi footer wala button show karo
+    if (isAndroid) {
+      installBtn.style.display = 'inline-flex';
+    }
   });
 
   installBtn.addEventListener('click', async () => {
     haptic();
     if (deferredPrompt) {
-      // Show the native Android install prompt
       deferredPrompt.prompt();
-      // Wait for the user to respond
       const { outcome } = await deferredPrompt.userChoice;
       console.log(`User response to install: ${outcome}`);
-      // Once used, the prompt can't be used again
       deferredPrompt = null;
-      // Hide the button after interaction
       installBtn.style.display = 'none';
     }
   });
