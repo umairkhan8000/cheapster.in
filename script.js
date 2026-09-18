@@ -248,9 +248,6 @@ function buildCard(store, index) {
   card.addEventListener("click", () => {
     haptic();
     openStoreLink(store);
-    const matchingOption = [...brandSelect.options].find(opt => opt.value === store.name);
-    if (matchingOption) brandSelect.value = matchingOption.value;
-    openModal("formModal");
   });
 
   return card;
