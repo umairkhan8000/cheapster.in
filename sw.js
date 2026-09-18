@@ -1,12 +1,12 @@
-const CACHE_NAME = 'cheapster-cache-v1';
+const CACHE_NAME = 'cheapster-cache-v2';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/style.css',
   '/script.js',
   '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png'
+  '/logo_192x192_2.png',
+  '/logo_512x512_2.png'
 ];
 
 self.addEventListener('install', (e) => {
