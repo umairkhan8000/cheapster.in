@@ -1,12 +1,12 @@
-const CACHE_NAME = 'cheapster-cache-v3';
+const CACHE_NAME = 'cheapster-cache-v4';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/style.css',
   '/script.js',
   '/manifest.json',
-  '/logo_192x192_2.png',
-  '/logo_512x512_2.png'
+  '/logo_192x192.png',
+  '/logo_512x512.png'
 ];
 
 self.addEventListener('install', (e) => {
@@ -15,7 +15,7 @@ self.addEventListener('install', (e) => {
       return cache.addAll(ASSETS_TO_CACHE);
     })
   );
-  self.skipWaiting(); // Turant naya SW activate karega
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', (e) => {
