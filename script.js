@@ -13,7 +13,6 @@ const stores = [
   { name: "Meesho", domain: "meesho.com", description: "Value shopping", link: "https://www.meesho.com" },
   { name: "Snitch", domain: "", description: "Men's fashion", link: "https://www.snitch.co.in" },
   { name: "Bonkers Corner", domain: "bonkerscorner.com", description: "Gen-Z streetwear", link: "https://www.bonkerscorner.com" },
-  { name: "Freakins", domain: "freakins.com", description: "Trendy denims & cargos", link: "https://www.freakins.com" },
   { name: "Powerlook", domain: "powerlook.in", description: "Men's fast-fashion", link: "https://powerlook.in" },
   { name: "The Souled Store", domain: "thesouledstore.com", description: "Pop culture merch", link: "https://www.thesouledstore.com" },
   { name: "Bewakoof", domain: "bewakoof.com", description: "Quirky fashion", link: "https://www.bewakoof.com" },
