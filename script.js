@@ -1,5 +1,5 @@
 // =========================================================
-// CHEAPSTER.IN — 60+ BRANDS DIRECTORY (Premium Edition)
+// CHEAPSTER.IN — TRENDING BRANDS DIRECTORY (Premium Edition)
 // Haptic Feedback, Spotlight Hover, Toast Notifications, & PWA
 // =========================================================
 
@@ -11,25 +11,36 @@ const stores = [
   { name: "AJIO", domain: "ajio.com", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/AJIO_Logo.svg/2560px-AJIO_Logo.svg.png", description: "Fashion destination", link: "https://www.ajio.com" },
   { name: "Tata CLiQ", domain: "tatacliq.com", logo: "https://upload.wikimedia.org/wikipedia/commons/e/e3/Tata_CLiQ_Logo.svg", description: "Multi-category retail", link: "https://www.tatacliq.com" },
   { name: "Meesho", domain: "meesho.com", description: "Value shopping", link: "https://www.meesho.com" },
-  { name: "Nike", domain: "nike.com", logo: "https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg", description: "Sports & streetwear", link: "https://www.nike.com/in" },
-  { name: "Puma", domain: "puma.com", logo: "https://upload.wikimedia.org/wikipedia/en/d/d7/Puma_Logo.svg", description: "Athletic wear", link: "https://in.puma.com" },
-  { name: "Adidas", domain: "adidas.co.in", logo: "https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg", description: "Sports & fashion", link: "https://www.adidas.co.in" },
   { name: "Snitch", domain: "", description: "Men's fashion", link: "https://www.snitch.co.in" },
+  { name: "Bonkers Corner", domain: "bonkerscorner.com", description: "Gen-Z streetwear", link: "https://www.bonkerscorner.com" },
+  { name: "Freakins", domain: "freakins.com", description: "Trendy denims & cargos", link: "https://www.freakins.com" },
+  { name: "Powerlook", domain: "powerlook.in", description: "Men's fast-fashion", link: "https://powerlook.in" },
   { name: "The Souled Store", domain: "thesouledstore.com", description: "Pop culture merch", link: "https://www.thesouledstore.com" },
   { name: "Bewakoof", domain: "bewakoof.com", description: "Quirky fashion", link: "https://www.bewakoof.com" },
   { name: "Urbanic", domain: "urbanic.com", description: "Gen-Z women's fashion", link: "https://www.urbanic.com" },
   { name: "Beyoung", domain: "beyoung.in", description: "Everyday fashion", link: "https://beyoung.in" },
   { name: "XYXX", domain: "xyxxcrew.com", description: "Men's innerwear", link: "https://xyxxcrew.com" },
 
-  // BEAUTY & GROOMING
+  // SNEAKERS & STREETWEAR CULTURE
+  { name: "Comet", domain: "wearcomet.com", description: "Bold Indian sneakers", link: "https://www.wearcomet.com" },
+  { name: "Campus Sutra", domain: "campussutra.com", description: "Casual streetwear", link: "https://www.campussutra.com" },
+  { name: "Veirdo", domain: "veirdo.in", description: "Oversized tees & wear", link: "https://www.veirdo.in" },
+  { name: "Nike", domain: "nike.com", logo: "https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg", description: "Sports & streetwear", link: "https://www.nike.com/in" },
+  { name: "Puma", domain: "puma.com", logo: "https://upload.wikimedia.org/wikipedia/en/d/d7/Puma_Logo.svg", description: "Athletic wear", link: "https://in.puma.com" },
+  { name: "Adidas", domain: "adidas.co.in", logo: "https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg", description: "Sports & fashion", link: "https://www.adidas.co.in" },
+
+  // BEAUTY, PERFUMES & GROOMING
   { name: "Nykaa", domain: "nykaa.com", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Nykaa_Logo.svg/2560px-Nykaa_Logo.svg.png", description: "Beauty & cosmetics", link: "https://www.nykaa.com" },
+  { name: "Bella Vita", domain: "bellavitaluxury.co.in", description: "Luxury perfumes", link: "https://www.bellavitaluxury.co.in" },
+  { name: "Bath & Body Works", domain: "bathandbodyworks.in", description: "Premium mists & care", link: "https://www.bathandbodyworks.in" },
+  { name: "Skinn by Titan", domain: "skinn.in", description: "Indian luxury fragrances", link: "https://www.skinn.in" },
   { name: "Purplle", domain: "purplle.com", description: "Beauty shopping", link: "https://www.purplle.com" },
   { name: "MyGlamm", domain: "myglamm.com", description: "Makeup & beauty", link: "https://www.myglamm.com" },
   { name: "Mamaearth", domain: "mamaearth.in", description: "Toxin-free care", link: "https://www.mamaearth.in" },
   { name: "Minimalist", domain: "beminimalist.co", description: "Science skincare", link: "https://www.beminimalist.co" },
   { name: "The Derma Co", domain: "thedermaco.com", description: "Dermatological care", link: "https://www.thedermaco.com" },
   { name: "Dot & Key", domain: "dotandkey.com", description: "Skincare", link: "https://www.dotandkey.com" },
-  { name: "Plum", domain: "plumgoodness.com", description: "Vegan beauty", link: "https://www.plumgoodness.com" },
+  { name: "Plum", domain: "plumgoodness.com", description: "Vegan beauty & mists", link: "https://www.plumgoodness.com" },
   { name: "Sugar Cosmetics", domain: "sugarcosmetics.com", description: "Makeup brand", link: "https://www.sugarcosmetics.com" },
   { name: "Pilgrim", domain: "discoverpilgrim.com", description: "Global beauty secrets", link: "https://www.discoverpilgrim.com" },
   { name: "Foxtale", domain: "foxtale.in", description: "Skincare essentials", link: "https://www.foxtale.in" },
