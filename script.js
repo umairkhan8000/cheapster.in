@@ -198,7 +198,6 @@ function buildCard(store, index) {
   img.alt = store.name;
   img.width = 100;
   img.height = 100;
-  img.decoding = "async";
   
   const isEager = index < 12;
   img.loading = isEager ? "eager" : "lazy";
@@ -211,6 +210,21 @@ function buildCard(store, index) {
   if (chain.length > 0) {
     let currentStep = 0;
     img.onerror = () => {
+      // MOBILE MINIMIZE FIX: Agar browser background mein hai ya net off hai, 
+      // toh error ko ignore karo aur app khulne par wapas same logo load karo.
+      if (document.hidden || !navigator.onLine) {
+        const retryLoad = () => {
+          if (!document.hidden && navigator.onLine) {
+            img.src = chain[currentStep]; 
+            document.removeEventListener("visibilitychange", retryLoad);
+            window.removeEventListener("online", retryLoad);
+          }
+        };
+        document.addEventListener("visibilitychange", retryLoad);
+        window.addEventListener("online", retryLoad);
+        return;
+      }
+
       currentStep++;
       if (currentStep < chain.length) {
         img.src = chain[currentStep];
