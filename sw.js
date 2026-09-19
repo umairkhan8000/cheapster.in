@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cheapster-cache-v5';
+const CACHE_NAME = 'cheapster-cache-v6';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -35,22 +35,14 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-  // NOTE: this used to check e.request.url.includes('firebase'), which
-  // also matched our OWN local firebase-config.js file (its URL contains
-  // that substring too) and silently excluded it from being cached —
-  // meaning Google Login would fail to load at all when offline. Scoped
-  // to the actual third-party hosts below so our own file gets cached
-  // normally while live Firebase/Cuelinks/Analytics API calls still pass
-  // straight through (we never want to cache those).
-  const url = e.request.url;
-  const isThirdPartyLiveService =
-    url.includes('gstatic.com/firebasejs') ||
-    url.includes('firebaseapp.com') ||
-    url.includes('googleapis.com') ||
-    url.includes('cuelinks.com') ||
-    url.includes('google-analytics.com') ||
-    url.includes('googletagmanager.com');
-  if (isThirdPartyLiveService) {
+  // Only handle requests for our OWN site's files. Third-party requests
+  // (Wikipedia logos, Google favicons, Firebase, Cuelinks, Analytics, etc.)
+  // pass straight through, untouched by the service worker — exactly like
+  // before it existed. Routing cross-origin image requests through the SW's
+  // cache/fetch logic was the cause of logos intermittently failing to
+  // load: cross-origin responses come back as "opaque" to a service worker,
+  // which this cache-and-fallback pattern doesn't handle reliably.
+  if (new URL(e.request.url).origin !== self.location.origin) {
     return;
   }
 
