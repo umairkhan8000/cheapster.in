@@ -1,5 +1,5 @@
 // =========================================================
-// CHEAPSTER.IN — PREMIUM BRAND DIRECTORY (Full Featured Edition)
+// CHEAPSTER.IN — PREMIUM BRAND DIRECTORY (Fixed & Full Edition)
 // =========================================================
 
 // --- CATEGORY ORDER (Most Selling to Least) ---
@@ -72,7 +72,7 @@ const stores = [
   { name: "Bare Anatomy", domain: "innovist.com", category: "Beauty", description: "Science hair care", link: "https://innovist.com/collections/bare-anatomy" },
   { name: "BBlunt", domain: "bblunt.com", category: "Beauty", description: "Salon-style hair care", link: "https://bblunt.com" },
   
-  // -- ROUTED BEAUTY BRANDS (Original Logo, Redirects to Nykaa) --
+  // -- ROUTED BEAUTY BRANDS --
   { name: "Lakme", domain: "lakmeindia.com", category: "Beauty", description: "Indian makeup giant", link: "https://www.nykaa.com/brands/lakme/c/334" },
   { name: "Maybelline", domain: "maybelline.co.in", category: "Beauty", description: "Global makeup", link: "https://www.nykaa.com/brands/maybelline-new-york/c/392" },
   { name: "L'Oréal", domain: "lorealparis.co.in", category: "Beauty", description: "Hair & cosmetics", link: "https://www.nykaa.com/brands/loreal-paris/c/595" },
@@ -130,15 +130,11 @@ const stores = [
   { name: "SleepyCat", domain: "sleepycat.in", category: "Home", description: "Sleep solutions", link: "https://sleepycat.in" },
   { name: "Rentomojo", domain: "rentomojo.com", category: "Home", description: "Furniture rentals", link: "https://www.rentomojo.com" },
   { name: "Moglix", domain: "moglix.com", category: "Home", description: "Hardware & tools", link: "https://www.moglix.com" },
-  
-  // -- ROUTED HARDWARE (Original Logo, Redirects to Amazon) --
   { name: "Bosch Tools", domain: "bosch-pt.co.in", category: "Home", description: "Power tools", link: "https://www.amazon.in/bosch-tools" },
 
   // 9. PETS
   { name: "Supertails", domain: "supertails.com", category: "Pets", description: "Pet care & food", link: "https://supertails.com" },
   { name: "Heads Up For Tails", domain: "headsupfortails.com", category: "Pets", description: "Luxury pet supplies", link: "https://headsupfortails.com" },
-  
-  // -- ROUTED PETS (Original Logo, Redirects to Amazon) --
   { name: "Drools", domain: "drools.com", category: "Pets", description: "Dog & cat food", link: "https://www.amazon.in/stores/Drools/Drools" },
   { name: "Pedigree", domain: "pedigree.in", category: "Pets", description: "Dog nutrition", link: "https://www.amazon.in/stores/Pedigree" },
   { name: "Royal Canin", domain: "royalcanin.com", category: "Pets", description: "Premium pet nutrition", link: "https://www.amazon.in/stores/RoyalCanin" },
@@ -153,8 +149,6 @@ const stores = [
   { name: "FirstCry", domain: "firstcry.com", category: "Kids", description: "Kids & baby gear", link: "https://www.firstcry.com" },
   { name: "Hamleys", domain: "hamleys.in", category: "Kids", description: "Premium toys", link: "https://www.hamleys.in" },
   { name: "Smartivity", domain: "smartivity.in", category: "Kids", description: "DIY & STEM toys", link: "https://www.smartivity.in" },
-  
-  // -- ROUTED KIDS TOYS (Original Logo, Redirects to Amazon) --
   { name: "LEGO", domain: "lego.com", category: "Kids", description: "Building blocks", link: "https://www.amazon.in/stores/LEGO" },
 
   // 12. FOOD & MEAT
@@ -247,7 +241,7 @@ function showToast(message, icon = "✨") {
   }
   const toast = document.createElement("div");
   toast.className = "toast-msg";
-  toast.innerHTML = `<span style="font-size:16px;">${icon}</span>${message}`;
+  toast.innerHTML = `<span style="font-size:16px;">${icon}</span> ${message}`;
   container.appendChild(toast);
   
   setTimeout(() => {
@@ -305,7 +299,7 @@ function buildCard(store, index) {
   card.addEventListener("mousemove", (e) => {
     const rect = card.getBoundingClientRect();
     card.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
-    card.style.setProperty("--mouse-y`, `${e.clientY - rect.top}px`);
+    card.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
   });
 
   const frame = document.createElement("div");
@@ -436,7 +430,6 @@ if (document.getElementById("currentYear")) {
 // UI CONTROLS, MODALS, HAMBURGER, FORMS & GIVEAWAY HANDLERS
 // =========================================================
 
-// Modal Utilities
 function openModal(id) {
   haptic();
   const modal = document.getElementById(id);
@@ -452,7 +445,6 @@ document.querySelectorAll("[data-close-modal]").forEach(btn => {
   btn.addEventListener("click", () => closeModal(btn.dataset.closeModal));
 });
 
-// Welcome Modal on first visit
 window.addEventListener("load", () => {
   if (localStorage.getItem("cheapster_welcome_seen") !== "1") {
     setTimeout(() => openModal("welcomeModal"), 800);
@@ -467,7 +459,6 @@ if(continueBtn) {
   });
 }
 
-// Header buttons & Hamburger Menu bindings
 const loginBtn = document.getElementById("loginBtn");
 if(loginBtn) {
   loginBtn.addEventListener("click", () => openModal("loginModal"));
@@ -487,7 +478,6 @@ if(mobileMenuBtn && mobileNav) {
   });
 }
 
-// Giveaway & Reward Form Handler (Google Sheets Link)
 const giveawayForm = document.getElementById("giveawayForm");
 if(giveawayForm) {
   giveawayForm.addEventListener("submit", async (e) => {
@@ -500,8 +490,6 @@ if(giveawayForm) {
     submitBtn.disabled = true;
 
     const formData = new FormData(giveawayForm);
-    
-    // Replace with your Google Apps Script Web App URL when ready
     const scriptURL = '#'; 
 
     try {
@@ -520,7 +508,6 @@ if(giveawayForm) {
   });
 }
 
-// Contact Form Handler
 const contactForm = document.getElementById("contactForm");
 if(contactForm) {
   contactForm.addEventListener("submit", (e) => {
@@ -532,7 +519,6 @@ if(contactForm) {
   });
 }
 
-// PWA Service Worker & Install Prompt
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').catch((err) => console.log('SW fail', err));
