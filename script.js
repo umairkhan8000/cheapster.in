@@ -214,16 +214,39 @@ function buildCard(store, index) {
 
   if (chain.length > 0) {
     let currentStep = 0;
-    img.onerror = () => {
+    let logoTimer = null;
+
+    function advanceLogo() {
+      clearTimeout(logoTimer);
       currentStep++;
       if (currentStep < chain.length) {
         img.src = chain[currentStep];
+        armLogoTimeout();
       } else {
-        img.onerror = null; 
-        img.src = svgFallback; 
+        img.onerror = null;
+        img.src = svgFallback;
       }
-    };
-    img.src = chain[0]; 
+    }
+
+    function armLogoTimeout() {
+      clearTimeout(logoTimer);
+      // This is a safety net for a request that's truly stuck (never
+      // resolves, never errors) — NOT a cutoff for normal loading delay.
+      // The first 12 logos load "eagerly" together and mostly share the
+      // same host (Wikipedia), and browsers only allow ~6 connections per
+      // host — so several of them legitimately queue and can easily take
+      // over a second before they even start. A short timeout here was
+      // aborting those queued-but-fine requests, which is what caused
+      // some logos to go missing until a refresh (once cached, they loaded
+      // instantly and never hit the timeout). 4s comfortably covers normal
+      // queueing/loading and only catches a genuinely hung request.
+      logoTimer = setTimeout(advanceLogo, 4000);
+    }
+
+    img.onload = () => clearTimeout(logoTimer);
+    img.onerror = advanceLogo;
+    img.src = chain[0];
+    armLogoTimeout();
   } else {
     img.src = svgFallback;
   }
