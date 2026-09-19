@@ -416,6 +416,10 @@ if (window.auth) {
     if (err) console.error("Google sign-in (redirect) failed:", err.code, err.message);
   });
 
+  const googleIcon = document.getElementById("googleIcon");
+  const authAvatarImg = document.getElementById("authAvatarImg");
+  const authAvatarFallback = document.getElementById("authAvatarFallback");
+
   window.auth.onAuthStateChanged((user) => {
     currentUser = user;
     if (user) {
@@ -423,13 +427,36 @@ if (window.auth) {
       authBtn.title = user.displayName || "Signed in";
       const nameField = document.getElementById("fullName");
       if (nameField && !nameField.value) nameField.value = user.displayName || "";
-      
+
+      // Show the account's Google profile picture instead of the generic
+      // Google icon, so it's visually obvious you're logged in — not just
+      // readable in small text. Falls back to a plain initials badge if
+      // there's no photo, or if the photo URL fails to load.
+      googleIcon.hidden = true;
+      if (user.photoURL) {
+        authAvatarImg.src = user.photoURL;
+        authAvatarImg.onerror = () => {
+          authAvatarImg.hidden = true;
+          authAvatarFallback.hidden = false;
+        };
+        authAvatarImg.hidden = false;
+        authAvatarFallback.hidden = true;
+      } else {
+        authAvatarFallback.textContent = initials(user.displayName || user.email || "?");
+        authAvatarFallback.hidden = false;
+        authAvatarImg.hidden = true;
+      }
+
       logoutBtn.hidden = false;
       if (menuLoginBtn) menuLoginBtn.hidden = true;
     } else {
       authBtnText.textContent = "Login";
       authBtn.title = "Login with Google";
-      
+
+      googleIcon.hidden = false;
+      authAvatarImg.hidden = true;
+      authAvatarFallback.hidden = true;
+
       logoutBtn.hidden = true;
       if (menuLoginBtn) menuLoginBtn.hidden = false;
     }
