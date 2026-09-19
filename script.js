@@ -1,243 +1,119 @@
 // =========================================================
-// CHEAPSTER.IN — PREMIUM BRAND DIRECTORY (Category Edition)
-// Haptic Feedback, Spotlight Hover, PWA & Category Routing
+// CHEAPSTER.IN — 77+ BRANDS DIRECTORY (Premium Edition)
+// Haptic Feedback, Spotlight Hover, Toast Notifications, & PWA
 // =========================================================
 
-// --- CATEGORY ORDER (Most Selling to Least) ---
-const CATEGORY_ORDER = [
-  "All", 
-  "Mega Brands", 
-  "Fashion", 
-  "Beauty", 
-  "Tech", 
-  "Wellness", 
-  "Jewellery", 
-  "Travel", 
-  "Home", 
-  "Pets", 
-  "Digital", 
-  "Kids", 
-  "Food"
-];
-
-// --- BRAND MASTER LIST (106 Brands) ---
 const stores = [
-  // 1. MEGA BRANDS (Highest Traffic)
-  { name: "Amazon", domain: "amazon.in", category: "Mega Brands", description: "Everything marketplace", link: "https://www.amazon.in" },
-  { name: "Flipkart", domain: "flipkart.com", category: "Mega Brands", description: "Shopping marketplace", link: "https://www.flipkart.com" },
-  { name: "Myntra", domain: "myntra.com", category: "Mega Brands", description: "Fashion & lifestyle", link: "https://www.myntra.com" },
-  { name: "Nykaa", domain: "nykaa.com", category: "Mega Brands", description: "Beauty & cosmetics", link: "https://www.nykaa.com" },
-  { name: "AJIO", domain: "ajio.com", category: "Mega Brands", description: "Fashion destination", link: "https://www.ajio.com" },
-  { name: "Tata CLiQ", domain: "tatacliq.com", category: "Mega Brands", description: "Multi-category retail", link: "https://www.tatacliq.com" },
-  { name: "Croma", domain: "croma.com", category: "Mega Brands", description: "Electronics", link: "https://www.croma.com" },
-  { name: "Meesho", domain: "meesho.com", category: "Mega Brands", description: "Value shopping", link: "https://www.meesho.com" },
+  // FASHION & STREETWEAR
+  { name: "Amazon", domain: "amazon.in", logo: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg", description: "Everything marketplace", link: "https://www.amazon.in" },
+  { name: "Flipkart", domain: "flipkart.com", logo: "https://upload.wikimedia.org/wikipedia/en/7/7a/Flipkart_logo.svg", description: "Shopping marketplace", link: "https://www.flipkart.com" },
+  { name: "Myntra", domain: "myntra.com", logo: "https://upload.wikimedia.org/wikipedia/commons/b/bc/Myntra_Logo.png", description: "Fashion & lifestyle", link: "https://www.myntra.com" },
+  { name: "AJIO", domain: "ajio.com", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/AJIO_Logo.svg/2560px-AJIO_Logo.svg.png", description: "Fashion destination", link: "https://www.ajio.com" },
+  { name: "Tata CLiQ", domain: "tatacliq.com", logo: "https://upload.wikimedia.org/wikipedia/commons/e/e3/Tata_CLiQ_Logo.svg", description: "Multi-category retail", link: "https://www.tatacliq.com" },
+  { name: "Meesho", domain: "meesho.com", description: "Value shopping", link: "https://www.meesho.com" },
+  { name: "Nike", domain: "nike.com", logo: "https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg", description: "Sports & streetwear", link: "https://www.nike.com/in" },
+  { name: "Puma", domain: "puma.com", logo: "https://upload.wikimedia.org/wikipedia/en/d/d7/Puma_Logo.svg", description: "Athletic wear", link: "https://in.puma.com" },
+  { name: "Adidas", domain: "adidas.co.in", logo: "https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg", description: "Sports & fashion", link: "https://www.adidas.co.in" },
+  { name: "Snitch", domain: "", description: "Men's fashion", link: "https://www.snitch.co.in" },
+  { name: "The Souled Store", domain: "thesouledstore.com", description: "Pop culture merch", link: "https://www.thesouledstore.com" },
+  { name: "Bewakoof", domain: "bewakoof.com", description: "Quirky fashion", link: "https://www.bewakoof.com" },
+  { name: "Urbanic", domain: "urbanic.com", description: "Gen-Z women's fashion", link: "https://www.urbanic.com" },
+  { name: "Beyoung", domain: "beyoung.in", description: "Everyday fashion", link: "https://beyoung.in" },
+  { name: "XYXX", domain: "xyxxcrew.com", description: "Men's innerwear", link: "https://xyxxcrew.com" },
 
-  // 2. FASHION & FOOTWEAR
-  { name: "Snitch", domain: "", category: "Fashion", description: "Men's fashion", link: "https://www.snitch.co.in" },
-  { name: "Urbanic", domain: "urbanic.com", category: "Fashion", description: "Gen-Z women's fashion", link: "https://www.urbanic.com" },
-  { name: "Off Duty India", domain: "offduty.in", category: "Fashion", description: "Baggy streetwear", link: "https://www.offduty.in" },
-  { name: "Vastrado", domain: "vastrado.com", category: "Fashion", description: "Affordable fast fashion", link: "https://www.vastrado.com" },
-  { name: "Beyoung", domain: "beyoung.in", category: "Fashion", description: "Everyday fashion", link: "https://beyoung.in" },
-  { name: "Bewakoof", domain: "bewakoof.com", category: "Fashion", description: "Quirky fashion", link: "https://www.bewakoof.com" },
-  { name: "The Souled Store", domain: "thesouledstore.com", category: "Fashion", description: "Pop culture merch", link: "https://www.thesouledstore.com" },
-  { name: "XYXX", domain: "xyxxcrew.com", category: "Fashion", description: "Men's innerwear", link: "https://xyxxcrew.com" },
-  { name: "Campus Sutra", domain: "campussutra.com", category: "Fashion", description: "Casual streetwear", link: "https://www.campussutra.com" },
-  { name: "Bonkers Corner", domain: "bonkerscorner.com", category: "Fashion", description: "Gen-Z streetwear", link: "https://www.bonkerscorner.com" },
-  { name: "Nike", domain: "nike.com", category: "Fashion", description: "Sports & streetwear", link: "https://www.nike.com/in" },
-  { name: "Puma", domain: "puma.com", category: "Fashion", description: "Athletic wear", link: "https://in.puma.com" },
-  { name: "Adidas", domain: "adidas.co.in", category: "Fashion", description: "Sports & fashion", link: "https://www.adidas.co.in" },
-  { name: "Crocs", domain: "crocs.in", category: "Fashion", description: "Comfort footwear", link: "https://www.crocs.in" },
+  // BEAUTY & GROOMING
+  { name: "Nykaa", domain: "nykaa.com", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Nykaa_Logo.svg/2560px-Nykaa_Logo.svg.png", description: "Beauty & cosmetics", link: "https://www.nykaa.com" },
+  { name: "Purplle", domain: "purplle.com", description: "Beauty shopping", link: "https://www.purplle.com" },
+  { name: "MyGlamm", domain: "myglamm.com", description: "Makeup & beauty", link: "https://www.myglamm.com" },
+  { name: "Mamaearth", domain: "mamaearth.in", description: "Toxin-free care", link: "https://www.mamaearth.in" },
+  { name: "Minimalist", domain: "beminimalist.co", description: "Science skincare", link: "https://www.beminimalist.co" },
+  { name: "The Derma Co", domain: "thedermaco.com", description: "Dermatological care", link: "https://www.thedermaco.com" },
+  { name: "Dot & Key", domain: "dotandkey.com", description: "Skincare", link: "https://www.dotandkey.com" },
+  { name: "Plum", domain: "plumgoodness.com", description: "Vegan beauty", link: "https://www.plumgoodness.com" },
+  { name: "Sugar Cosmetics", domain: "sugarcosmetics.com", description: "Makeup brand", link: "https://www.sugarcosmetics.com" },
+  { name: "Pilgrim", domain: "discoverpilgrim.com", description: "Global beauty secrets", link: "https://www.discoverpilgrim.com" },
+  { name: "Foxtale", domain: "foxtale.in", description: "Skincare essentials", link: "https://www.foxtale.in" },
+  { name: "MCaffeine", domain: "mcaffeine.com", description: "Caffeinated care", link: "https://www.mcaffeine.com" },
+  { name: "Aqualogica", domain: "aqualogica.in", description: "Hydration skincare", link: "https://www.aqualogica.in" },
+  { name: "WOW Skin Science", domain: "buywow.in", description: "Natural care", link: "https://www.buywow.in" },
 
-  // 3. BEAUTY & HAIRCARE
-  { name: "Minimalist", domain: "beminimalist.co", category: "Beauty", description: "Science skincare", link: "https://www.beminimalist.co" },
-  { name: "Plum", domain: "plumgoodness.com", category: "Beauty", description: "Vegan beauty", link: "https://www.plumgoodness.com" },
-  { name: "The Derma Co", domain: "thedermaco.com", category: "Beauty", description: "Dermatological care", link: "https://www.thedermaco.com" },
-  { name: "Dot & Key", domain: "dotandkey.com", category: "Beauty", description: "Skincare essentials", link: "https://www.dotandkey.com" },
-  { name: "Mamaearth", domain: "mamaearth.in", category: "Beauty", description: "Toxin-free care", link: "https://www.mamaearth.in" },
-  { name: "Aqualogica", domain: "aqualogica.in", category: "Beauty", description: "Hydration skincare", link: "https://www.aqualogica.in" },
-  { name: "MCaffeine", domain: "mcaffeine.com", category: "Beauty", description: "Caffeinated care", link: "https://www.mcaffeine.com" },
-  { name: "Foxtale", domain: "foxtale.in", category: "Beauty", description: "Skincare essentials", link: "https://www.foxtale.in" },
-  { name: "Pilgrim", domain: "discoverpilgrim.com", category: "Beauty", description: "Global beauty secrets", link: "https://www.discoverpilgrim.com" },
-  { name: "WOW Skin Science", domain: "buywow.in", category: "Beauty", description: "Natural care", link: "https://www.buywow.in" },
-  { name: "Purplle", domain: "purplle.com", category: "Beauty", description: "Beauty shopping", link: "https://www.purplle.com" },
-  { name: "Sugar Cosmetics", domain: "sugarcosmetics.com", category: "Beauty", description: "Makeup brand", link: "https://www.sugarcosmetics.com" },
-  { name: "MyGlamm", domain: "myglamm.com", category: "Beauty", description: "Makeup & beauty", link: "https://www.myglamm.com" },
-  { name: "Bella Vita", domain: "bellavitaluxury.co.in", category: "Beauty", description: "Luxury perfumes", link: "https://www.bellavitaluxury.co.in" },
-  { name: "Skinn by Titan", domain: "skinn.in", category: "Beauty", description: "Indian luxury fragrances", link: "https://www.skinn.in" },
-  { name: "Bath & Body Works", domain: "bathandbodyworks.in", category: "Beauty", description: "Premium mists & care", link: "https://www.bathandbodyworks.in" },
-  { name: "Swiss Beauty", domain: "swissbeauty.in", category: "Beauty", description: "Budget makeup", link: "https://swissbeauty.in" },
-  { name: "Renee Cosmetics", domain: "reneecosmetics.in", category: "Beauty", description: "Trending makeup", link: "https://www.reneecosmetics.in" },
-  { name: "Colorbar", domain: "", category: "Beauty", description: "Premium cosmetics", link: "https://www.colorbarcosmetics.com" },
-  { name: "MAC Cosmetics", domain: "maccosmetics.in", category: "Beauty", description: "Luxury makeup", link: "https://www.maccosmetics.in" },
-  { name: "Traya", domain: "traya.health", category: "Beauty", description: "Hair fall treatment", link: "https://traya.health" },
-  { name: "Bare Anatomy", domain: "innovist.com", category: "Beauty", description: "Science hair care", link: "https://innovist.com/collections/bare-anatomy" },
-  { name: "BBlunt", domain: "bblunt.com", category: "Beauty", description: "Salon-style hair care", link: "https://bblunt.com" },
-  
-  // -- ROUTED BEAUTY BRANDS (Original Logo, Redirects to Nykaa) --
-  { name: "Lakme", domain: "lakmeindia.com", category: "Beauty", description: "Indian makeup giant", link: "https://www.nykaa.com/brands/lakme/c/334" },
-  { name: "Maybelline", domain: "maybelline.co.in", category: "Beauty", description: "Global makeup", link: "https://www.nykaa.com/brands/maybelline-new-york/c/392" },
-  { name: "L'Oréal", domain: "lorealparis.co.in", category: "Beauty", description: "Hair & cosmetics", link: "https://www.nykaa.com/brands/loreal-paris/c/595" },
+  // HEALTH & WELLNESS
+  { name: "Plix", domain: "", description: "Plant nutrition", link: "https://www.plixlife.com" },
+  { name: "MuscleBlaze", domain: "muscleblaze.com", description: "Sports nutrition", link: "https://www.muscleblaze.com" },
+  { name: "Myprotein", domain: "myprotein.co.in", logo: "https://upload.wikimedia.org/wikipedia/commons/7/73/Myprotein_logo.svg", description: "Fitness supplements", link: "https://www.myprotein.co.in" },
+  { name: "Kapiva", domain: "kapiva.in", description: "Ayurvedic nutrition", link: "https://www.kapiva.in" },
+  { name: "HealthKart", domain: "healthkart.com", description: "Health supplements", link: "https://www.healthkart.com" },
 
-  // 4. TECH & GADGETS
-  { name: "Samsung", domain: "samsung.com", category: "Tech", description: "Mobiles & electronics", link: "https://www.samsung.com/in" },
-  { name: "OnePlus", domain: "oneplus.in", category: "Tech", description: "Smartphones", link: "https://www.oneplus.in" },
-  { name: "Dell", domain: "dell.com", category: "Tech", description: "Laptops & PCs", link: "https://www.dell.com/en-in" },
-  { name: "Lenovo", domain: "lenovo.com", category: "Tech", description: "Laptops & tech", link: "https://www.lenovo.com/in" },
-  { name: "Realme", domain: "realme.com", category: "Tech", description: "Smartphones & AIoT", link: "https://www.realme.com/in/" },
-  { name: "boAt", domain: "boat-lifestyle.com", category: "Tech", description: "Audio & wearables", link: "https://www.boat-lifestyle.com" },
-  { name: "Noise", domain: "gonoise.com", category: "Tech", description: "Smartwatches", link: "https://www.gonoise.com" },
-  { name: "JBL", domain: "jbl.com", category: "Tech", description: "Premium audio", link: "https://in.jbl.com" },
-  { name: "Reliance Digital", domain: "reliancedigital.in", category: "Tech", description: "Tech retail", link: "https://www.reliancedigital.in" },
+  // QUICK COMMERCE & FOOD
+  { name: "Blinkit", domain: "blinkit.com", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/7/7b/Blinkit_logo.svg/1200px-Blinkit_logo.svg.png", description: "10-min delivery", link: "https://blinkit.com" },
+  { name: "Swiggy", domain: "swiggy.com", logo: "https://upload.wikimedia.org/wikipedia/en/1/12/Swiggy_logo.svg", description: "Food & Instamart", link: "https://www.swiggy.com" },
+  { name: "Zomato", domain: "zomato.com", description: "Food delivery", link: "https://www.zomato.com" },
+  { name: "Zepto", domain: "zeptonow.com", description: "Quick commerce", link: "https://www.zeptonow.com" },
+  { name: "BigBasket", domain: "bigbasket.com", description: "Online grocery", link: "https://www.bigbasket.com" },
+  { name: "EatSure", domain: "eatsure.com", description: "Food delivery", link: "https://www.eatsure.com" },
+  { name: "Domino's", domain: "dominos.co.in", logo: "https://upload.wikimedia.org/wikipedia/commons/3/3e/Domino%27s_pizza_logo.svg", description: "Pizza delivery", link: "https://www.dominos.co.in" },
+  { name: "Pizza Hut", domain: "pizzahut.co.in", logo: "https://upload.wikimedia.org/wikipedia/sco/d/d2/Pizza_Hut_logo.svg", description: "Pizza delivery", link: "https://www.pizzahut.co.in" },
 
-  // 5. WELLNESS, GROOMING & DENTAL
-  { name: "Beardo", domain: "beardo.in", category: "Wellness", description: "Men's grooming", link: "https://beardo.in" },
-  { name: "Bombay Shaving Co", domain: "bombayshavingcompany.com", category: "Wellness", description: "Premium grooming", link: "https://bombayshavingcompany.com" },
-  { name: "Man Matters", domain: "manmatters.com", category: "Wellness", description: "Men's wellness", link: "https://manmatters.com" },
-  { name: "The Man Company", domain: "themancompany.com", category: "Wellness", description: "Premium essentials", link: "https://www.themancompany.com" },
-  { name: "Perfora", domain: "perforacare.com", category: "Wellness", description: "Premium oral care", link: "https://perforacare.com" },
-  { name: "Tata 1mg", domain: "1mg.com", category: "Wellness", description: "Online pharmacy", link: "https://www.1mg.com" },
-  { name: "Apollo 24|7", domain: "apollo247.com", category: "Wellness", description: "Healthcare delivery", link: "https://www.apollo247.com" },
-  { name: "Netmeds", domain: "netmeds.com", category: "Wellness", description: "Medicine delivery", link: "https://www.netmeds.com" },
-  { name: "MuscleBlaze", domain: "muscleblaze.com", category: "Wellness", description: "Sports nutrition", link: "https://www.muscleblaze.com" },
-  { name: "Myprotein", domain: "myprotein.co.in", category: "Wellness", description: "Fitness supplements", link: "https://www.myprotein.co.in" },
-  { name: "Plix", domain: "", category: "Wellness", description: "Plant nutrition", link: "https://www.plixlife.com" },
-  { name: "Kapiva", domain: "kapiva.in", category: "Wellness", description: "Ayurvedic nutrition", link: "https://www.kapiva.in" },
-  { name: "HealthKart", domain: "healthkart.com", category: "Wellness", description: "Health supplements", link: "https://www.healthkart.com" },
+  // ELECTRONICS & TECH
+  { name: "Croma", domain: "croma.com", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Croma_Logo.svg/2560px-Croma_Logo.svg.png", description: "Electronics", link: "https://www.croma.com" },
+  { name: "Reliance Digital", domain: "reliancedigital.in", description: "Tech retail", link: "https://www.reliancedigital.in" },
+  { name: "Samsung", domain: "samsung.com", logo: "https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg", description: "Mobiles & electronics", link: "https://www.samsung.com/in" },
+  { name: "OnePlus", domain: "oneplus.in", logo: "https://upload.wikimedia.org/wikipedia/commons/f/f8/OnePlus_logo.svg", description: "Smartphones", link: "https://www.oneplus.in" },
+  { name: "boAt", domain: "boat-lifestyle.com", description: "Audio & wearables", link: "https://www.boat-lifestyle.com" },
+  { name: "Noise", domain: "gonoise.com", description: "Smartwatches", link: "https://www.gonoise.com" },
+  { name: "Nothing", domain: "nothing.tech", logo: "https://upload.wikimedia.org/wikipedia/commons/8/87/Nothing_logo.svg", description: "Innovative tech", link: "https://in.nothing.tech" },
+  { name: "JBL", domain: "jbl.com", logo: "https://upload.wikimedia.org/wikipedia/commons/2/2d/JBL_logo.svg", description: "Premium audio", link: "https://in.jbl.com" },
+  { name: "Apple", domain: "apple.com", logo: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg", description: "Premium devices", link: "https://www.apple.com/in" },
 
-  // 6. JEWELLERY & ACCESSORIES
-  { name: "Lenskart", domain: "lenskart.com", category: "Jewellery", description: "Eyewear", link: "https://www.lenskart.com" },
-  { name: "Titan", domain: "titan.co.in", category: "Jewellery", description: "Watches & Eyeplus", link: "https://www.titan.co.in" },
-  { name: "Fastrack", domain: "fastrack.in", category: "Jewellery", description: "Youth accessories", link: "https://www.fastrack.in" },
-  { name: "CaratLane", domain: "caratlane.com", category: "Jewellery", description: "Diamond jewellery", link: "https://www.caratlane.com" },
-  { name: "Tanishq", domain: "tanishq.co.in", category: "Jewellery", description: "Fine jewellery", link: "https://www.tanishq.co.in" },
-  { name: "Giva", domain: "giva.co", category: "Jewellery", description: "Silver jewellery", link: "https://www.giva.co" },
-  { name: "Palmonas", domain: "palmonas.com", category: "Jewellery", description: "Demi-fine jewellery", link: "https://www.palmonas.com" },
-  { name: "Melorra", domain: "melorra.com", category: "Jewellery", description: "Trendy gold", link: "https://www.melorra.com" },
-  { name: "BlueStone", domain: "bluestone.com", category: "Jewellery", description: "Fine jewellery", link: "https://www.bluestone.com" },
+  // ACCESSORIES
+  { name: "Lenskart", domain: "lenskart.com", description: "Eyewear", link: "https://www.lenskart.com" },
+  { name: "Giva", domain: "giva.co", description: "Silver jewellery", link: "https://www.giva.co" },
+  { name: "Fastrack", domain: "fastrack.in", description: "Youth accessories", link: "https://www.fastrack.in" },
+  { name: "Tanishq", domain: "tanishq.co.in", description: "Fine jewellery", link: "https://www.tanishq.co.in" },
 
-  // 7. TRAVEL & FLIGHTS
-  { name: "MakeMyTrip", domain: "makemytrip.com", category: "Travel", description: "Flights & hotels", link: "https://www.makemytrip.com" },
-  { name: "Agoda", domain: "agoda.com", category: "Travel", description: "Hotels & stays", link: "https://www.agoda.com" },
-  { name: "Booking.com", domain: "booking.com", category: "Travel", description: "Global travel", link: "https://www.booking.com" },
-  { name: "Goibibo", domain: "goibibo.com", category: "Travel", description: "Travel bookings", link: "https://www.goibibo.com" },
-  { name: "Ixigo", domain: "ixigo.com", category: "Travel", description: "Flight & train bookings", link: "https://www.ixigo.com" },
-  { name: "Oyo Rooms", domain: "oyorooms.com", category: "Travel", description: "Budget stays", link: "https://www.oyorooms.com" },
+  // TRAVEL
+  { name: "MakeMyTrip", domain: "makemytrip.com", description: "Flights & hotels", link: "https://www.makemytrip.com" },
+  { name: "Goibibo", domain: "goibibo.com", description: "Travel bookings", link: "https://www.goibibo.com" },
+  { name: "Agoda", domain: "agoda.com", logo: "https://upload.wikimedia.org/wikipedia/commons/1/18/Agoda_logo.svg", description: "Hotels & stays", link: "https://www.agoda.com" },
+  { name: "Cleartrip", domain: "cleartrip.com", description: "Flights & travel", link: "https://www.cleartrip.com" },
+  { name: "Oyo Rooms", domain: "oyorooms.com", logo: "https://upload.wikimedia.org/wikipedia/commons/1/19/OYO_Rooms_%28logo%29.png", description: "Budget stays", link: "https://www.oyorooms.com" },
+  { name: "Booking.com", domain: "booking.com", logo: "https://upload.wikimedia.org/wikipedia/commons/b/be/Booking.com_logo.svg", description: "Global travel", link: "https://www.booking.com" },
+  { name: "RedBus", domain: "redbus.in", description: "Bus bookings", link: "https://www.redbus.in" },
 
-  // 8. HOME & HARDWARE
-  { name: "Pepperfry", domain: "pepperfry.com", category: "Home", description: "Furniture marketplace", link: "https://www.pepperfry.com" },
-  { name: "WoodenStreet", domain: "woodenstreet.com", category: "Home", description: "Solid wood furniture", link: "https://www.woodenstreet.com" },
-  { name: "Urban Ladder", domain: "urbanladder.com", category: "Home", description: "Premium furniture", link: "https://www.urbanladder.com" },
-  { name: "Wakefit", domain: "wakefit.co", category: "Home", description: "Mattress & furniture", link: "https://www.wakefit.co" },
-  { name: "SleepyCat", domain: "sleepycat.in", category: "Home", description: "Sleep solutions", link: "https://sleepycat.in" },
-  { name: "Rentomojo", domain: "rentomojo.com", category: "Home", description: "Furniture rentals", link: "https://www.rentomojo.com" },
-  { name: "Moglix", domain: "moglix.com", category: "Home", description: "Hardware & tools", link: "https://www.moglix.com" },
-  
-  // -- ROUTED HARDWARE (Original Logo, Redirects to Amazon) --
-  { name: "Bosch Tools", domain: "bosch-pt.co.in", category: "Home", description: "Power tools", link: "https://www.amazon.in/bosch-tools" },
+  // PHARMACY
+  { name: "Tata 1mg", domain: "1mg.com", description: "Online pharmacy", link: "https://www.1mg.com" },
+  { name: "Apollo 24|7", domain: "apollo247.com", description: "Healthcare", link: "https://www.apollo247.com" },
+  { name: "Netmeds", domain: "netmeds.com", description: "Medicine delivery", link: "https://www.netmeds.com" },
 
-  // 9. PETS
-  { name: "Supertails", domain: "supertails.com", category: "Pets", description: "Pet care & food", link: "https://supertails.com" },
-  { name: "Heads Up For Tails", domain: "headsupfortails.com", category: "Pets", description: "Luxury pet supplies", link: "https://headsupfortails.com" },
-  
-  // -- ROUTED PETS (Original Logo, Redirects to Amazon) --
-  { name: "Drools", domain: "drools.com", category: "Pets", description: "Dog & cat food", link: "https://www.amazon.in/stores/Drools/Drools" },
-  { name: "Pedigree", domain: "pedigree.in", category: "Pets", description: "Dog nutrition", link: "https://www.amazon.in/stores/Pedigree" },
-  { name: "Royal Canin", domain: "royalcanin.com", category: "Pets", description: "Premium pet nutrition", link: "https://www.amazon.in/stores/RoyalCanin" },
+  // FINANCE & CARDS
+  { name: "Upstox", domain: "upstox.com", description: "Trading app", link: "https://upstox.com" },
+  { name: "Groww", domain: "groww.in", description: "Investing platform", link: "https://groww.in" },
+  { name: "Angel One", domain: "angelone.in", description: "Stock broking", link: "https://www.angelone.in" },
+  { name: "BankBazaar", domain: "bankbazaar.com", description: "Financial marketplace", link: "https://www.bankbazaar.com" },
+  { name: "SBI Credit Cards", domain: "sbicard.com", description: "Credit cards", link: "https://www.sbicard.com" },
 
-  // 10. DIGITAL & SOFTWARE
-  { name: "Hostinger", domain: "hostinger.in", category: "Digital", description: "Web hosting", link: "https://www.hostinger.in" },
-  { name: "GoDaddy", domain: "godaddy.com", category: "Digital", description: "Domains & web tools", link: "https://www.godaddy.com/en-in" },
-  { name: "Microsoft", domain: "microsoft.com", category: "Digital", description: "Office 365 & Xbox", link: "https://www.microsoft.com/en-in" },
-  { name: "Norton", domain: "norton.com", category: "Digital", description: "Antivirus security", link: "https://in.norton.com" },
-
-  // 11. KIDS & TOYS
-  { name: "FirstCry", domain: "firstcry.com", category: "Kids", description: "Kids & baby gear", link: "https://www.firstcry.com" },
-  { name: "Hamleys", domain: "hamleys.in", category: "Kids", description: "Premium toys", link: "https://www.hamleys.in" },
-  { name: "Smartivity", domain: "smartivity.in", category: "Kids", description: "DIY & STEM toys", link: "https://www.smartivity.in" },
-  
-  // -- ROUTED KIDS TOYS (Original Logo, Redirects to Amazon) --
-  { name: "LEGO", domain: "lego.com", category: "Kids", description: "Building blocks", link: "https://www.amazon.in/stores/LEGO" },
-
-  // 12. FOOD & MEAT
-  { name: "Licious", domain: "licious.in", category: "Food", description: "Fresh meat & seafood", link: "https://www.licious.in" },
-  { name: "EatSure", domain: "eatsure.com", category: "Food", description: "Food delivery", link: "https://www.eatsure.com" }
+  // SOFTWARE & DIGITAL
+  { name: "Hostinger", domain: "hostinger.in", logo: "https://upload.wikimedia.org/wikipedia/commons/f/ff/Hostinger_logo.svg", description: "Web hosting", link: "https://www.hostinger.in" },
+  { name: "Bluehost", domain: "bluehost.in", logo: "https://upload.wikimedia.org/wikipedia/commons/d/d7/Bluehost_logo.svg", description: "Hosting services", link: "https://www.bluehost.in" },
+  { name: "Shopify", domain: "shopify.in", logo: "https://upload.wikimedia.org/wikipedia/commons/0/0e/Shopify_logo_2018.svg", description: "E-commerce platform", link: "https://www.shopify.com" },
+  { name: "Canva", domain: "canva.com", logo: "https://upload.wikimedia.org/wikipedia/commons/0/08/Canva_icon_2021.svg", description: "Design tool", link: "https://www.canva.com" },
+  { name: "Grammarly", domain: "grammarly.com", logo: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Grammarly_logo.svg", description: "Writing assistant", link: "https://www.grammarly.com" },
+  { name: "ChatGPT", domain: "openai.com", logo: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg", description: "AI tools", link: "https://chatgpt.com" },
+  { name: "Adobe", domain: "adobe.com", logo: "https://upload.wikimedia.org/wikipedia/commons/b/b6/Adobe_Logo_Square.svg", description: "Creative software", link: "https://www.adobe.com" }
 ];
 
-// ---------- Premium UI Injections (Styles & Category Nav) ----------
-function injectStylesAndNav() {
-  // Check if style already exists to prevent duplicates on hot reload
-  if(!document.getElementById("cheapster-cat-styles")) {
-    const style = document.createElement("style");
-    style.id = "cheapster-cat-styles";
-    style.innerHTML = `
-      .category-nav-wrapper {
-        position: sticky;
-        top: 60px; /* Adjust based on your header height */
-        background: rgba(13, 33, 56, 0.95); /* Dark theme match */
-        backdrop-filter: blur(10px);
-        z-index: 100;
-        padding: 12px 16px;
-        margin-bottom: 20px;
-        border-bottom: 1px solid rgba(255,255,255,0.05);
-      }
-      .category-nav {
-        display: flex;
-        gap: 10px;
-        overflow-x: auto;
-        scrollbar-width: none; /* Firefox */
-      }
-      .category-nav::-webkit-scrollbar {
-        display: none; /* Chrome/Safari */
-      }
-      .cat-pill {
-        background: rgba(255, 255, 255, 0.08);
-        color: #a3b8cc;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 20px;
-        padding: 8px 18px;
-        font-size: 14px;
-        font-weight: 600;
-        white-space: nowrap;
-        cursor: pointer;
-        transition: all 0.25s ease;
-        user-select: none;
-      }
-      .cat-pill:hover {
-        background: rgba(255, 255, 255, 0.15);
-        color: #ffffff;
-      }
-      .cat-pill.active {
-        background: #ffffff;
-        color: #0d2138;
-        border-color: #ffffff;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      }
-    `;
-    document.head.appendChild(style);
-  }
-
-  // Inject Category Nav right above the grid
-  const gridElement = document.getElementById("storeGrid");
-  if(!document.getElementById("categoryNavWrapper") && gridElement) {
-    const navWrapper = document.createElement("div");
-    navWrapper.id = "categoryNavWrapper";
-    navWrapper.className = "category-nav-wrapper";
-    
-    const navScroll = document.createElement("div");
-    navScroll.className = "category-nav";
-    navScroll.id = "categoryNav";
-    
-    navWrapper.appendChild(navScroll);
-    gridElement.parentNode.insertBefore(navWrapper, gridElement);
-  }
-}
-
-// ---------- App State ----------
-let currentCategory = "All";
-let searchQuery = "";
+const grid = document.getElementById("storeGrid");
+const searchInput = document.getElementById("searchInput");
+const resultPill = document.getElementById("resultPill");
+const heroStoreCount = document.getElementById("heroStoreCount");
+const emptyState = document.getElementById("emptyState");
+const brandSelect = document.getElementById("brandSelect");
 
 // ---------- Premium Interactions Helpers ----------
-const haptic = () => { if (navigator.vibrate) navigator.vibrate(40); };
+
+const haptic = () => {
+  if (navigator.vibrate) navigator.vibrate(40);
+};
 
 function showToast(message, icon = "✨") {
   haptic();
@@ -259,7 +135,11 @@ function showToast(message, icon = "✨") {
   }, 3500);
 }
 
-function initials(name) { return name.substring(0, 2).toUpperCase(); }
+// ---------- utilities ----------
+
+function initials(name) {
+  return name.substring(0, 2).toUpperCase();
+}
 
 function debounce(fn, delay = 160) {
   let timer;
@@ -279,38 +159,34 @@ function buildLogoChain(store) {
 }
 
 function openStoreLink(store) {
-  let url = store.link || (store.domain ? `https://www.${store.domain}` : null);
+  let url = store.link;
+  if (!url || url === "#") {
+    url = store.domain ? `https://www.${store.domain}` : null;
+  }
   if (!url) return;
+
   const a = document.createElement("a");
   a.href = url;
   a.target = "_blank";
   a.rel = "noopener noreferrer";
+  a.style.display = "none";
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
 }
 
-// ---------- Shuffle Helper ----------
-// Fisher-Yates Shuffle for mixed feeds
-function shuffleArray(array) {
-  let arr = [...array];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-
-// ---------- Rendering Logic ----------
-const grid = document.getElementById("storeGrid");
+// ---------- rendering ----------
 
 function buildCard(store, index) {
   const card = document.createElement("div");
   card.className = "store-card";
+
   card.addEventListener("mousemove", (e) => {
     const rect = card.getBoundingClientRect();
-    card.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
-    card.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    card.style.setProperty("--mouse-x", `${x}px`);
+    card.style.setProperty("--mouse-y", `${y}px`);
   });
 
   const frame = document.createElement("div");
@@ -322,7 +198,16 @@ function buildCard(store, index) {
   img.alt = store.name;
   img.width = 100;
   img.height = 100;
-  img.loading = index < 12 ? "eager" : "lazy";
+  img.decoding = "async";
+  
+  const isEager = index < 12;
+  if (isEager) {
+    img.loading = "eager";
+    img.fetchPriority = "high";
+  } else {
+    img.loading = "lazy";
+    img.fetchPriority = "low";
+  }
 
   const bgColors = ['#1c3f66', '#0d2138', '#142a44']; 
   const bg = bgColors[index % bgColors.length];
@@ -330,13 +215,64 @@ function buildCard(store, index) {
 
   if (chain.length > 0) {
     let currentStep = 0;
-    img.onerror = () => {
+    let logoTimer = null;
+
+    function advanceLogo() {
+      clearTimeout(logoTimer);
       currentStep++;
-      if (currentStep < chain.length) img.src = chain[currentStep];
-      else { img.onerror = null; img.src = svgFallback; }
-    };
-    img.src = chain[0]; 
-  } else { img.src = svgFallback; }
+      if (currentStep < chain.length) {
+        img.src = chain[currentStep];
+        armLogoTimeout();
+      } else {
+        img.onerror = null;
+        img.src = svgFallback;
+      }
+    }
+
+    function armLogoTimeout() {
+      clearTimeout(logoTimer);
+      // This is a safety net for a request that's truly stuck (never
+      // resolves, never errors) — NOT a cutoff for normal loading delay.
+      // The first 12 logos load "eagerly" together and mostly share the
+      // same host (Wikipedia), and browsers only allow ~6 connections per
+      // host — so several of them legitimately queue and can easily take
+      // over a second before they even start. 4s comfortably covers normal
+      // queueing/loading and only catches a genuinely hung request.
+      logoTimer = setTimeout(advanceLogo, 4000);
+    }
+
+    img.onload = () => clearTimeout(logoTimer);
+    img.onerror = advanceLogo;
+    img.src = chain[0];
+
+    if (isEager) {
+      // Eager images start fetching immediately, so a timer from right
+      // now correctly measures real loading time.
+      armLogoTimeout();
+    } else if ("IntersectionObserver" in window) {
+      // Lazy images might not start fetching for a long time — whenever
+      // the user actually scrolls near them, which could be well past any
+      // fixed timeout window. Starting the timer immediately (like eager
+      // images) was firing before the browser had even begun loading these,
+      // wrongly yanking most of the site's logos over to the lower-quality
+      // fallback. Instead, only arm the timeout once the image is actually
+      // about to come into view — that's when loading realistically starts.
+      const lazyLoadWatcher = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            armLogoTimeout();
+            lazyLoadWatcher.unobserve(img);
+          }
+        });
+      }, { rootMargin: "300px" });
+      lazyLoadWatcher.observe(img);
+    }
+    // No IntersectionObserver support: lazy images simply resolve via
+    // onload/onerror whenever the browser gets to them, with no artificial
+    // time cap — safer than guessing wrong.
+  } else {
+    img.src = svgFallback;
+  }
   
   frame.appendChild(img);
 
@@ -354,106 +290,53 @@ function buildCard(store, index) {
   button.textContent = "Shop Now";
 
   card.append(frame, name, meta, button);
-  card.addEventListener("click", () => { haptic(); openStoreLink(store); });
+
+  card.addEventListener("click", () => {
+    haptic();
+    openStoreLink(store);
+  });
+
   return card;
 }
 
-function renderUI() {
-  if (!grid) return;
-  // 1. Filter logic
-  let filtered = stores.filter(store => {
-    const matchesCat = currentCategory === "All" || store.category === currentCategory;
-    const matchesSearch = store.name.toLowerCase().includes(searchQuery) || store.description.toLowerCase().includes(searchQuery);
-    return matchesCat && matchesSearch;
-  });
-
-  // 2. Sorting / Shuffling Logic
-  if (currentCategory === "All" && searchQuery === "") {
-    // Top Mega Brands stay on top, the rest get mixed!
-    const mega = filtered.filter(s => s.category === "Mega Brands");
-    const others = shuffleArray(filtered.filter(s => s.category !== "Mega Brands"));
-    filtered = [...mega, ...others];
-  } else {
-    // If specific category is chosen, display alphabetically to look clean
-    filtered.sort((a, b) => a.name.localeCompare(b.name));
-  }
-
-  // 3. Render grid
+function renderStores(storeList) {
   const fragment = document.createDocumentFragment();
-  filtered.forEach((store, i) => fragment.appendChild(buildCard(store, i)));
+  storeList.forEach((store, i) => fragment.appendChild(buildCard(store, i)));
   grid.innerHTML = "";
   grid.appendChild(fragment);
 
-  // Update counters
-  const count = filtered.length;
-  const resultPill = document.getElementById("resultPill");
-  const heroStoreCount = document.getElementById("heroStoreCount");
-  const emptyState = document.getElementById("emptyState");
-
+  const count = storeList.length;
   if (resultPill) resultPill.textContent = `${count} brands`;
-  if (heroStoreCount) heroStoreCount.textContent = stores.length;
+  if (heroStoreCount) heroStoreCount.textContent = count;
   if (emptyState) emptyState.hidden = count !== 0;
 }
 
-function renderCategoryNav() {
-  const navScroll = document.getElementById("categoryNav");
-  if (!navScroll) return;
-  navScroll.innerHTML = "";
-  
-  CATEGORY_ORDER.forEach(cat => {
-    const pill = document.createElement("div");
-    pill.className = `cat-pill ${cat === currentCategory ? "active" : ""}`;
-    pill.textContent = cat;
-    pill.addEventListener("click", () => {
-      haptic();
-      currentCategory = cat;
-      // scroll the pill into view
-      pill.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-      renderCategoryNav(); // Re-render to update active class
-      renderUI();
-    });
-    navScroll.appendChild(pill);
-  });
-}
+const handleSearch = debounce((query) => {
+  const q = query.toLowerCase().trim();
+  const filtered = stores.filter(store =>
+    store.name.toLowerCase().includes(q) ||
+    store.description.toLowerCase().includes(q)
+  );
+  renderStores(filtered);
+});
 
-// ---------- Search Setup ----------
-const searchInput = document.getElementById("searchInput");
-if (searchInput) {
-  searchInput.addEventListener("input", debounce((e) => {
-    searchQuery = e.target.value.toLowerCase().trim();
-    renderUI();
-  }));
-}
+searchInput.addEventListener("input", (e) => handleSearch(e.target.value));
 
-// Populate forms
-const brandSelect = document.getElementById("brandSelect");
-if (brandSelect) {
-  stores.forEach(store => {
-    const option = document.createElement("option");
-    option.value = store.name;
-    option.textContent = store.name;
-    brandSelect.appendChild(option);
-  });
-}
+stores.forEach(store => {
+  const option = document.createElement("option");
+  option.value = store.name;
+  option.textContent = store.name;
+  brandSelect.appendChild(option);
+});
 
-// ---------- Initialization ----------
-injectStylesAndNav();
-renderCategoryNav();
-renderUI();
-
-if (document.getElementById("currentYear")) {
-  document.getElementById("currentYear").textContent = new Date().getFullYear();
-}
-
-// =========================================================
-// REMAINDER OF UTILS (Modals, Auth, Forms, PWA)
-// =========================================================
+// ---------- modals ----------
 
 function openModal(id) {
   haptic();
   const modal = document.getElementById(id);
   if (modal) { modal.hidden = false; document.body.classList.add("modal-open"); }
 }
+
 function closeModal(id) {
   haptic();
   const modal = document.getElementById(id);
@@ -464,40 +347,284 @@ document.querySelectorAll("[data-close-modal]").forEach(btn => {
   btn.addEventListener("click", () => closeModal(btn.dataset.closeModal));
 });
 
+document.querySelectorAll(".modal-overlay").forEach(overlay => {
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) {
+      overlay.hidden = true;
+      document.body.classList.remove("modal-open");
+    }
+  });
+});
+
+document.getElementById("headerOfferBtn").addEventListener("click", () => openModal("formModal"));
+document.querySelectorAll("[data-info-modal]").forEach(btn => {
+  btn.addEventListener("click", () => openModal(btn.dataset.infoModal));
+});
+
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+const headerDropdown = document.getElementById("headerDropdown");
+
+function closeHeaderDropdown() {
+  headerDropdown.hidden = true;
+  hamburgerBtn.setAttribute("aria-expanded", "false");
+}
+
+hamburgerBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  haptic();
+  const isOpen = !headerDropdown.hidden;
+  if (isOpen) {
+    closeHeaderDropdown();
+  } else {
+    headerDropdown.hidden = false;
+    hamburgerBtn.setAttribute("aria-expanded", "true");
+  }
+});
+
+headerDropdown.querySelectorAll("button").forEach(btn => {
+  btn.addEventListener("click", closeHeaderDropdown);
+});
+
+document.addEventListener("click", (e) => {
+  if (!headerDropdown.hidden && !headerDropdown.contains(e.target)) {
+    closeHeaderDropdown();
+  }
+});
+
 window.addEventListener("load", () => {
   if (localStorage.getItem("cheapster_welcome_seen") !== "1") {
     setTimeout(() => openModal("welcomeModal"), 800);
   }
 });
-const continueBtn = document.getElementById("continueBtn");
-if(continueBtn) {
-  continueBtn.addEventListener("click", () => {
-    localStorage.setItem("cheapster_welcome_seen", "1");
-    closeModal("welcomeModal");
+
+document.getElementById("continueBtn").addEventListener("click", () => {
+  localStorage.setItem("cheapster_welcome_seen", "1");
+  closeModal("welcomeModal");
+});
+
+// ---------- Google login (Firebase Auth) ----------
+
+const authBtn = document.getElementById("authBtn");
+const authBtnText = document.getElementById("authBtnText");
+const logoutBtn = document.getElementById("logoutBtn");
+const menuLoginBtn = document.getElementById("menuLoginBtn"); 
+let currentUser = null;
+
+if (window.auth) {
+  const handleLogin = () => {
+    haptic();
+    if (currentUser) return;
+
+    window.auth.signInWithPopup(window.googleProvider).catch((err) => {
+      console.error("Google sign-in failed:", err.code, err.message);
+      if (
+        err.code === "auth/popup-blocked" ||
+        err.code === "auth/operation-not-supported-in-this-environment" ||
+        err.code === "auth/popup-closed-by-user" ||
+        err.code === "auth/cancelled-popup-request"
+      ) {
+        window.auth.signInWithRedirect(window.googleProvider);
+      } else if (err.code === "auth/unauthorized-domain") {
+        showToast("Domain not authorized for login.", "⚠️");
+      } else {
+        showToast("Login failed. Please try again.", "❌");
+      }
+    });
+  };
+
+  authBtn.addEventListener("click", handleLogin);
+  if (menuLoginBtn) menuLoginBtn.addEventListener("click", handleLogin);
+
+  window.auth.getRedirectResult().catch((err) => {
+    if (err) console.error("Google sign-in (redirect) failed:", err.code, err.message);
+  });
+
+  const googleIcon = document.getElementById("googleIcon");
+  const authAvatarImg = document.getElementById("authAvatarImg");
+  const authAvatarFallback = document.getElementById("authAvatarFallback");
+
+  window.auth.onAuthStateChanged((user) => {
+    currentUser = user;
+    if (user) {
+      authBtnText.textContent = user.displayName ? user.displayName.split(" ")[0] : "Account";
+      authBtn.title = user.displayName || "Signed in";
+      const nameField = document.getElementById("fullName");
+      if (nameField && !nameField.value) nameField.value = user.displayName || "";
+
+      // Show the account's Google profile picture instead of the generic
+      // Google icon, so it's visually obvious you're logged in — not just
+      // readable in small text. Falls back to a plain initials badge if
+      // there's no photo, or if the photo URL fails to load.
+      googleIcon.hidden = true;
+      if (user.photoURL) {
+        authAvatarImg.src = user.photoURL;
+        authAvatarImg.onerror = () => {
+          authAvatarImg.hidden = true;
+          authAvatarFallback.hidden = false;
+        };
+        authAvatarImg.hidden = false;
+        authAvatarFallback.hidden = true;
+      } else {
+        authAvatarFallback.textContent = initials(user.displayName || user.email || "?");
+        authAvatarFallback.hidden = false;
+        authAvatarImg.hidden = true;
+      }
+
+      logoutBtn.hidden = false;
+      if (menuLoginBtn) menuLoginBtn.hidden = true;
+    } else {
+      authBtnText.textContent = "Login";
+      authBtn.title = "Login with Google";
+
+      googleIcon.hidden = false;
+      authAvatarImg.hidden = true;
+      authAvatarFallback.hidden = true;
+
+      logoutBtn.hidden = true;
+      if (menuLoginBtn) menuLoginBtn.hidden = false;
+    }
+  });
+
+  logoutBtn.addEventListener("click", () => window.auth.signOut());
+} else {
+  const alertNotConfigured = () => showToast("Login isn't configured yet.", "⚠️");
+  authBtn.addEventListener("click", alertNotConfigured);
+  if (menuLoginBtn) menuLoginBtn.addEventListener("click", alertNotConfigured);
+}
+
+// ---------- reward form → Google Sheet ----------
+
+const SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbziQvJq8kqk-CAHRekAHjkSVEJkQmbBp84girc4vjfTPbY20VJl2hz_I-OC-bWBcjQf/exec";
+
+document.getElementById("rewardForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  if (!currentUser) {
+    showToast("Please login with Google first.", "🔒");
+    return;
+  }
+
+  const submitBtn = document.getElementById("submitRewardBtn");
+  const payload = {
+    fullName: document.getElementById("fullName").value,
+    whatsapp: document.getElementById("whatsapp").value,
+    brand: document.getElementById("brandSelect").value,
+    email: currentUser.email || "",
+    uid: currentUser.uid || "",
+    submittedAt: new Date().toISOString()
+  };
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Submitting...";
+  haptic();
+
+  fetch(SHEET_WEBAPP_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: new URLSearchParams(payload)
+  }).catch((err) => console.error("Sheet submission error in background:", err));
+
+  setTimeout(() => {
+    document.getElementById("rewardForm").hidden = true;
+    document.getElementById("successView").hidden = false;
+    
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit Entry";
+    haptic(); 
+  }, 600);
+});
+
+document.getElementById("contactForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = document.getElementById("contactName").value;
+  const issue = document.getElementById("contactIssueText").value;
+  const message = document.getElementById("contactMessage").value;
+
+  const text = encodeURIComponent(`Hi Cheapster Support,\nMy Name: ${name}\nIssue: ${issue}\n\nMessage:\n${message}`);
+  openStoreLink({ link: `https://wa.me/919999999999?text=${text}` }); 
+});
+
+// ---------- premium touches: header shadow + scroll reveal ----------
+
+const header = document.getElementById("siteHeader");
+if (header) {
+  let ticking = false;
+  window.addEventListener("scroll", () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      header.classList.toggle("is-scrolled", window.scrollY > 12);
+      ticking = false;
+    });
+  }, { passive: true });
+}
+
+const revealTargets = document.querySelectorAll(".reveal-on-scroll");
+if (revealTargets.length && "IntersectionObserver" in window) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("in-view");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0, rootMargin: "0px 0px -10% 0px" });
+  revealTargets.forEach(el => {
+    el.classList.add("reveal-armed");
+    observer.observe(el);
+    setTimeout(() => el.classList.add("in-view"), 1500);
   });
 }
 
-// PWA Install Logic
+renderStores(stores);
+if (document.getElementById("currentYear")) {
+  document.getElementById("currentYear").textContent = new Date().getFullYear();
+}
+
+// =========================================================
+// PWA INSTALL BUTTON & SERVICE WORKER SETUP
+// =========================================================
+
+// 1. Register Service Worker for PWA
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch((err) => console.log('SW fail', err));
+    navigator.serviceWorker.register('/sw.js').catch((err) => {
+      console.log('Service worker registration failed.', err);
+    });
   });
 }
 
 let deferredPrompt;
 const installBtn = document.getElementById('installAppBtn');
+
+// Sirf Android OS detect karne ka logic
+const isAndroid = /android/i.test(navigator.userAgent || navigator.vendor || window.opera);
+
 if (installBtn) {
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    installBtn.style.display = 'inline-flex';
+    
+    // Agar phone Android hai, tabhi footer wala button show karo
+    if (isAndroid) {
+      installBtn.style.display = 'inline-flex';
+    }
   });
+
   installBtn.addEventListener('click', async () => {
     haptic();
     if (deferredPrompt) {
       deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`User response to install: ${outcome}`);
       deferredPrompt = null;
       installBtn.style.display = 'none';
     }
+  });
+
+  window.addEventListener('appinstalled', () => {
+    installBtn.style.display = 'none';
+    deferredPrompt = null;
+    console.log('App successfully installed!');
   });
 }
