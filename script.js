@@ -201,13 +201,8 @@ function buildCard(store, index) {
   img.decoding = "async";
   
   const isEager = index < 12;
-  if (isEager) {
-    img.loading = "eager";
-    img.fetchPriority = "high";
-  } else {
-    img.loading = "lazy";
-    img.fetchPriority = "low";
-  }
+  img.loading = isEager ? "eager" : "lazy";
+  img.fetchPriority = isEager ? "high" : "low";
 
   const bgColors = ['#1c3f66', '#0d2138', '#142a44']; 
   const bg = bgColors[index % bgColors.length];
@@ -215,61 +210,16 @@ function buildCard(store, index) {
 
   if (chain.length > 0) {
     let currentStep = 0;
-    let logoTimer = null;
-
-    function advanceLogo() {
-      clearTimeout(logoTimer);
+    img.onerror = () => {
       currentStep++;
       if (currentStep < chain.length) {
         img.src = chain[currentStep];
-        armLogoTimeout();
       } else {
-        img.onerror = null;
-        img.src = svgFallback;
+        img.onerror = null; 
+        img.src = svgFallback; 
       }
-    }
-
-    function armLogoTimeout() {
-      clearTimeout(logoTimer);
-      // This is a safety net for a request that's truly stuck (never
-      // resolves, never errors) — NOT a cutoff for normal loading delay.
-      // The first 12 logos load "eagerly" together and mostly share the
-      // same host (Wikipedia), and browsers only allow ~6 connections per
-      // host — so several of them legitimately queue and can easily take
-      // over a second before they even start. 4s comfortably covers normal
-      // queueing/loading and only catches a genuinely hung request.
-      logoTimer = setTimeout(advanceLogo, 4000);
-    }
-
-    img.onload = () => clearTimeout(logoTimer);
-    img.onerror = advanceLogo;
-    img.src = chain[0];
-
-    if (isEager) {
-      // Eager images start fetching immediately, so a timer from right
-      // now correctly measures real loading time.
-      armLogoTimeout();
-    } else if ("IntersectionObserver" in window) {
-      // Lazy images might not start fetching for a long time — whenever
-      // the user actually scrolls near them, which could be well past any
-      // fixed timeout window. Starting the timer immediately (like eager
-      // images) was firing before the browser had even begun loading these,
-      // wrongly yanking most of the site's logos over to the lower-quality
-      // fallback. Instead, only arm the timeout once the image is actually
-      // about to come into view — that's when loading realistically starts.
-      const lazyLoadWatcher = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            armLogoTimeout();
-            lazyLoadWatcher.unobserve(img);
-          }
-        });
-      }, { rootMargin: "300px" });
-      lazyLoadWatcher.observe(img);
-    }
-    // No IntersectionObserver support: lazy images simply resolve via
-    // onload/onerror whenever the browser gets to them, with no artificial
-    // time cap — safer than guessing wrong.
+    };
+    img.src = chain[0]; 
   } else {
     img.src = svgFallback;
   }
@@ -451,10 +401,6 @@ if (window.auth) {
       const nameField = document.getElementById("fullName");
       if (nameField && !nameField.value) nameField.value = user.displayName || "";
 
-      // Show the account's Google profile picture instead of the generic
-      // Google icon, so it's visually obvious you're logged in — not just
-      // readable in small text. Falls back to a plain initials badge if
-      // there's no photo, or if the photo URL fails to load.
       googleIcon.hidden = true;
       if (user.photoURL) {
         authAvatarImg.src = user.photoURL;
@@ -585,7 +531,6 @@ if (document.getElementById("currentYear")) {
 // PWA INSTALL BUTTON & SERVICE WORKER SETUP
 // =========================================================
 
-// 1. Register Service Worker for PWA
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').catch((err) => {
@@ -597,7 +542,6 @@ if ('serviceWorker' in navigator) {
 let deferredPrompt;
 const installBtn = document.getElementById('installAppBtn');
 
-// Sirf Android OS detect karne ka logic
 const isAndroid = /android/i.test(navigator.userAgent || navigator.vendor || window.opera);
 
 if (installBtn) {
@@ -605,7 +549,6 @@ if (installBtn) {
     e.preventDefault();
     deferredPrompt = e;
     
-    // Agar phone Android hai, tabhi footer wala button show karo
     if (isAndroid) {
       installBtn.style.display = 'inline-flex';
     }
