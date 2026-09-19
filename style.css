@@ -47,11 +47,17 @@ body::before {
   content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.55;
   background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='320'%20height='320'%3E%3Ccircle%20cx='46'%20cy='58'%20r='20'%20fill='%23cda15c'%20opacity='0.05'/%3E%3Ccircle%20cx='46'%20cy='58'%20r='9'%20fill='%23cda15c'%20opacity='0.10'/%3E%3Ccircle%20cx='46'%20cy='58'%20r='3'%20fill='%23eccd8f'%20opacity='0.20'/%3E%3Ccircle%20cx='244'%20cy='96'%20r='17'%20fill='%235b9eea'%20opacity='0.05'/%3E%3Ccircle%20cx='244'%20cy='96'%20r='8'%20fill='%235b9eea'%20opacity='0.09'/%3E%3Ccircle%20cx='244'%20cy='96'%20r='3'%20fill='%23bcdcff'%20opacity='0.17'/%3E%3Ccircle%20cx='128'%20cy='236'%20r='15'%20fill='%23cda15c'%20opacity='0.04'/%3E%3Ccircle%20cx='128'%20cy='236'%20r='7'%20fill='%23eccd8f'%20opacity='0.09'/%3E%3Ccircle%20cx='128'%20cy='236'%20r='2.5'%20fill='%23f4e2b8'%20opacity='0.16'/%3E%3Ccircle%20cx='288'%20cy='276'%20r='13'%20fill='%235b9eea'%20opacity='0.04'/%3E%3Ccircle%20cx='288'%20cy='276'%20r='6'%20fill='%235b9eea'%20opacity='0.08'/%3E%3C/svg%3E");
   background-size: 320px 320px;
+  will-change: transform;
 }
 
 body > * { position: relative; z-index: 1; }
-.page-noise { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: transparent; }
-.ambient { position: fixed; z-index: 0; pointer-events: none; border-radius: 50%; filter: blur(90px); opacity: 0.45; }
+.page-noise { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: transparent; will-change: transform; }
+/* Fixed + heavy blur is the classic scroll-jank combo — without its own
+   compositor layer, some browsers repaint this blur every scroll frame.
+   will-change: transform isolates it onto its own layer (painted once,
+   just moved by the GPU thereafter); the smaller blur radius trims the
+   per-frame cost further for phones without an isolated layer. */
+.ambient { position: fixed; z-index: 0; pointer-events: none; border-radius: 50%; filter: blur(70px); opacity: 0.45; will-change: transform; }
 .ambient-left { top: -120px; left: -140px; width: 380px; height: 380px; background: radial-gradient(circle, rgba(91, 158, 234, 0.22), transparent 70%); }
 .ambient-right { top: 25%; right: -180px; width: 440px; height: 440px; background: radial-gradient(circle, rgba(205, 161, 92, 0.16), transparent 70%); }
 
@@ -97,7 +103,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* Header */
-.site-header { position: sticky; top: 0; z-index: 100; background: rgba(9, 13, 20, 0.82); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--line); transition: box-shadow .3s ease, background-color .3s ease; }
+.site-header { position: sticky; top: 0; z-index: 100; background: rgba(9, 13, 20, 0.88); backdrop-filter: blur(9px); -webkit-backdrop-filter: blur(9px); border-bottom: 1px solid var(--line); transition: box-shadow .3s ease, background-color .3s ease; will-change: transform; }
 .site-header.is-scrolled { background: rgba(9, 13, 20, 0.96); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); }
 .site-header::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne), var(--sapphire-glow), transparent); background-size: 200% 100%; opacity: 0.55; animation: shimmerLine 7s linear infinite; }
 @keyframes shimmerLine { to { background-position: -200% 0; } }
