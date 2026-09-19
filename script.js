@@ -33,7 +33,7 @@ const stores = [
   { name: "Meesho", domain: "meesho.com", category: "Mega Brands", description: "Value shopping", link: "https://www.meesho.com" },
 
   // 2. FASHION & FOOTWEAR
-  { name: "Snitch", domain: "snitch.co.in", category: "Fashion", description: "Men's fashion", link: "https://www.snitch.co.in" },
+  { name: "Snitch", domain: "", category: "Fashion", description: "Men's fashion", link: "https://www.snitch.co.in" },
   { name: "Urbanic", domain: "urbanic.com", category: "Fashion", description: "Gen-Z women's fashion", link: "https://www.urbanic.com" },
   { name: "Off Duty India", domain: "offduty.in", category: "Fashion", description: "Baggy streetwear", link: "https://www.offduty.in" },
   { name: "Vastrado", domain: "vastrado.com", category: "Fashion", description: "Affordable fast fashion", link: "https://www.vastrado.com" },
@@ -67,7 +67,7 @@ const stores = [
   { name: "Bath & Body Works", domain: "bathandbodyworks.in", category: "Beauty", description: "Premium mists & care", link: "https://www.bathandbodyworks.in" },
   { name: "Swiss Beauty", domain: "swissbeauty.in", category: "Beauty", description: "Budget makeup", link: "https://swissbeauty.in" },
   { name: "Renee Cosmetics", domain: "reneecosmetics.in", category: "Beauty", description: "Trending makeup", link: "https://www.reneecosmetics.in" },
-  { name: "Colorbar", domain: "colorbarcosmetics.com", category: "Beauty", description: "Premium cosmetics", link: "https://www.colorbarcosmetics.com" },
+  { name: "Colorbar", domain: "", category: "Beauty", description: "Premium cosmetics", link: "https://www.colorbarcosmetics.com" },
   { name: "MAC Cosmetics", domain: "maccosmetics.in", category: "Beauty", description: "Luxury makeup", link: "https://www.maccosmetics.in" },
   { name: "Traya", domain: "traya.health", category: "Beauty", description: "Hair fall treatment", link: "https://traya.health" },
   { name: "Bare Anatomy", domain: "innovist.com", category: "Beauty", description: "Science hair care", link: "https://innovist.com/collections/bare-anatomy" },
@@ -100,7 +100,7 @@ const stores = [
   { name: "Netmeds", domain: "netmeds.com", category: "Wellness", description: "Medicine delivery", link: "https://www.netmeds.com" },
   { name: "MuscleBlaze", domain: "muscleblaze.com", category: "Wellness", description: "Sports nutrition", link: "https://www.muscleblaze.com" },
   { name: "Myprotein", domain: "myprotein.co.in", category: "Wellness", description: "Fitness supplements", link: "https://www.myprotein.co.in" },
-  { name: "Plix", domain: "plixlife.com", category: "Wellness", description: "Plant nutrition", link: "https://www.plixlife.com" },
+  { name: "Plix", domain: "", category: "Wellness", description: "Plant nutrition", link: "https://www.plixlife.com" },
   { name: "Kapiva", domain: "kapiva.in", category: "Wellness", description: "Ayurvedic nutrition", link: "https://www.kapiva.in" },
   { name: "HealthKart", domain: "healthkart.com", category: "Wellness", description: "Health supplements", link: "https://www.healthkart.com" },
 
