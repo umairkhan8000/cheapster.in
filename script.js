@@ -1,5 +1,5 @@
 // =========================================================
-// CHEAPSTER.IN — 77+ BRANDS DIRECTORY (Premium Edition)
+// CHEAPSTER.IN — 60+ BRANDS DIRECTORY (Premium Edition)
 // Haptic Feedback, Spotlight Hover, Toast Notifications, & PWA
 // =========================================================
 
@@ -83,23 +83,7 @@ const stores = [
   // PHARMACY
   { name: "Tata 1mg", domain: "1mg.com", description: "Online pharmacy", link: "https://www.1mg.com" },
   { name: "Apollo 24|7", domain: "apollo247.com", description: "Healthcare", link: "https://www.apollo247.com" },
-  { name: "Netmeds", domain: "netmeds.com", description: "Medicine delivery", link: "https://www.netmeds.com" },
-
-  // FINANCE & CARDS
-  { name: "Upstox", domain: "upstox.com", description: "Trading app", link: "https://upstox.com" },
-  { name: "Groww", domain: "groww.in", description: "Investing platform", link: "https://groww.in" },
-  { name: "Angel One", domain: "angelone.in", description: "Stock broking", link: "https://www.angelone.in" },
-  { name: "BankBazaar", domain: "bankbazaar.com", description: "Financial marketplace", link: "https://www.bankbazaar.com" },
-  { name: "SBI Credit Cards", domain: "sbicard.com", description: "Credit cards", link: "https://www.sbicard.com" },
-
-  // SOFTWARE & DIGITAL
-  { name: "Hostinger", domain: "hostinger.in", logo: "https://upload.wikimedia.org/wikipedia/commons/f/ff/Hostinger_logo.svg", description: "Web hosting", link: "https://www.hostinger.in" },
-  { name: "Bluehost", domain: "bluehost.in", logo: "https://upload.wikimedia.org/wikipedia/commons/d/d7/Bluehost_logo.svg", description: "Hosting services", link: "https://www.bluehost.in" },
-  { name: "Shopify", domain: "shopify.in", logo: "https://upload.wikimedia.org/wikipedia/commons/0/0e/Shopify_logo_2018.svg", description: "E-commerce platform", link: "https://www.shopify.com" },
-  { name: "Canva", domain: "canva.com", logo: "https://upload.wikimedia.org/wikipedia/commons/0/08/Canva_icon_2021.svg", description: "Design tool", link: "https://www.canva.com" },
-  { name: "Grammarly", domain: "grammarly.com", logo: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Grammarly_logo.svg", description: "Writing assistant", link: "https://www.grammarly.com" },
-  { name: "ChatGPT", domain: "openai.com", logo: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg", description: "AI tools", link: "https://chatgpt.com" },
-  { name: "Adobe", domain: "adobe.com", logo: "https://upload.wikimedia.org/wikipedia/commons/b/b6/Adobe_Logo_Square.svg", description: "Creative software", link: "https://www.adobe.com" }
+  { name: "Netmeds", domain: "netmeds.com", description: "Medicine delivery", link: "https://www.netmeds.com" }
 ];
 
 const grid = document.getElementById("storeGrid");
@@ -210,8 +194,7 @@ function buildCard(store, index) {
   if (chain.length > 0) {
     let currentStep = 0;
     img.onerror = () => {
-      // MOBILE MINIMIZE FIX: Agar browser background mein hai ya net off hai, 
-      // toh error ko ignore karo aur app khulne par wapas same logo load karo.
+      // MOBILE MINIMIZE FIX
       if (document.hidden || !navigator.onLine) {
         const retryLoad = () => {
           if (!document.hidden && navigator.onLine) {
