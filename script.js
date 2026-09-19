@@ -72,9 +72,11 @@ const stores = [
   { name: "Traya", domain: "traya.health", category: "Beauty", description: "Hair fall treatment", link: "https://traya.health" },
   { name: "Bare Anatomy", domain: "innovist.com", category: "Beauty", description: "Science hair care", link: "https://innovist.com/collections/bare-anatomy" },
   { name: "BBlunt", domain: "bblunt.com", category: "Beauty", description: "Salon-style hair care", link: "https://bblunt.com" },
-  { name: "Lakme", domain: "nykaa.com", category: "Beauty", description: "Indian makeup giant", link: "https://www.nykaa.com/brands/lakme/c/334" },
-  { name: "Maybelline", domain: "nykaa.com", category: "Beauty", description: "Global makeup", link: "https://www.nykaa.com/brands/maybelline-new-york/c/392" },
-  { name: "L'Oréal", domain: "nykaa.com", category: "Beauty", description: "Hair & cosmetics", link: "https://www.nykaa.com/brands/loreal-paris/c/595" },
+  
+  // -- ROUTED BEAUTY BRANDS (Original Logo, Redirects to Nykaa) --
+  { name: "Lakme", domain: "lakmeindia.com", category: "Beauty", description: "Indian makeup giant", link: "https://www.nykaa.com/brands/lakme/c/334" },
+  { name: "Maybelline", domain: "maybelline.co.in", category: "Beauty", description: "Global makeup", link: "https://www.nykaa.com/brands/maybelline-new-york/c/392" },
+  { name: "L'Oréal", domain: "lorealparis.co.in", category: "Beauty", description: "Hair & cosmetics", link: "https://www.nykaa.com/brands/loreal-paris/c/595" },
 
   // 4. TECH & GADGETS
   { name: "Samsung", domain: "samsung.com", category: "Tech", description: "Mobiles & electronics", link: "https://www.samsung.com/in" },
@@ -129,14 +131,18 @@ const stores = [
   { name: "SleepyCat", domain: "sleepycat.in", category: "Home", description: "Sleep solutions", link: "https://sleepycat.in" },
   { name: "Rentomojo", domain: "rentomojo.com", category: "Home", description: "Furniture rentals", link: "https://www.rentomojo.com" },
   { name: "Moglix", domain: "moglix.com", category: "Home", description: "Hardware & tools", link: "https://www.moglix.com" },
-  { name: "Bosch Tools", domain: "amazon.in", category: "Home", description: "Power tools", link: "https://www.amazon.in/bosch-tools" },
+  
+  // -- ROUTED HARDWARE (Original Logo, Redirects to Amazon) --
+  { name: "Bosch Tools", domain: "bosch-pt.co.in", category: "Home", description: "Power tools", link: "https://www.amazon.in/bosch-tools" },
 
   // 9. PETS
   { name: "Supertails", domain: "supertails.com", category: "Pets", description: "Pet care & food", link: "https://supertails.com" },
   { name: "Heads Up For Tails", domain: "headsupfortails.com", category: "Pets", description: "Luxury pet supplies", link: "https://headsupfortails.com" },
-  { name: "Drools", domain: "amazon.in", category: "Pets", description: "Dog & cat food", link: "https://www.amazon.in/stores/Drools/Drools" },
-  { name: "Pedigree", domain: "amazon.in", category: "Pets", description: "Dog nutrition", link: "https://www.amazon.in/stores/Pedigree" },
-  { name: "Royal Canin", domain: "amazon.in", category: "Pets", description: "Premium pet nutrition", link: "https://www.amazon.in/stores/RoyalCanin" },
+  
+  // -- ROUTED PETS (Original Logo, Redirects to Amazon) --
+  { name: "Drools", domain: "drools.com", category: "Pets", description: "Dog & cat food", link: "https://www.amazon.in/stores/Drools/Drools" },
+  { name: "Pedigree", domain: "pedigree.in", category: "Pets", description: "Dog nutrition", link: "https://www.amazon.in/stores/Pedigree" },
+  { name: "Royal Canin", domain: "royalcanin.com", category: "Pets", description: "Premium pet nutrition", link: "https://www.amazon.in/stores/RoyalCanin" },
 
   // 10. DIGITAL & SOFTWARE
   { name: "Hostinger", domain: "hostinger.in", category: "Digital", description: "Web hosting", link: "https://www.hostinger.in" },
@@ -148,7 +154,9 @@ const stores = [
   { name: "FirstCry", domain: "firstcry.com", category: "Kids", description: "Kids & baby gear", link: "https://www.firstcry.com" },
   { name: "Hamleys", domain: "hamleys.in", category: "Kids", description: "Premium toys", link: "https://www.hamleys.in" },
   { name: "Smartivity", domain: "smartivity.in", category: "Kids", description: "DIY & STEM toys", link: "https://www.smartivity.in" },
-  { name: "LEGO", domain: "amazon.in", category: "Kids", description: "Building blocks", link: "https://www.amazon.in/stores/LEGO" },
+  
+  // -- ROUTED KIDS TOYS (Original Logo, Redirects to Amazon) --
+  { name: "LEGO", domain: "lego.com", category: "Kids", description: "Building blocks", link: "https://www.amazon.in/stores/LEGO" },
 
   // 12. FOOD & MEAT
   { name: "Licious", domain: "licious.in", category: "Food", description: "Fresh meat & seafood", link: "https://www.licious.in" },
@@ -157,64 +165,71 @@ const stores = [
 
 // ---------- Premium UI Injections (Styles & Category Nav) ----------
 function injectStylesAndNav() {
-  const style = document.createElement("style");
-  style.innerHTML = `
-    .category-nav-wrapper {
-      position: sticky;
-      top: 60px; /* Adjust based on your header height */
-      background: rgba(13, 33, 56, 0.95); /* Dark theme match */
-      backdrop-filter: blur(10px);
-      z-index: 100;
-      padding: 12px 16px;
-      margin-bottom: 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    .category-nav {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      scrollbar-width: none; /* Firefox */
-    }
-    .category-nav::-webkit-scrollbar {
-      display: none; /* Chrome/Safari */
-    }
-    .cat-pill {
-      background: rgba(255, 255, 255, 0.08);
-      color: #a3b8cc;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 20px;
-      padding: 8px 18px;
-      font-size: 14px;
-      font-weight: 600;
-      white-space: nowrap;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      user-select: none;
-    }
-    .cat-pill:hover {
-      background: rgba(255, 255, 255, 0.15);
-      color: #ffffff;
-    }
-    .cat-pill.active {
-      background: #ffffff;
-      color: #0d2138;
-      border-color: #ffffff;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    }
-  `;
-  document.head.appendChild(style);
+  // Check if style already exists to prevent duplicates on hot reload
+  if(!document.getElementById("cheapster-cat-styles")) {
+    const style = document.createElement("style");
+    style.id = "cheapster-cat-styles";
+    style.innerHTML = `
+      .category-nav-wrapper {
+        position: sticky;
+        top: 60px; /* Adjust based on your header height */
+        background: rgba(13, 33, 56, 0.95); /* Dark theme match */
+        backdrop-filter: blur(10px);
+        z-index: 100;
+        padding: 12px 16px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+      }
+      .category-nav {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        scrollbar-width: none; /* Firefox */
+      }
+      .category-nav::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
+      }
+      .cat-pill {
+        background: rgba(255, 255, 255, 0.08);
+        color: #a3b8cc;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        padding: 8px 18px;
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        user-select: none;
+      }
+      .cat-pill:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+      }
+      .cat-pill.active {
+        background: #ffffff;
+        color: #0d2138;
+        border-color: #ffffff;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      }
+    `;
+    document.head.appendChild(style);
+  }
 
   // Inject Category Nav right above the grid
   const gridElement = document.getElementById("storeGrid");
-  const navWrapper = document.createElement("div");
-  navWrapper.className = "category-nav-wrapper";
-  
-  const navScroll = document.createElement("div");
-  navScroll.className = "category-nav";
-  navScroll.id = "categoryNav";
-  
-  navWrapper.appendChild(navScroll);
-  gridElement.parentNode.insertBefore(navWrapper, gridElement);
+  if(!document.getElementById("categoryNavWrapper") && gridElement) {
+    const navWrapper = document.createElement("div");
+    navWrapper.id = "categoryNavWrapper";
+    navWrapper.className = "category-nav-wrapper";
+    
+    const navScroll = document.createElement("div");
+    navScroll.className = "category-nav";
+    navScroll.id = "categoryNav";
+    
+    navWrapper.appendChild(navScroll);
+    gridElement.parentNode.insertBefore(navWrapper, gridElement);
+  }
 }
 
 // ---------- App State ----------
@@ -344,6 +359,7 @@ function buildCard(store, index) {
 }
 
 function renderUI() {
+  if (!grid) return;
   // 1. Filter logic
   let filtered = stores.filter(store => {
     const matchesCat = currentCategory === "All" || store.category === currentCategory;
@@ -381,6 +397,7 @@ function renderUI() {
 
 function renderCategoryNav() {
   const navScroll = document.getElementById("categoryNav");
+  if (!navScroll) return;
   navScroll.innerHTML = "";
   
   CATEGORY_ORDER.forEach(cat => {
@@ -401,14 +418,16 @@ function renderCategoryNav() {
 
 // ---------- Search Setup ----------
 const searchInput = document.getElementById("searchInput");
-searchInput.addEventListener("input", debounce((e) => {
-  searchQuery = e.target.value.toLowerCase().trim();
-  renderUI();
-}));
+if (searchInput) {
+  searchInput.addEventListener("input", debounce((e) => {
+    searchQuery = e.target.value.toLowerCase().trim();
+    renderUI();
+  }));
+}
 
 // Populate forms
 const brandSelect = document.getElementById("brandSelect");
-if(brandSelect) {
+if (brandSelect) {
   stores.forEach(store => {
     const option = document.createElement("option");
     option.value = store.name;
@@ -429,7 +448,6 @@ if (document.getElementById("currentYear")) {
 // =========================================================
 // REMAINDER OF UTILS (Modals, Auth, Forms, PWA)
 // =========================================================
-// Note: Keeping your existing Modal, Firebase Auth, and PWA logic exactly as is.
 
 function openModal(id) {
   haptic();
