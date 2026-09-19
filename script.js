@@ -1,5 +1,6 @@
 // =========================================================
-// CHEAPSTER.IN — PREMIUM BRAND DIRECTORY (Fixed & Full Edition)
+// CHEAPSTER.IN — PREMIUM BRAND DIRECTORY (Category Edition)
+// Haptic Feedback, Spotlight Hover, PWA & Category Routing
 // =========================================================
 
 // --- CATEGORY ORDER (Most Selling to Least) ---
@@ -72,7 +73,7 @@ const stores = [
   { name: "Bare Anatomy", domain: "innovist.com", category: "Beauty", description: "Science hair care", link: "https://innovist.com/collections/bare-anatomy" },
   { name: "BBlunt", domain: "bblunt.com", category: "Beauty", description: "Salon-style hair care", link: "https://bblunt.com" },
   
-  // -- ROUTED BEAUTY BRANDS --
+  // -- ROUTED BEAUTY BRANDS (Original Logo, Redirects to Nykaa) --
   { name: "Lakme", domain: "lakmeindia.com", category: "Beauty", description: "Indian makeup giant", link: "https://www.nykaa.com/brands/lakme/c/334" },
   { name: "Maybelline", domain: "maybelline.co.in", category: "Beauty", description: "Global makeup", link: "https://www.nykaa.com/brands/maybelline-new-york/c/392" },
   { name: "L'Oréal", domain: "lorealparis.co.in", category: "Beauty", description: "Hair & cosmetics", link: "https://www.nykaa.com/brands/loreal-paris/c/595" },
@@ -92,7 +93,7 @@ const stores = [
   { name: "Beardo", domain: "beardo.in", category: "Wellness", description: "Men's grooming", link: "https://beardo.in" },
   { name: "Bombay Shaving Co", domain: "bombayshavingcompany.com", category: "Wellness", description: "Premium grooming", link: "https://bombayshavingcompany.com" },
   { name: "Man Matters", domain: "manmatters.com", category: "Wellness", description: "Men's wellness", link: "https://manmatters.com" },
-  { name: "The Man Company", domain: "themancompany.com", category: "Wellness", description: "Premium essentials", link: "https://themancompany.com" },
+  { name: "The Man Company", domain: "themancompany.com", category: "Wellness", description: "Premium essentials", link: "https://www.themancompany.com" },
   { name: "Perfora", domain: "perforacare.com", category: "Wellness", description: "Premium oral care", link: "https://perforacare.com" },
   { name: "Tata 1mg", domain: "1mg.com", category: "Wellness", description: "Online pharmacy", link: "https://www.1mg.com" },
   { name: "Apollo 24|7", domain: "apollo247.com", category: "Wellness", description: "Healthcare delivery", link: "https://www.apollo247.com" },
@@ -130,11 +131,15 @@ const stores = [
   { name: "SleepyCat", domain: "sleepycat.in", category: "Home", description: "Sleep solutions", link: "https://sleepycat.in" },
   { name: "Rentomojo", domain: "rentomojo.com", category: "Home", description: "Furniture rentals", link: "https://www.rentomojo.com" },
   { name: "Moglix", domain: "moglix.com", category: "Home", description: "Hardware & tools", link: "https://www.moglix.com" },
+  
+  // -- ROUTED HARDWARE (Original Logo, Redirects to Amazon) --
   { name: "Bosch Tools", domain: "bosch-pt.co.in", category: "Home", description: "Power tools", link: "https://www.amazon.in/bosch-tools" },
 
   // 9. PETS
   { name: "Supertails", domain: "supertails.com", category: "Pets", description: "Pet care & food", link: "https://supertails.com" },
   { name: "Heads Up For Tails", domain: "headsupfortails.com", category: "Pets", description: "Luxury pet supplies", link: "https://headsupfortails.com" },
+  
+  // -- ROUTED PETS (Original Logo, Redirects to Amazon) --
   { name: "Drools", domain: "drools.com", category: "Pets", description: "Dog & cat food", link: "https://www.amazon.in/stores/Drools/Drools" },
   { name: "Pedigree", domain: "pedigree.in", category: "Pets", description: "Dog nutrition", link: "https://www.amazon.in/stores/Pedigree" },
   { name: "Royal Canin", domain: "royalcanin.com", category: "Pets", description: "Premium pet nutrition", link: "https://www.amazon.in/stores/RoyalCanin" },
@@ -149,6 +154,8 @@ const stores = [
   { name: "FirstCry", domain: "firstcry.com", category: "Kids", description: "Kids & baby gear", link: "https://www.firstcry.com" },
   { name: "Hamleys", domain: "hamleys.in", category: "Kids", description: "Premium toys", link: "https://www.hamleys.in" },
   { name: "Smartivity", domain: "smartivity.in", category: "Kids", description: "DIY & STEM toys", link: "https://www.smartivity.in" },
+  
+  // -- ROUTED KIDS TOYS (Original Logo, Redirects to Amazon) --
   { name: "LEGO", domain: "lego.com", category: "Kids", description: "Building blocks", link: "https://www.amazon.in/stores/LEGO" },
 
   // 12. FOOD & MEAT
@@ -158,14 +165,15 @@ const stores = [
 
 // ---------- Premium UI Injections (Styles & Category Nav) ----------
 function injectStylesAndNav() {
+  // Check if style already exists to prevent duplicates on hot reload
   if(!document.getElementById("cheapster-cat-styles")) {
     const style = document.createElement("style");
     style.id = "cheapster-cat-styles";
     style.innerHTML = `
       .category-nav-wrapper {
         position: sticky;
-        top: 60px;
-        background: rgba(13, 33, 56, 0.95);
+        top: 60px; /* Adjust based on your header height */
+        background: rgba(13, 33, 56, 0.95); /* Dark theme match */
         backdrop-filter: blur(10px);
         z-index: 100;
         padding: 12px 16px;
@@ -176,10 +184,10 @@ function injectStylesAndNav() {
         display: flex;
         gap: 10px;
         overflow-x: auto;
-        scrollbar-width: none;
+        scrollbar-width: none; /* Firefox */
       }
       .category-nav::-webkit-scrollbar {
-        display: none;
+        display: none; /* Chrome/Safari */
       }
       .cat-pill {
         background: rgba(255, 255, 255, 0.08);
@@ -208,6 +216,7 @@ function injectStylesAndNav() {
     document.head.appendChild(style);
   }
 
+  // Inject Category Nav right above the grid
   const gridElement = document.getElementById("storeGrid");
   if(!document.getElementById("categoryNavWrapper") && gridElement) {
     const navWrapper = document.createElement("div");
@@ -227,7 +236,7 @@ function injectStylesAndNav() {
 let currentCategory = "All";
 let searchQuery = "";
 
-// ---------- Interactions & Helpers ----------
+// ---------- Premium Interactions Helpers ----------
 const haptic = () => { if (navigator.vibrate) navigator.vibrate(40); };
 
 function showToast(message, icon = "✨") {
@@ -281,6 +290,8 @@ function openStoreLink(store) {
   document.body.removeChild(a);
 }
 
+// ---------- Shuffle Helper ----------
+// Fisher-Yates Shuffle for mixed feeds
 function shuffleArray(array) {
   let arr = [...array];
   for (let i = arr.length - 1; i > 0; i--) {
@@ -290,7 +301,7 @@ function shuffleArray(array) {
   return arr;
 }
 
-// ---------- Rendering Cards ----------
+// ---------- Rendering Logic ----------
 const grid = document.getElementById("storeGrid");
 
 function buildCard(store, index) {
@@ -349,25 +360,31 @@ function buildCard(store, index) {
 
 function renderUI() {
   if (!grid) return;
+  // 1. Filter logic
   let filtered = stores.filter(store => {
     const matchesCat = currentCategory === "All" || store.category === currentCategory;
     const matchesSearch = store.name.toLowerCase().includes(searchQuery) || store.description.toLowerCase().includes(searchQuery);
     return matchesCat && matchesSearch;
   });
 
+  // 2. Sorting / Shuffling Logic
   if (currentCategory === "All" && searchQuery === "") {
+    // Top Mega Brands stay on top, the rest get mixed!
     const mega = filtered.filter(s => s.category === "Mega Brands");
     const others = shuffleArray(filtered.filter(s => s.category !== "Mega Brands"));
     filtered = [...mega, ...others];
   } else {
+    // If specific category is chosen, display alphabetically to look clean
     filtered.sort((a, b) => a.name.localeCompare(b.name));
   }
 
+  // 3. Render grid
   const fragment = document.createDocumentFragment();
   filtered.forEach((store, i) => fragment.appendChild(buildCard(store, i)));
   grid.innerHTML = "";
   grid.appendChild(fragment);
 
+  // Update counters
   const count = filtered.length;
   const resultPill = document.getElementById("resultPill");
   const heroStoreCount = document.getElementById("heroStoreCount");
@@ -390,15 +407,16 @@ function renderCategoryNav() {
     pill.addEventListener("click", () => {
       haptic();
       currentCategory = cat;
+      // scroll the pill into view
       pill.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-      renderCategoryNav();
+      renderCategoryNav(); // Re-render to update active class
       renderUI();
     });
     navScroll.appendChild(pill);
   });
 }
 
-// ---------- Search & Select Setup ----------
+// ---------- Search Setup ----------
 const searchInput = document.getElementById("searchInput");
 if (searchInput) {
   searchInput.addEventListener("input", debounce((e) => {
@@ -407,6 +425,7 @@ if (searchInput) {
   }));
 }
 
+// Populate forms
 const brandSelect = document.getElementById("brandSelect");
 if (brandSelect) {
   stores.forEach(store => {
@@ -427,7 +446,7 @@ if (document.getElementById("currentYear")) {
 }
 
 // =========================================================
-// UI CONTROLS, MODALS, HAMBURGER, FORMS & GIVEAWAY HANDLERS
+// REMAINDER OF UTILS (Modals, Auth, Forms, PWA)
 // =========================================================
 
 function openModal(id) {
@@ -445,12 +464,214 @@ document.querySelectorAll("[data-close-modal]").forEach(btn => {
   btn.addEventListener("click", () => closeModal(btn.dataset.closeModal));
 });
 
+// ---------- Header offer button + info-modal links (About/Policy/Terms/Contact) ----------
+const headerOfferBtn = document.getElementById("headerOfferBtn");
+if (headerOfferBtn) headerOfferBtn.addEventListener("click", () => openModal("formModal"));
+document.querySelectorAll("[data-info-modal]").forEach(btn => {
+  btn.addEventListener("click", () => openModal(btn.dataset.infoModal));
+});
+
+// ---------- Hamburger menu ----------
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+const headerDropdown = document.getElementById("headerDropdown");
+
+if (hamburgerBtn && headerDropdown) {
+  function closeHeaderDropdown() {
+    headerDropdown.hidden = true;
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+  }
+
+  hamburgerBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    haptic();
+    const isOpen = !headerDropdown.hidden;
+    if (isOpen) {
+      closeHeaderDropdown();
+    } else {
+      headerDropdown.hidden = false;
+      hamburgerBtn.setAttribute("aria-expanded", "true");
+    }
+  });
+
+  headerDropdown.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("click", closeHeaderDropdown);
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!headerDropdown.hidden && !headerDropdown.contains(e.target)) {
+      closeHeaderDropdown();
+    }
+  });
+}
+
+// ---------- Google login (Firebase Auth) ----------
+const authBtn = document.getElementById("authBtn");
+const authBtnText = document.getElementById("authBtnText");
+const logoutBtn = document.getElementById("logoutBtn");
+const menuLoginBtn = document.getElementById("menuLoginBtn");
+let currentUser = null;
+
+if (authBtn && window.auth) {
+  const handleLogin = () => {
+    haptic();
+    if (currentUser) return;
+
+    window.auth.signInWithPopup(window.googleProvider).catch((err) => {
+      console.error("Google sign-in failed:", err.code, err.message);
+      if (
+        err.code === "auth/popup-blocked" ||
+        err.code === "auth/operation-not-supported-in-this-environment" ||
+        err.code === "auth/popup-closed-by-user" ||
+        err.code === "auth/cancelled-popup-request"
+      ) {
+        window.auth.signInWithRedirect(window.googleProvider);
+      } else if (err.code === "auth/unauthorized-domain") {
+        showToast("Domain not authorized for login.", "⚠️");
+      } else {
+        showToast("Login failed. Please try again.", "❌");
+      }
+    });
+  };
+
+  authBtn.addEventListener("click", handleLogin);
+  if (menuLoginBtn) menuLoginBtn.addEventListener("click", handleLogin);
+
+  window.auth.getRedirectResult().catch((err) => {
+    if (err) console.error("Google sign-in (redirect) failed:", err.code, err.message);
+  });
+
+  const googleIcon = document.getElementById("googleIcon");
+  const authAvatarImg = document.getElementById("authAvatarImg");
+  const authAvatarFallback = document.getElementById("authAvatarFallback");
+
+  window.auth.onAuthStateChanged((user) => {
+    currentUser = user;
+    if (user) {
+      authBtnText.textContent = user.displayName ? user.displayName.split(" ")[0] : "Account";
+      authBtn.title = user.displayName || "Signed in";
+      const nameField = document.getElementById("fullName");
+      if (nameField && !nameField.value) nameField.value = user.displayName || "";
+
+      // Show the account's Google profile picture instead of the generic
+      // Google icon, so it's visually obvious you're logged in.
+      if (googleIcon) googleIcon.hidden = true;
+      if (authAvatarImg && authAvatarFallback) {
+        if (user.photoURL) {
+          authAvatarImg.src = user.photoURL;
+          authAvatarImg.onerror = () => {
+            authAvatarImg.hidden = true;
+            authAvatarFallback.hidden = false;
+          };
+          authAvatarImg.hidden = false;
+          authAvatarFallback.hidden = true;
+        } else {
+          authAvatarFallback.textContent = initials(user.displayName || user.email || "?");
+          authAvatarFallback.hidden = false;
+          authAvatarImg.hidden = true;
+        }
+      }
+
+      if (logoutBtn) logoutBtn.hidden = false;
+      if (menuLoginBtn) menuLoginBtn.hidden = true;
+    } else {
+      authBtnText.textContent = "Login";
+      authBtn.title = "Login with Google";
+
+      if (googleIcon) googleIcon.hidden = false;
+      if (authAvatarImg) authAvatarImg.hidden = true;
+      if (authAvatarFallback) authAvatarFallback.hidden = true;
+
+      if (logoutBtn) logoutBtn.hidden = true;
+      if (menuLoginBtn) menuLoginBtn.hidden = false;
+    }
+  });
+
+  if (logoutBtn) logoutBtn.addEventListener("click", () => window.auth.signOut());
+} else if (authBtn) {
+  const alertNotConfigured = () => showToast("Login isn't configured yet.", "⚠️");
+  authBtn.addEventListener("click", alertNotConfigured);
+  if (menuLoginBtn) menuLoginBtn.addEventListener("click", alertNotConfigured);
+}
+
+// ---------- reward form → Google Sheet ----------
+const SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbziQvJq8kqk-CAHRekAHjkSVEJkQmbBp84girc4vjfTPbY20VJl2hz_I-OC-bWBcjQf/exec";
+
+const rewardForm = document.getElementById("rewardForm");
+if (rewardForm) {
+  rewardForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    if (!currentUser) {
+      showToast("Please login with Google first.", "🔒");
+      return;
+    }
+
+    const submitBtn = document.getElementById("submitRewardBtn");
+    const payload = {
+      fullName: document.getElementById("fullName").value,
+      whatsapp: document.getElementById("whatsapp").value,
+      brand: document.getElementById("brandSelect").value,
+      email: currentUser.email || "",
+      uid: currentUser.uid || "",
+      submittedAt: new Date().toISOString()
+    };
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting...";
+    haptic();
+
+    // mode: "no-cors" — Apps Script Web Apps redirect their response through
+    // a URL with no CORS headers, so a normal fetch() throws even when the
+    // row was written successfully. We don't need to read the response.
+    fetch(SHEET_WEBAPP_URL, {
+      method: "POST",
+      mode: "no-cors",
+      body: new URLSearchParams(payload)
+    }).catch((err) => console.error("Sheet submission error in background:", err));
+
+    setTimeout(() => {
+      document.getElementById("rewardForm").hidden = true;
+      document.getElementById("successView").hidden = false;
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit Entry";
+      haptic();
+    }, 600);
+  });
+}
+
+// ---------- contact form → WhatsApp ----------
+const contactForm = document.getElementById("contactForm");
+if (contactForm) {
+  contactForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = document.getElementById("contactName").value;
+    const issue = document.getElementById("contactIssueText").value;
+    const message = document.getElementById("contactMessage").value;
+
+    const text = encodeURIComponent(`Hi Cheapster Support,\nMy Name: ${name}\nIssue: ${issue}\n\nMessage:\n${message}`);
+    openStoreLink({ link: `https://wa.me/919999999999?text=${text}` });
+  });
+}
+
+// ---------- header shadow on scroll ----------
+const header = document.getElementById("siteHeader");
+if (header) {
+  let ticking = false;
+  window.addEventListener("scroll", () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      header.classList.toggle("is-scrolled", window.scrollY > 12);
+      ticking = false;
+    });
+  }, { passive: true });
+}
+
 window.addEventListener("load", () => {
   if (localStorage.getItem("cheapster_welcome_seen") !== "1") {
     setTimeout(() => openModal("welcomeModal"), 800);
   }
 });
-
 const continueBtn = document.getElementById("continueBtn");
 if(continueBtn) {
   continueBtn.addEventListener("click", () => {
@@ -459,66 +680,7 @@ if(continueBtn) {
   });
 }
 
-const loginBtn = document.getElementById("loginBtn");
-if(loginBtn) {
-  loginBtn.addEventListener("click", () => openModal("loginModal"));
-}
-
-const claimGiveawayBtn = document.getElementById("claimGiveawayBtn");
-if(claimGiveawayBtn) {
-  claimGiveawayBtn.addEventListener("click", () => openModal("giveawayModal"));
-}
-
-const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-const mobileNav = document.getElementById("mobileNav");
-if(mobileMenuBtn && mobileNav) {
-  mobileMenuBtn.addEventListener("click", () => {
-    haptic();
-    mobileNav.hidden = !mobileNav.hidden;
-  });
-}
-
-const giveawayForm = document.getElementById("giveawayForm");
-if(giveawayForm) {
-  giveawayForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    haptic();
-    
-    const submitBtn = giveawayForm.querySelector('button[type="submit"]');
-    const originalText = submitBtn.textContent;
-    submitBtn.textContent = "Submitting...";
-    submitBtn.disabled = true;
-
-    const formData = new FormData(giveawayForm);
-    const scriptURL = '#'; 
-
-    try {
-      if(scriptURL !== '#') {
-        await fetch(scriptURL, { method: 'POST', body: formData });
-      }
-      showToast("Successfully registered for Giveaway!", "🎁");
-      giveawayForm.reset();
-      closeModal("giveawayModal");
-    } catch(err) {
-      showToast("Something went wrong. Try again!", "⚠️");
-    } finally {
-      submitBtn.textContent = originalText;
-      submitBtn.disabled = false;
-    }
-  });
-}
-
-const contactForm = document.getElementById("contactForm");
-if(contactForm) {
-  contactForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    haptic();
-    showToast("Message sent successfully!", "✉️");
-    contactForm.reset();
-    closeModal("contactModal");
-  });
-}
-
+// PWA Install Logic
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').catch((err) => console.log('SW fail', err));
