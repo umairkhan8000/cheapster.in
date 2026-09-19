@@ -78,6 +78,22 @@ a { color: inherit; text-decoration: none; }
 .blinking-dot { width: 6px; height: 6px; background-color: #7fe3ab; border-radius: 50%; box-shadow: 0 0 10px #7fe3ab; animation: blink 1.5s infinite ease-in-out; }
 @keyframes blink { 0%, 100% { opacity: 0.35; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.15); } }
 
+/* Scrolling Date Bar */
+.giveaway-date-bar { 
+  background: linear-gradient(90deg, var(--sapphire), #142a44); 
+  border-bottom: 1px solid var(--line-gold); 
+  text-align: center; 
+  padding: 6px 0 8px; 
+  font-size: 10.5px; 
+  font-weight: 600; 
+  color: var(--platinum); 
+  letter-spacing: 0.5px; 
+}
+.giveaway-date-bar span { 
+  color: var(--champagne-bright); 
+  font-weight: 800; 
+}
+
 /* Header */
 .site-header { position: sticky; top: 0; z-index: 100; background: rgba(9, 13, 20, 0.82); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--line); transition: box-shadow .3s ease, background-color .3s ease; }
 .site-header.is-scrolled { background: rgba(9, 13, 20, 0.96); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); }
