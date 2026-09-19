@@ -200,7 +200,8 @@ function buildCard(store, index) {
   img.height = 100;
   img.decoding = "async";
   
-  if (index < 12) {
+  const isEager = index < 12;
+  if (isEager) {
     img.loading = "eager";
     img.fetchPriority = "high";
   } else {
@@ -235,10 +236,7 @@ function buildCard(store, index) {
       // The first 12 logos load "eagerly" together and mostly share the
       // same host (Wikipedia), and browsers only allow ~6 connections per
       // host — so several of them legitimately queue and can easily take
-      // over a second before they even start. A short timeout here was
-      // aborting those queued-but-fine requests, which is what caused
-      // some logos to go missing until a refresh (once cached, they loaded
-      // instantly and never hit the timeout). 4s comfortably covers normal
+      // over a second before they even start. 4s comfortably covers normal
       // queueing/loading and only catches a genuinely hung request.
       logoTimer = setTimeout(advanceLogo, 4000);
     }
@@ -246,7 +244,32 @@ function buildCard(store, index) {
     img.onload = () => clearTimeout(logoTimer);
     img.onerror = advanceLogo;
     img.src = chain[0];
-    armLogoTimeout();
+
+    if (isEager) {
+      // Eager images start fetching immediately, so a timer from right
+      // now correctly measures real loading time.
+      armLogoTimeout();
+    } else if ("IntersectionObserver" in window) {
+      // Lazy images might not start fetching for a long time — whenever
+      // the user actually scrolls near them, which could be well past any
+      // fixed timeout window. Starting the timer immediately (like eager
+      // images) was firing before the browser had even begun loading these,
+      // wrongly yanking most of the site's logos over to the lower-quality
+      // fallback. Instead, only arm the timeout once the image is actually
+      // about to come into view — that's when loading realistically starts.
+      const lazyLoadWatcher = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            armLogoTimeout();
+            lazyLoadWatcher.unobserve(img);
+          }
+        });
+      }, { rootMargin: "300px" });
+      lazyLoadWatcher.observe(img);
+    }
+    // No IntersectionObserver support: lazy images simply resolve via
+    // onload/onerror whenever the browser gets to them, with no artificial
+    // time cap — safer than guessing wrong.
   } else {
     img.src = svgFallback;
   }
