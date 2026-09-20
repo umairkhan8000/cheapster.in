@@ -99,7 +99,7 @@ const stores = [
   { name: "Vijay Sales", domain: "vijaysales.com", category: "Tech", description: "Electronics retail", link: "https://www.vijaysales.com" },
   { name: "Cashify", domain: "cashify.in", category: "Tech", description: "Sell & buy phones", link: "https://www.cashify.in" },
   { name: "ControlZ", domain: "controlz.world", category: "Tech", description: "Premium renewed iPhones", link: "https://www.controlz.world" },
-  { name: "Yaantra", domain: "", category: "Tech", description: "Refurbished mobiles", link: "https://www.yaantra.com" }
+  { name: "Yaantra", domain: "", category: "Tech", description: "Refurbished mobiles", link: "https://www.yaantra.com" },
   { name: "Spinny", domain: "spinny.com", category: "Tech", description: "Buy & sell used cars", link: "https://www.spinny.com" },
 
   // 5. WELLNESS & HEALTH (Clinical, Pharmacy & Nutrition)
