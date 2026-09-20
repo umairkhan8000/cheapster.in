@@ -44,7 +44,7 @@ const stores = [
   { name: "The Souled Store", domain: "thesouledstore.com", category: "Fashion", description: "Pop culture merch", link: "https://www.thesouledstore.com" },
   { name: "XYXX", domain: "xyxxcrew.com", category: "Fashion", description: "Men's innerwear", link: "https://bitli.in/3zj1f7A" },
   { name: "Campus Sutra", domain: "campussutra.com", category: "Fashion", description: "Casual streetwear", link: "https://www.campussutra.com" },
-  { name: "Bonkers Corner", domain: "bonkerscorner.com", category: "Fashion", description: "Gen-Z streetwear", link: "https://www.bonkerscorner.com" },
+  { name: "Bonkers Corner", domain: "bonkerscorner.com", category: "Fashion", description: "Gen-Z streetwear", link: "https://bitli.in/hdml48S" },
   { name: "Levi's", domain: "levi.in", category: "Fashion", description: "Premium denim", link: "https://www.levi.in" },
   { name: "Shoppers Stop", domain: "shoppersstop.com", category: "Fashion", description: "Premium retail", link: "https://www.shoppersstop.com" },
   { name: "LimeRoad", domain: "limeroad.com", category: "Fashion", description: "Value fashion", link: "https://www.limeroad.com" },
