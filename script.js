@@ -27,7 +27,7 @@ const stores = [
   { name: "Myntra", domain: "myntra.com", category: "Mega Brands", description: "Fashion & lifestyle", link: "https://www.myntra.com" },
   { name: "Nykaa", domain: "nykaa.com", category: "Mega Brands", description: "Beauty & cosmetics", link: "https://www.nykaa.com" },
   { name: "AJIO", domain: "ajio.com", category: "Mega Brands", description: "Fashion destination", link: "https://www.ajio.com" },
-  { name: "Tata CLiQ", domain: "tatacliq.com", category: "Mega Brands", description: "Multi-category retail", link: "https://www.tatacliq.com" },
+  { name: "Tata CLiQ", domain: "tatacliq.com", category: "Mega Brands", description: "Multi-category retail", link: "https://bitli.in/2MlmDa6" },
   { name: "Croma", domain: "croma.com", category: "Mega Brands", description: "Electronics", link: "https://www.croma.com" },
   { name: "Tira", domain: "tirabeauty.com", category: "Mega Brands", description: "Premium beauty", link: "https://www.tirabeauty.com" },
   { name: "Meesho", domain: "meesho.com", category: "Mega Brands", description: "Value shopping", link: "https://www.meesho.com" },
