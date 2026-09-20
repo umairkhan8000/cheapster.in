@@ -51,7 +51,7 @@ body::before {
 }
 
 body > * { position: relative; z-index: 1; }
-.page-noise { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: transparent; will-change: transform; }
+
 /* Fixed + heavy blur is the classic scroll-jank combo — without its own
    compositor layer, some browsers repaint this blur every scroll frame.
    will-change: transform isolates it onto its own layer (painted once,
