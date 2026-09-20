@@ -79,10 +79,9 @@ const stores = [
   { name: "The Man Company", domain: "themancompany.com", category: "Beauty & Grooming", description: "Premium essentials", link: "https://bitli.in/bNc5aYS" },
 
   // -- ROUTED BEAUTY BRANDS (Redirects to Nykaa) --
-  // Uses the SAME Nykaa affiliate link already configured above.
-  { name: "Lakme", domain: "lakmeindia.com", category: "Beauty & Grooming", description: "Indian makeup giant", link: "https://bitli.in/cYKpZba" },
-  { name: "Maybelline", domain: "maybelline.co.in", category: "Beauty & Grooming", description: "Global makeup", link: "https://bitli.in/cYKpZba" },
-  { name: "L'Oréal", domain: "lorealparis.co.in", category: "Beauty & Grooming", description: "Hair & cosmetics", link: "https://bitli.in/cYKpZba" },
+  { name: "Lakme", domain: "lakmeindia.com", category: "Beauty & Grooming", description: "Indian makeup giant", link: "https://www.nykaa.com/brands/lakme/c/334" },
+  { name: "Maybelline", domain: "maybelline.co.in", category: "Beauty & Grooming", description: "Global makeup", link: "https://www.nykaa.com/brands/maybelline-new-york/c/392" },
+  { name: "L'Oréal", domain: "lorealparis.co.in", category: "Beauty & Grooming", description: "Hair & cosmetics", link: "https://www.nykaa.com/brands/loreal-paris/c/595" },
 
   // 4. TECH & GADGETS
   { name: "Samsung", domain: "samsung.com", category: "Tech", description: "Mobiles & electronics", link: "https://www.samsung.com/in" },
@@ -231,11 +230,11 @@ function injectStylesAndNav() {
     const navWrapper = document.createElement("div");
     navWrapper.id = "categoryNavWrapper";
     navWrapper.className = "category-nav-wrapper";
-
+    
     const navScroll = document.createElement("div");
     navScroll.className = "category-nav";
     navScroll.id = "categoryNav";
-
+    
     navWrapper.appendChild(navScroll);
     gridElement.parentNode.insertBefore(navWrapper, gridElement);
   }
@@ -246,14 +245,11 @@ let currentCategory = "All";
 let searchQuery = "";
 
 // ---------- Premium Interactions Helpers ----------
-const haptic = () => {
-  if (navigator.vibrate) navigator.vibrate(40);
-};
+const haptic = () => { if (navigator.vibrate) navigator.vibrate(40); };
 
 function showToast(message, icon = "✨") {
   haptic();
   let container = document.getElementById("toastContainer");
-
   if (!container) {
     container = document.createElement("div");
     container.id = "toastContainer";
@@ -287,7 +283,9 @@ function debounce(fn, delay = 160) {
 function buildLogoChain(store) {
   const chain = [];
 
-  if (store.logo) chain.push(store.logo);
+  if (store.logo) {
+    chain.push(store.logo);
+  }
 
   if (store.domain) {
     chain.push(
@@ -298,11 +296,18 @@ function buildLogoChain(store) {
   return chain;
 }
 
-// Kept for existing non-store external links such as WhatsApp.
+/*
+ * This helper is still used by the WhatsApp flow.
+ * Store cards themselves no longer use it for navigation.
+ */
 function openStoreLink(store) {
-  let url = store.link || (
-    store.domain ? `https://www.${store.domain}` : null
-  );
+  let url =
+    store.link ||
+    (
+      store.domain
+        ? `https://www.${store.domain}`
+        : null
+    );
 
   if (!url) return;
 
@@ -321,76 +326,126 @@ function shuffleArray(array) {
   let arr = [...array];
 
   for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+    const j =
+      Math.floor(
+        Math.random() * (i + 1)
+      );
+
+    [arr[i], arr[j]] =
+      [arr[j], arr[i]];
   }
 
   return arr;
 }
 
 // ---------- Rendering Logic ----------
-const grid = document.getElementById("storeGrid");
-
-function buildCard(store, index) {
-  /*
-    IMPORTANT FOR CUELINKS:
-
-    Store cards are now REAL <a href> elements.
-
-    Previously the site created a temporary anchor only after the
-    user clicked the card. That made outbound merchant links harder
-    for affiliate-link scripts to detect/process.
-
-    Keeping the actual merchant URL in a normal anchor gives the
-    Cuelinks script a standard outbound link in the DOM.
-  */
-
-  const url = store.link || (
-    store.domain ? `https://www.${store.domain}` : null
+const grid =
+  document.getElementById(
+    "storeGrid"
   );
 
+/*
+ * Cuelinks FIX:
+ *
+ * Every merchant destination is now represented by a real,
+ * persistent <a href=""> element.
+ *
+ * The previous code created:
+ *
+ *   div -> click -> temporary <a> -> click() -> remove()
+ *
+ * This version creates:
+ *
+ *   <a href="merchant-url"> ... </a>
+ *
+ * and keeps it in the DOM.
+ */
+function buildCard(store, index) {
+
+  const url =
+    store.link ||
+    (
+      store.domain
+        ? `https://www.${store.domain}`
+        : null
+    );
+
   if (!url) {
-    return document.createDocumentFragment();
+    return null;
   }
 
-  const card = document.createElement("a");
+  const card =
+    document.createElement("a");
 
-  card.className = "store-card";
-  card.href = url;
-  card.target = "_blank";
-  card.rel = "noopener noreferrer";
+  card.className =
+    "store-card";
+
+  card.href =
+    url;
+
+  card.target =
+    "_blank";
+
+  card.rel =
+    "noopener noreferrer";
 
   card.setAttribute(
     "aria-label",
     `Shop from ${store.name}`
   );
 
-  // Keep existing spotlight hover interaction.
-  card.addEventListener("mousemove", (e) => {
-    const rect = card.getBoundingClientRect();
+  card.addEventListener(
+    "mousemove",
+    (e) => {
 
-    card.style.setProperty(
-      "--mouse-x",
-      `${e.clientX - rect.left}px`
+      const rect =
+        card.getBoundingClientRect();
+
+      card.style.setProperty(
+        "--mouse-x",
+        `${e.clientX - rect.left}px`
+      );
+
+      card.style.setProperty(
+        "--mouse-y",
+        `${e.clientY - rect.top}px`
+      );
+    }
+  );
+
+  // ---------- Logo ----------
+  const frame =
+    document.createElement(
+      "div"
     );
 
-    card.style.setProperty(
-      "--mouse-y",
-      `${e.clientY - rect.top}px`
+  frame.className =
+    "store-logo-frame";
+
+  const chain =
+    buildLogoChain(store);
+
+  const img =
+    document.createElement(
+      "img"
     );
-  });
 
-  const frame = document.createElement("div");
-  frame.className = "store-logo-frame";
+  img.className =
+    "store-logo";
 
-  const chain = buildLogoChain(store);
+  img.alt =
+    store.name;
 
-  const img = document.createElement("img");
-  img.className = "store-logo";
-  img.alt = store.name;
-  img.width = 100;
-  img.height = 100;
-  img.loading = index < 12 ? "eager" : "lazy";
+  img.width =
+    100;
+
+  img.height =
+    100;
+
+  img.loading =
+    index < 12
+      ? "eager"
+      : "lazy";
 
   const bgColors = [
     "#1c3f66",
@@ -398,53 +453,98 @@ function buildCard(store, index) {
     "#142a44"
   ];
 
-  const bg = bgColors[index % bgColors.length];
+  const bg =
+    bgColors[
+      index % bgColors.length
+    ];
 
   const svgFallback =
     `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E` +
     `%3Crect width='100' height='100' rx='20' fill='${encodeURIComponent(bg)}'/%3E` +
-    `%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='38' font-weight='800' fill='%23ffffff'%3E` +
+    `%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' ` +
+    `font-family='sans-serif' font-size='38' font-weight='800' fill='%23ffffff'%3E` +
     `${initials(store.name)}` +
     `%3C/text%3E%3C/svg%3E`;
 
   if (chain.length > 0) {
+
     let currentStep = 0;
 
     img.onerror = () => {
+
       currentStep++;
 
-      if (currentStep < chain.length) {
-        img.src = chain[currentStep];
+      if (
+        currentStep <
+        chain.length
+      ) {
+
+        img.src =
+          chain[currentStep];
+
       } else {
-        img.onerror = null;
-        img.src = svgFallback;
+
+        img.onerror =
+          null;
+
+        img.src =
+          svgFallback;
       }
     };
 
-    img.src = chain[0];
+    img.src =
+      chain[0];
+
   } else {
-    img.src = svgFallback;
+
+    img.src =
+      svgFallback;
   }
 
-  frame.appendChild(img);
+  frame.appendChild(
+    img
+  );
 
-  const name = document.createElement("h3");
-  name.className = "store-name";
-  name.textContent = store.name;
+  // ---------- Store Name ----------
+  const name =
+    document.createElement(
+      "h3"
+    );
 
-  const meta = document.createElement("p");
-  meta.className = "store-meta";
-  meta.textContent = store.description;
+  name.className =
+    "store-name";
+
+  name.textContent =
+    store.name;
+
+  // ---------- Store Description ----------
+  const meta =
+    document.createElement(
+      "p"
+    );
+
+  meta.className =
+    "store-meta";
+
+  meta.textContent =
+    store.description;
 
   /*
-    Keep existing Shop Now visual treatment,
-    but do NOT make it another clickable element.
+   * Keep the visual Shop Now element.
+   *
+   * It is deliberately NOT a nested <button>.
+   * The parent anchor is the clickable element.
+   */
+  const button =
+    document.createElement(
+      "div"
+    );
 
-    The parent card itself is the real anchor.
-  */
-  const button = document.createElement("div");
-  button.className = "shop-button";
-  button.textContent = "Shop Now";
+  button.className =
+    "shop-button";
+
+  button.textContent =
+    "Shop Now";
 
   card.append(
     frame,
@@ -453,150 +553,332 @@ function buildCard(store, index) {
     button
   );
 
-  // Haptic feedback only; native anchor navigation remains untouched.
-  card.addEventListener("click", () => {
-    haptic();
-  });
+  card.addEventListener(
+    "click",
+    () => {
+      haptic();
+    }
+  );
 
   return card;
 }
 
+/*
+ * Merchant anchors are created only once.
+ *
+ * Search/category changes will hide/reorder the existing
+ * anchor elements rather than destroying and recreating them.
+ */
+let storeAnchorsReady =
+  false;
+
+let storeCardMap =
+  new Map();
+
+function ensureStoreAnchors() {
+
+  if (
+    storeAnchorsReady ||
+    !grid
+  ) {
+    return;
+  }
+
+  const fragment =
+    document.createDocumentFragment();
+
+  stores.forEach(
+    (store, index) => {
+
+      const card =
+        buildCard(
+          store,
+          index
+        );
+
+      if (!card) {
+        return;
+      }
+
+      storeCardMap.set(
+        store.name,
+        card
+      );
+
+      fragment.appendChild(
+        card
+      );
+    }
+  );
+
+  grid.appendChild(
+    fragment
+  );
+
+  storeAnchorsReady =
+    true;
+}
+
 function renderUI() {
-  if (!grid) return;
 
-  let filtered = stores.filter((store) => {
-    const matchesCat =
-      currentCategory === "All" ||
-      store.category === currentCategory;
+  if (!grid) {
+    return;
+  }
 
-    const matchesSearch =
-      store.name.toLowerCase().includes(searchQuery) ||
-      store.description.toLowerCase().includes(searchQuery);
+  /*
+   * First render creates all permanent merchant anchors.
+   * Cuelinks will be loaded only after this.
+   */
+  ensureStoreAnchors();
 
-    return matchesCat && matchesSearch;
-  });
+  let filtered =
+    stores.filter(
+      (store) => {
+
+        const matchesCat =
+          currentCategory === "All" ||
+          store.category ===
+            currentCategory;
+
+        const matchesSearch =
+          store.name
+            .toLowerCase()
+            .includes(
+              searchQuery
+            ) ||
+          store.description
+            .toLowerCase()
+            .includes(
+              searchQuery
+            );
+
+        return (
+          matchesCat &&
+          matchesSearch
+        );
+      }
+    );
 
   if (
     currentCategory === "All" &&
     searchQuery === ""
   ) {
-    const mega = filtered.filter(
-      (s) => s.category === "Mega Brands"
-    );
 
-    const others = shuffleArray(
+    const mega =
       filtered.filter(
-        (s) => s.category !== "Mega Brands"
-      )
-    );
+        (s) =>
+          s.category ===
+          "Mega Brands"
+      );
 
-    filtered = [...mega, ...others];
+    const others =
+      shuffleArray(
+        filtered.filter(
+          (s) =>
+            s.category !==
+            "Mega Brands"
+        )
+      );
+
+    filtered =
+      [
+        ...mega,
+        ...others
+      ];
+
   } else {
+
     filtered.sort(
-      (a, b) => a.name.localeCompare(b.name)
+      (a, b) =>
+        a.name.localeCompare(
+          b.name
+        )
     );
   }
 
-  const fragment = document.createDocumentFragment();
+  /*
+   * Hide all existing anchors first.
+   */
+  storeCardMap.forEach(
+    (card) => {
+      card.hidden = true;
+    }
+  );
 
-  filtered.forEach((store, i) => {
-    fragment.appendChild(
-      buildCard(store, i)
-    );
-  });
+  /*
+   * Show and reorder existing anchors.
+   *
+   * These are the SAME <a> nodes that Cuelinks already sees.
+   * We do not recreate them.
+   */
+  filtered.forEach(
+    (store) => {
 
-  grid.innerHTML = "";
-  grid.appendChild(fragment);
+      const card =
+        storeCardMap.get(
+          store.name
+        );
 
-  const count = filtered.length;
+      if (!card) {
+        return;
+      }
+
+      card.hidden =
+        false;
+
+      grid.appendChild(
+        card
+      );
+    }
+  );
+
+  const count =
+    filtered.length;
 
   const resultPill =
-    document.getElementById("resultPill");
+    document.getElementById(
+      "resultPill"
+    );
 
   const heroStoreCount =
-    document.getElementById("heroStoreCount");
+    document.getElementById(
+      "heroStoreCount"
+    );
 
   const emptyState =
-    document.getElementById("emptyState");
+    document.getElementById(
+      "emptyState"
+    );
 
   if (resultPill) {
-    resultPill.textContent = `${count} brands`;
+    resultPill.textContent =
+      `${count} brands`;
   }
 
   if (heroStoreCount) {
-    heroStoreCount.textContent = stores.length;
+    heroStoreCount.textContent =
+      stores.length;
   }
 
   if (emptyState) {
-    emptyState.hidden = count !== 0;
+    emptyState.hidden =
+      count !== 0;
   }
 }
 
 function renderCategoryNav() {
+
   const navScroll =
-    document.getElementById("categoryNav");
+    document.getElementById(
+      "categoryNav"
+    );
 
-  if (!navScroll) return;
+  if (!navScroll) {
+    return;
+  }
 
-  navScroll.innerHTML = "";
+  navScroll.innerHTML =
+    "";
 
-  CATEGORY_ORDER.forEach((cat) => {
-    const pill = document.createElement("div");
+  CATEGORY_ORDER.forEach(
+    (cat) => {
 
-    pill.className =
-      `cat-pill ${cat === currentCategory ? "active" : ""}`;
+      const pill =
+        document.createElement(
+          "div"
+        );
 
-    pill.textContent = cat;
+      pill.className =
+        `cat-pill ${
+          cat === currentCategory
+            ? "active"
+            : ""
+        }`;
 
-    pill.addEventListener("click", () => {
-      haptic();
+      pill.textContent =
+        cat;
 
-      currentCategory = cat;
+      pill.addEventListener(
+        "click",
+        () => {
 
-      pill.scrollIntoView({
-        behavior: "smooth",
-        inline: "center",
-        block: "nearest"
-      });
+          haptic();
 
-      renderCategoryNav();
-      renderUI();
-    });
+          currentCategory =
+            cat;
 
-    navScroll.appendChild(pill);
-  });
+          pill.scrollIntoView({
+            behavior:
+              "smooth",
+            inline:
+              "center",
+            block:
+              "nearest"
+          });
+
+          renderCategoryNav();
+          renderUI();
+        }
+      );
+
+      navScroll.appendChild(
+        pill
+      );
+    }
+  );
 }
 
 // ---------- Search Setup ----------
 const searchInput =
-  document.getElementById("searchInput");
+  document.getElementById(
+    "searchInput"
+  );
 
 if (searchInput) {
+
   searchInput.addEventListener(
     "input",
-    debounce((e) => {
-      searchQuery =
-        e.target.value.toLowerCase().trim();
+    debounce(
+      (e) => {
 
-      renderUI();
-    })
+        searchQuery =
+          e.target.value
+            .toLowerCase()
+            .trim();
+
+        renderUI();
+      }
+    )
   );
 }
 
 // ---------- Populate Forms ----------
 const brandSelect =
-  document.getElementById("brandSelect");
+  document.getElementById(
+    "brandSelect"
+  );
 
 if (brandSelect) {
-  stores.forEach((store) => {
-    const option =
-      document.createElement("option");
 
-    option.value = store.name;
-    option.textContent = store.name;
+  stores.forEach(
+    (store) => {
 
-    brandSelect.appendChild(option);
-  });
+      const option =
+        document.createElement(
+          "option"
+        );
+
+      option.value =
+        store.name;
+
+      option.textContent =
+        store.name;
+
+      brandSelect.appendChild(
+        option
+      );
+    }
+  );
 }
 
 // ---------- Initialization ----------
@@ -604,8 +886,98 @@ injectStylesAndNav();
 renderCategoryNav();
 renderUI();
 
-if (document.getElementById("currentYear")) {
-  document.getElementById("currentYear").textContent =
+// =========================================================
+// CUELINKS LOADER
+// =========================================================
+//
+// IMPORTANT:
+// Merchant <a> elements are created FIRST.
+// Cuelinks script is loaded SECOND.
+//
+// This removes the previous race where Cuelinks was loading
+// independently while the merchant cards were still being
+// generated dynamically.
+// =========================================================
+
+(function loadCuelinks() {
+
+  if (
+    window.__cheapsterCuelinksLoaded ||
+    window.__cheapsterCuelinksLoading
+  ) {
+    return;
+  }
+
+  window.cId =
+    "322092";
+
+  window.__cheapsterCuelinksLoading =
+    true;
+
+  const script =
+    document.createElement(
+      "script"
+    );
+
+  script.type =
+    "text/javascript";
+
+  /*
+   * Deliberately NOT async.
+   *
+   * The loader itself is appended only after all
+   * merchant anchors already exist.
+   */
+  script.async =
+    false;
+
+  script.src =
+    document.location.protocol ===
+    "https:"
+      ? "https://cdn0.cuelinks.com/js/cuelinksv2.js"
+      : "http://cdn0.cuelinks.com/js/cuelinksv2.js";
+
+  script.onload =
+    () => {
+
+      window.__cheapsterCuelinksLoaded =
+        true;
+
+      window.__cheapsterCuelinksLoading =
+        false;
+
+      console.log(
+        "Cheapster: Cuelinks loaded after merchant anchors were rendered."
+      );
+    };
+
+  script.onerror =
+    () => {
+
+      window.__cheapsterCuelinksLoading =
+        false;
+
+      console.error(
+        "Cheapster: Cuelinks script failed to load."
+      );
+    };
+
+  document.body.appendChild(
+    script
+  );
+
+})();
+
+// ---------- Current Year ----------
+if (
+  document.getElementById(
+    "currentYear"
+  )
+) {
+
+  document.getElementById(
+    "currentYear"
+  ).textContent =
     new Date().getFullYear();
 }
 
@@ -615,81 +987,145 @@ if (document.getElementById("currentYear")) {
 // =========================================================
 
 function openModal(id) {
+
   haptic();
 
   const modal =
-    document.getElementById(id);
+    document.getElementById(
+      id
+    );
 
   if (modal) {
-    modal.hidden = false;
-    document.body.classList.add("modal-open");
+
+    modal.hidden =
+      false;
+
+    document.body.classList.add(
+      "modal-open"
+    );
   }
 }
 
 function closeModal(id) {
+
   haptic();
 
   const modal =
-    document.getElementById(id);
+    document.getElementById(
+      id
+    );
 
   if (modal) {
-    modal.hidden = true;
-    document.body.classList.remove("modal-open");
+
+    modal.hidden =
+      true;
+
+    document.body.classList.remove(
+      "modal-open"
+    );
   }
 
-  if (id === "formModal") {
+  if (
+    id === "formModal"
+  ) {
+
     const form =
-      document.getElementById("rewardForm");
+      document.getElementById(
+        "rewardForm"
+      );
 
     const success =
-      document.getElementById("successView");
+      document.getElementById(
+        "successView"
+      );
 
-    if (form && success) {
+    if (
+      form &&
+      success
+    ) {
+
       form.reset();
-      form.hidden = false;
-      success.hidden = true;
+
+      form.hidden =
+        false;
+
+      success.hidden =
+        true;
     }
   }
 }
 
 document
-  .querySelectorAll("[data-close-modal]")
-  .forEach((btn) => {
-    btn.addEventListener("click", () => {
-      closeModal(btn.dataset.closeModal);
-    });
-  });
+  .querySelectorAll(
+    "[data-close-modal]"
+  )
+  .forEach(
+    (btn) => {
+
+      btn.addEventListener(
+        "click",
+        () =>
+          closeModal(
+            btn.dataset.closeModal
+          )
+      );
+    }
+  );
 
 // ---------- Header offer button + info-modal links ----------
 const headerOfferBtn =
-  document.getElementById("headerOfferBtn");
+  document.getElementById(
+    "headerOfferBtn"
+  );
 
 if (headerOfferBtn) {
+
   headerOfferBtn.addEventListener(
     "click",
-    () => openModal("formModal")
+    () =>
+      openModal(
+        "formModal"
+      )
   );
 }
 
 document
-  .querySelectorAll("[data-info-modal]")
-  .forEach((btn) => {
-    btn.addEventListener("click", () => {
-      openModal(btn.dataset.infoModal);
-    });
-  });
+  .querySelectorAll(
+    "[data-info-modal]"
+  )
+  .forEach(
+    (btn) => {
+
+      btn.addEventListener(
+        "click",
+        () =>
+          openModal(
+            btn.dataset.infoModal
+          )
+      );
+    }
+  );
 
 // ---------- Hamburger menu ----------
 const hamburgerBtn =
-  document.getElementById("hamburgerBtn");
+  document.getElementById(
+    "hamburgerBtn"
+  );
 
 const headerDropdown =
-  document.getElementById("headerDropdown");
+  document.getElementById(
+    "headerDropdown"
+  );
 
-if (hamburgerBtn && headerDropdown) {
+if (
+  hamburgerBtn &&
+  headerDropdown
+) {
 
   function closeHeaderDropdown() {
-    headerDropdown.hidden = true;
+
+    headerDropdown.hidden =
+      true;
 
     hamburgerBtn.setAttribute(
       "aria-expanded",
@@ -700,16 +1136,22 @@ if (hamburgerBtn && headerDropdown) {
   hamburgerBtn.addEventListener(
     "click",
     (e) => {
+
       e.stopPropagation();
+
       haptic();
 
       const isOpen =
         !headerDropdown.hidden;
 
       if (isOpen) {
+
         closeHeaderDropdown();
+
       } else {
-        headerDropdown.hidden = false;
+
+        headerDropdown.hidden =
+          false;
 
         hamburgerBtn.setAttribute(
           "aria-expanded",
@@ -720,21 +1162,30 @@ if (hamburgerBtn && headerDropdown) {
   );
 
   headerDropdown
-    .querySelectorAll("button")
-    .forEach((btn) => {
-      btn.addEventListener(
-        "click",
-        closeHeaderDropdown
-      );
-    });
+    .querySelectorAll(
+      "button"
+    )
+    .forEach(
+      (btn) => {
+
+        btn.addEventListener(
+          "click",
+          closeHeaderDropdown
+        );
+      }
+    );
 
   document.addEventListener(
     "click",
     (e) => {
+
       if (
         !headerDropdown.hidden &&
-        !headerDropdown.contains(e.target)
+        !headerDropdown.contains(
+          e.target
+        )
       ) {
+
         closeHeaderDropdown();
       }
     }
@@ -743,64 +1194,91 @@ if (hamburgerBtn && headerDropdown) {
 
 // ---------- Google login (Firebase Auth) ----------
 const authBtn =
-  document.getElementById("authBtn");
+  document.getElementById(
+    "authBtn"
+  );
 
 const authBtnText =
-  document.getElementById("authBtnText");
+  document.getElementById(
+    "authBtnText"
+  );
 
 const logoutBtn =
-  document.getElementById("logoutBtn");
+  document.getElementById(
+    "logoutBtn"
+  );
 
 const menuLoginBtn =
-  document.getElementById("menuLoginBtn");
+  document.getElementById(
+    "menuLoginBtn"
+  );
 
-let currentUser = null;
+let currentUser =
+  null;
 
-if (authBtn && window.auth) {
+if (
+  authBtn &&
+  window.auth
+) {
 
-  const handleLogin = () => {
-    haptic();
+  const handleLogin =
+    () => {
 
-    if (currentUser) return;
+      haptic();
 
-    window.auth
-      .signInWithPopup(
-        window.googleProvider
-      )
-      .catch((err) => {
-        console.error(
-          "Google sign-in failed:",
-          err.code,
-          err.message
+      if (currentUser) {
+        return;
+      }
+
+      window.auth
+        .signInWithPopup(
+          window.googleProvider
+        )
+        .catch(
+          (err) => {
+
+            console.error(
+              "Google sign-in failed:",
+              err.code,
+              err.message
+            );
+
+            if (
+              err.code ===
+                "auth/popup-blocked" ||
+              err.code ===
+                "auth/operation-not-supported-in-this-environment" ||
+              err.code ===
+                "auth/popup-closed-by-user" ||
+              err.code ===
+                "auth/cancelled-popup-request"
+            ) {
+
+              window.auth
+                .signInWithRedirect(
+                  window.googleProvider
+                );
+
+            } else if (
+              err.code ===
+              "auth/unauthorized-domain"
+            ) {
+
+              showToast(
+                "Domain not authorized for login.",
+                "⚠️"
+              );
+
+            } else {
+
+              showToast(
+                "Login failed. Please try again.",
+                "❌"
+              );
+            }
+          }
         );
-
-        if (
-          err.code === "auth/popup-blocked" ||
-          err.code ===
-            "auth/operation-not-supported-in-this-environment" ||
-          err.code ===
-            "auth/popup-closed-by-user" ||
-          err.code ===
-            "auth/cancelled-popup-request"
-        ) {
-          window.auth.signInWithRedirect(
-            window.googleProvider
-          );
-        } else if (
-          err.code === "auth/unauthorized-domain"
-        ) {
-          showToast(
-            "Domain not authorized for login.",
-            "⚠️"
-          );
-        } else {
-          showToast(
-            "Login failed. Please try again.",
-            "❌"
-          );
-        }
-      });
-  };
+    };
 
   authBtn.addEventListener(
     "click",
@@ -808,6 +1286,7 @@ if (authBtn && window.auth) {
   );
 
   if (menuLoginBtn) {
+
     menuLoginBtn.addEventListener(
       "click",
       handleLogin
@@ -816,21 +1295,29 @@ if (authBtn && window.auth) {
 
   window.auth
     .getRedirectResult()
-    .catch((err) => {
-      if (err) {
-        console.error(
-          "Google sign-in (redirect) failed:",
-          err.code,
-          err.message
-        );
+    .catch(
+      (err) => {
+
+        if (err) {
+
+          console.error(
+            "Google sign-in (redirect) failed:",
+            err.code,
+            err.message
+          );
+        }
       }
-    });
+    );
 
   const googleIcon =
-    document.getElementById("googleIcon");
+    document.getElementById(
+      "googleIcon"
+    );
 
   const authAvatarImg =
-    document.getElementById("authAvatarImg");
+    document.getElementById(
+      "authAvatarImg"
+    );
 
   const authAvatarFallback =
     document.getElementById(
@@ -840,31 +1327,39 @@ if (authBtn && window.auth) {
   window.auth.onAuthStateChanged(
     (user) => {
 
-      currentUser = user;
+      currentUser =
+        user;
 
       if (user) {
 
         authBtnText.textContent =
           user.displayName
-            ? user.displayName.split(" ")[0]
+            ? user.displayName
+                .split(" ")[0]
             : "Account";
 
         authBtn.title =
-          user.displayName || "Signed in";
+          user.displayName ||
+          "Signed in";
 
         const nameField =
-          document.getElementById("fullName");
+          document.getElementById(
+            "fullName"
+          );
 
         if (
           nameField &&
           !nameField.value
         ) {
+
           nameField.value =
-            user.displayName || "";
+            user.displayName ||
+            "";
         }
 
         if (googleIcon) {
-          googleIcon.hidden = true;
+          googleIcon.hidden =
+            true;
         }
 
         if (
@@ -872,18 +1367,28 @@ if (authBtn && window.auth) {
           authAvatarFallback
         ) {
 
-          if (user.photoURL) {
+          if (
+            user.photoURL
+          ) {
 
             authAvatarImg.src =
               user.photoURL;
 
-            authAvatarImg.onerror = () => {
-              authAvatarImg.hidden = true;
-              authAvatarFallback.hidden = false;
-            };
+            authAvatarImg.onerror =
+              () => {
 
-            authAvatarImg.hidden = false;
-            authAvatarFallback.hidden = true;
+                authAvatarImg.hidden =
+                  true;
+
+                authAvatarFallback.hidden =
+                  false;
+              };
+
+            authAvatarImg.hidden =
+              false;
+
+            authAvatarFallback.hidden =
+              true;
 
           } else {
 
@@ -894,62 +1399,77 @@ if (authBtn && window.auth) {
                 "?"
               );
 
-            authAvatarFallback.hidden = false;
-            authAvatarImg.hidden = true;
+            authAvatarFallback.hidden =
+              false;
+
+            authAvatarImg.hidden =
+              true;
           }
         }
 
         if (logoutBtn) {
-          logoutBtn.hidden = false;
+          logoutBtn.hidden =
+            false;
         }
 
         if (menuLoginBtn) {
-          menuLoginBtn.hidden = true;
+          menuLoginBtn.hidden =
+            true;
         }
 
       } else {
 
-        authBtnText.textContent = "Login";
+        authBtnText.textContent =
+          "Login";
+
         authBtn.title =
           "Login with Google";
 
         if (googleIcon) {
-          googleIcon.hidden = false;
+          googleIcon.hidden =
+            false;
         }
 
         if (authAvatarImg) {
-          authAvatarImg.hidden = true;
+          authAvatarImg.hidden =
+            true;
         }
 
         if (authAvatarFallback) {
-          authAvatarFallback.hidden = true;
+          authAvatarFallback.hidden =
+            true;
         }
 
         if (logoutBtn) {
-          logoutBtn.hidden = true;
+          logoutBtn.hidden =
+            true;
         }
 
         if (menuLoginBtn) {
-          menuLoginBtn.hidden = false;
+          menuLoginBtn.hidden =
+            false;
         }
       }
     }
   );
 
   if (logoutBtn) {
+
     logoutBtn.addEventListener(
       "click",
-      () => window.auth.signOut()
+      () =>
+        window.auth.signOut()
     );
   }
 
 } else if (authBtn) {
 
-  const alertNotConfigured = () =>
-    showToast(
-      "Login isn't configured yet.",
-      "⚠️"
-    );
+  const alertNotConfigured =
+    () =>
+      showToast(
+        "Login isn't configured yet.",
+        "⚠️"
+      );
 
   authBtn.addEventListener(
     "click",
@@ -957,6 +1477,7 @@ if (authBtn && window.auth) {
   );
 
   if (menuLoginBtn) {
+
     menuLoginBtn.addEventListener(
       "click",
       alertNotConfigured
@@ -969,7 +1490,9 @@ const GIVEAWAY_WHATSAPP_NUMBER =
   "919999999999";
 
 const rewardForm =
-  document.getElementById("rewardForm");
+  document.getElementById(
+    "rewardForm"
+  );
 
 if (rewardForm) {
 
@@ -980,10 +1503,12 @@ if (rewardForm) {
       e.preventDefault();
 
       if (!currentUser) {
+
         showToast(
           "Please login with Google first.",
           "🔒"
         );
+
         return;
       }
 
@@ -1007,7 +1532,9 @@ if (rewardForm) {
           "brandSelect"
         ).value;
 
-      submitBtn.disabled = true;
+      submitBtn.disabled =
+        true;
+
       submitBtn.textContent =
         "Submitting...";
 
@@ -1027,23 +1554,30 @@ if (rewardForm) {
           `https://wa.me/${GIVEAWAY_WHATSAPP_NUMBER}?text=${text}`
       });
 
-      setTimeout(() => {
+      setTimeout(
+        () => {
 
-        document.getElementById(
-          "rewardForm"
-        ).hidden = true;
+          document.getElementById(
+            "rewardForm"
+          ).hidden =
+            true;
 
-        document.getElementById(
-          "successView"
-        ).hidden = false;
+          document.getElementById(
+            "successView"
+          ).hidden =
+            false;
 
-        submitBtn.disabled = false;
-        submitBtn.textContent =
-          "Submit Entry";
+          submitBtn.disabled =
+            false;
 
-        haptic();
+          submitBtn.textContent =
+            "Submit Entry";
 
-      }, 600);
+          haptic();
+
+        },
+        600
+      );
     }
   );
 }
@@ -1053,7 +1587,9 @@ const WEB3FORMS_ACCESS_KEY =
   "5f013235-2314-452d-8f2e-2064a1f2d2e0";
 
 const contactForm =
-  document.getElementById("contactForm");
+  document.getElementById(
+    "contactForm"
+  );
 
 if (contactForm) {
 
@@ -1084,7 +1620,10 @@ if (contactForm) {
         ).value;
 
       if (submitBtn) {
-        submitBtn.disabled = true;
+
+        submitBtn.disabled =
+          true;
+
         submitBtn.textContent =
           "Sending...";
       }
@@ -1093,29 +1632,43 @@ if (contactForm) {
 
       try {
 
-        const res = await fetch(
-          "https://api.web3forms.com/submit",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type":
-                "application/json",
-              Accept:
-                "application/json"
-            },
-            body: JSON.stringify({
-              access_key:
-                WEB3FORMS_ACCESS_KEY,
-              subject:
-                `Cheapster Support: ${issue}`,
-              from_name:
-                "Cheapster.in Contact Form",
-              name: name,
-              issue: issue,
-              message: message
-            })
-          }
-        );
+        const res =
+          await fetch(
+            "https://api.web3forms.com/submit",
+            {
+              method:
+                "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json",
+
+                Accept:
+                  "application/json"
+              },
+
+              body:
+                JSON.stringify({
+                  access_key:
+                    WEB3FORMS_ACCESS_KEY,
+
+                  subject:
+                    `Cheapster Support: ${issue}`,
+
+                  from_name:
+                    "Cheapster.in Contact Form",
+
+                  name:
+                    name,
+
+                  issue:
+                    issue,
+
+                  message:
+                    message
+                })
+            }
+          );
 
         const data =
           await res.json();
@@ -1128,6 +1681,7 @@ if (contactForm) {
           );
 
           contactForm.reset();
+
           closeModal(
             "contactModal"
           );
@@ -1155,7 +1709,10 @@ if (contactForm) {
       } finally {
 
         if (submitBtn) {
-          submitBtn.disabled = false;
+
+          submitBtn.disabled =
+            false;
+
           submitBtn.textContent =
             "Send Message";
         }
@@ -1166,32 +1723,45 @@ if (contactForm) {
 
 // ---------- header shadow on scroll ----------
 const header =
-  document.getElementById("siteHeader");
+  document.getElementById(
+    "siteHeader"
+  );
 
 if (header) {
 
-  let ticking = false;
+  let ticking =
+    false;
 
   window.addEventListener(
     "scroll",
     () => {
 
-      if (ticking) return;
+      if (ticking) {
+        return;
+      }
 
-      ticking = true;
+      ticking =
+        true;
 
-      requestAnimationFrame(() => {
+      requestAnimationFrame(
+        () => {
 
-        header.classList.toggle(
-          "is-scrolled",
-          window.scrollY > 12
-        );
+          header.classList.toggle(
+            "is-scrolled",
+            window.scrollY >
+              12
+          );
 
-        ticking = false;
-      });
+          ticking =
+            false;
+        }
+      );
 
     },
-    { passive: true }
+    {
+      passive:
+        true
+    }
   );
 }
 
@@ -1241,19 +1811,25 @@ if (continueBtn) {
 }
 
 // ---------- PWA Install Logic ----------
-if ("serviceWorker" in navigator) {
+if (
+  "serviceWorker" in
+  navigator
+) {
 
   window.addEventListener(
     "load",
     () => {
 
       navigator.serviceWorker
-        .register("/sw.js")
-        .catch((err) =>
-          console.log(
-            "SW fail",
-            err
-          )
+        .register(
+          "/sw.js"
+        )
+        .catch(
+          (err) =>
+            console.log(
+              "SW fail",
+              err
+            )
         );
     }
   );
@@ -1271,7 +1847,10 @@ const isAndroid =
     navigator.userAgent
   );
 
-if (installBtn && isAndroid) {
+if (
+  installBtn &&
+  isAndroid
+) {
 
   window.addEventListener(
     "beforeinstallprompt",
@@ -1279,7 +1858,8 @@ if (installBtn && isAndroid) {
 
       e.preventDefault();
 
-      deferredPrompt = e;
+      deferredPrompt =
+        e;
 
       installBtn.style.display =
         "inline-flex";
@@ -1296,7 +1876,8 @@ if (installBtn && isAndroid) {
 
         deferredPrompt.prompt();
 
-        deferredPrompt = null;
+        deferredPrompt =
+          null;
 
         installBtn.style.display =
           "none";
