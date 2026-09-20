@@ -11,8 +11,8 @@ const ASSETS_TO_CACHE = [
   '/logo_512x512.png'
 ];
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(
+self.addEventListener('install', (e) => {
+  e.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS_TO_CACHE);
     })
@@ -21,16 +21,14 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
     caches.keys().then((keyList) => {
       return Promise.all(
         keyList.map((key) => {
           if (key !== CACHE_NAME) {
             return caches.delete(key);
           }
-
-          return undefined;
         })
       );
     })
@@ -39,27 +37,18 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', (e) => {
 
-  /*
-   * Only handle requests belonging to Cheapster itself.
-   *
-   * Cuelinks, merchant websites, Google, Firebase,
-   * Analytics, external logos and all other third-party
-   * resources pass through normally.
-   */
-  if (
-    new URL(event.request.url).origin !==
-    self.location.origin
-  ) {
+  // Third-party requests are deliberately not intercepted.
+  if (new URL(e.request.url).origin !== self.location.origin) {
     return;
   }
 
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
+  e.respondWith(
+    caches.match(e.request).then((cachedResponse) => {
 
-      const networkPromise =
-        fetch(event.request)
+      const fetchPromise =
+        fetch(e.request)
           .then((networkResponse) => {
 
             if (
@@ -76,7 +65,7 @@ self.addEventListener('fetch', (event) => {
 
               caches.open(CACHE_NAME).then((cache) => {
                 cache.put(
-                  event.request,
+                  e.request,
                   responseToCache
                 );
               });
@@ -88,7 +77,7 @@ self.addEventListener('fetch', (event) => {
             return cachedResponse;
           });
 
-      return cachedResponse || networkPromise;
+      return cachedResponse || fetchPromise;
     })
   );
 });
