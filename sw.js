@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cheapster-cache-v10';
+const CACHE_NAME = 'cheapster-cache-v11';
 
 const ASSETS_TO_CACHE = [
   '/',
@@ -11,8 +11,8 @@ const ASSETS_TO_CACHE = [
   '/logo_512x512.png'
 ];
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(
+self.addEventListener('install', (event) => {
+  event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS_TO_CACHE);
     })
@@ -21,14 +21,16 @@ self.addEventListener('install', (e) => {
   self.skipWaiting();
 });
 
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
     caches.keys().then((keyList) => {
       return Promise.all(
         keyList.map((key) => {
           if (key !== CACHE_NAME) {
             return caches.delete(key);
           }
+
+          return undefined;
         })
       );
     })
@@ -37,22 +39,27 @@ self.addEventListener('activate', (e) => {
   self.clients.claim();
 });
 
-self.addEventListener('fetch', (e) => {
-  // Third-party requests are intentionally left untouched.
-  // This includes merchant websites, Cuelinks, Google,
-  // Firebase, Analytics, logos, etc.
+self.addEventListener('fetch', (event) => {
+
+  /*
+   * Only handle requests belonging to Cheapster itself.
+   *
+   * Cuelinks, merchant websites, Google, Firebase,
+   * Analytics, external logos and all other third-party
+   * resources pass through normally.
+   */
   if (
-    new URL(e.request.url).origin !==
+    new URL(event.request.url).origin !==
     self.location.origin
   ) {
     return;
   }
 
-  e.respondWith(
-    caches.match(e.request).then((cachedResponse) => {
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) => {
 
-      const fetchPromise =
-        fetch(e.request)
+      const networkPromise =
+        fetch(event.request)
           .then((networkResponse) => {
 
             if (
@@ -67,14 +74,12 @@ self.addEventListener('fetch', (e) => {
               const responseToCache =
                 networkResponse.clone();
 
-              caches
-                .open(CACHE_NAME)
-                .then((cache) => {
-                  cache.put(
-                    e.request,
-                    responseToCache
-                  );
-                });
+              caches.open(CACHE_NAME).then((cache) => {
+                cache.put(
+                  event.request,
+                  responseToCache
+                );
+              });
             }
 
             return networkResponse;
@@ -83,7 +88,7 @@ self.addEventListener('fetch', (e) => {
             return cachedResponse;
           });
 
-      return cachedResponse || fetchPromise;
+      return cachedResponse || networkPromise;
     })
   );
 });
