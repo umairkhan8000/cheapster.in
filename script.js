@@ -462,6 +462,16 @@ function closeModal(id) {
   haptic();
   const modal = document.getElementById(id);
   if (modal) { modal.hidden = true; document.body.classList.remove("modal-open"); }
+
+  if (id === "formModal") {
+    const form = document.getElementById("rewardForm");
+    const success = document.getElementById("successView");
+    if (form && success) {
+      form.reset();
+      form.hidden = false;
+      success.hidden = true;
+    }
+  }
 }
 
 document.querySelectorAll("[data-close-modal]").forEach(btn => {
