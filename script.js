@@ -19,7 +19,7 @@ const CATEGORY_ORDER = [
   "Kids"
 ];
 
-// --- BRAND MASTER LIST (102 Premium Brands) ---
+// --- BRAND MASTER LIST (Updated & Cleaned) ---
 const stores = [
   // 1. MEGA BRANDS (Highest Traffic & Volume)
   { name: "Amazon", domain: "amazon.in", category: "Mega Brands", description: "Everything marketplace", link: "https://link.amazon/B03SYMxWN" },
@@ -37,8 +37,6 @@ const stores = [
   // 2. FASHION & FOOTWEAR
   { name: "Snitch", domain: "", category: "Fashion", description: "Men's fashion", link: "https://www.snitch.co.in" },
   { name: "Urbanic", domain: "urbanic.com", category: "Fashion", description: "Gen-Z women's fashion", link: "https://www.urbanic.com" },
-  { name: "Off Duty India", domain: "offduty.in", category: "Fashion", description: "Baggy streetwear", link: "https://www.offduty.in" },
-  { name: "Vastrado", domain: "vastrado.com", category: "Fashion", description: "Affordable fast fashion", link: "https://www.vastrado.com" },
   { name: "Beyoung", domain: "beyoung.in", category: "Fashion", description: "Everyday fashion", link: "https://beyoung.in" },
   { name: "Bewakoof", domain: "bewakoof.com", category: "Fashion", description: "Quirky fashion", link: "https://www.bewakoof.com" },
   { name: "The Souled Store", domain: "thesouledstore.com", category: "Fashion", description: "Pop culture merch", link: "https://www.thesouledstore.com" },
@@ -85,7 +83,7 @@ const stores = [
   { name: "Maybelline", domain: "maybelline.co.in", category: "Beauty & Grooming", description: "Global makeup", link: "https://www.nykaa.com/brands/maybelline-new-york/c/392" },
   { name: "L'Oréal", domain: "lorealparis.co.in", category: "Beauty & Grooming", description: "Hair & cosmetics", link: "https://www.nykaa.com/brands/loreal-paris/c/595" },
 
-  // 4. TECH & GADGETS (New Gadgets + High-Ticket Resell)
+  // 4. TECH & GADGETS
   { name: "Samsung", domain: "samsung.com", category: "Tech", description: "Mobiles & electronics", link: "https://www.samsung.com/in" },
   { name: "OnePlus", domain: "oneplus.in", category: "Tech", description: "Smartphones", link: "https://www.oneplus.in" },
   { name: "Dell", domain: "dell.com", category: "Tech", description: "Laptops & PCs", link: "https://www.dell.com/en-in" },
@@ -98,11 +96,9 @@ const stores = [
   { name: "HP", domain: "hp.com", category: "Tech", description: "Laptops & tech", link: "https://www.hp.com/in-en/" },
   { name: "Vijay Sales", domain: "vijaysales.com", category: "Tech", description: "Electronics retail", link: "https://www.vijaysales.com" },
   { name: "Cashify", domain: "cashify.in", category: "Tech", description: "Sell & buy phones", link: "https://www.cashify.in" },
-  { name: "ControlZ", domain: "controlz.world", category: "Tech", description: "Premium renewed iPhones", link: "https://www.controlz.world" },
-  { name: "Yaantra", domain: "", category: "Tech", description: "Refurbished mobiles", link: "https://www.yaantra.com" },
   { name: "Spinny", domain: "spinny.com", category: "Tech", description: "Buy & sell used cars", link: "https://www.spinny.com" },
 
-  // 5. WELLNESS & HEALTH (Clinical, Pharmacy & Nutrition)
+  // 5. WELLNESS & HEALTH
   { name: "Tata 1mg", domain: "1mg.com", category: "Wellness & Health", description: "Online pharmacy", link: "https://www.1mg.com" },
   { name: "Apollo 24|7", domain: "apollo247.com", category: "Wellness & Health", description: "Healthcare delivery", link: "https://www.apollo247.com" },
   { name: "Netmeds", domain: "netmeds.com", category: "Wellness & Health", description: "Medicine delivery", link: "https://www.netmeds.com" },
@@ -115,7 +111,7 @@ const stores = [
   { name: "Man Matters", domain: "manmatters.com", category: "Wellness & Health", description: "Men's wellness", link: "https://manmatters.com" },
   { name: "Perfora", domain: "perforacare.com", category: "Wellness & Health", description: "Premium oral care", link: "https://perforacare.com" },
   
-  // -- ROUTED HEALTH BRANDS (Redirects to HealthKart for Max Commission) --
+  // -- ROUTED HEALTH BRANDS --
   { name: "Optimum Nutrition", domain: "optimumnutrition.com", category: "Wellness & Health", description: "Premium whey protein", link: "https://www.healthkart.com/brand/optimum-nutrition" },
 
   // 6. JEWELLERY & GIFTING
@@ -147,14 +143,14 @@ const stores = [
   { name: "Rentomojo", domain: "rentomojo.com", category: "Home", description: "Furniture rentals", link: "https://www.rentomojo.com" },
   { name: "Moglix", domain: "moglix.com", category: "Home", description: "Hardware & tools", link: "https://www.moglix.com" },
   
-  // -- ROUTED HARDWARE (Redirects to Moglix) --
+  // -- ROUTED HARDWARE --
   { name: "Bosch Tools", domain: "bosch-pt.co.in", category: "Home", description: "Power tools", link: "https://www.moglix.com/brands/bosch" },
 
   // 9. PETS
   { name: "Supertails", domain: "supertails.com", category: "Pets", description: "Pet care & food", link: "https://supertails.com" },
   { name: "Heads Up For Tails", domain: "headsupfortails.com", category: "Pets", description: "Luxury pet supplies", link: "https://headsupfortails.com" },
   
-  // -- ROUTED PETS (Redirects directly to Supertails instead of Amazon) --
+  // -- ROUTED PETS --
   { name: "Drools", domain: "drools.com", category: "Pets", description: "Dog & cat food", link: "https://supertails.com/collections/drools" },
   { name: "Pedigree", domain: "pedigree.in", category: "Pets", description: "Dog nutrition", link: "https://supertails.com/collections/pedigree" },
   { name: "Royal Canin", domain: "royalcanin.com", category: "Pets", description: "Premium pet nutrition", link: "https://supertails.com/collections/royal-canin" },
@@ -173,7 +169,7 @@ const stores = [
   { name: "Hamleys", domain: "hamleys.in", category: "Kids", description: "Premium toys", link: "https://www.hamleys.in" },
   { name: "Smartivity", domain: "smartivity.in", category: "Kids", description: "DIY & STEM toys", link: "https://www.smartivity.in" },
   
-  // -- ROUTED KIDS TOYS (Redirects to Hamleys) --
+  // -- ROUTED KIDS TOYS --
   { name: "LEGO", domain: "lego.com", category: "Kids", description: "Building blocks", link: "https://www.hamleys.in/brand/lego.html" }
 ];
 
@@ -606,7 +602,6 @@ if (authBtn && window.auth) {
 }
 
 // ---------- reward form → WhatsApp ----------
-// TODO: replace with your real business WhatsApp number (10-digit, no +91)
 const GIVEAWAY_WHATSAPP_NUMBER = "919999999999";
 
 const rewardForm = document.getElementById("rewardForm");
