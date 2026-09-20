@@ -595,8 +595,9 @@ if (authBtn && window.auth) {
   if (menuLoginBtn) menuLoginBtn.addEventListener("click", alertNotConfigured);
 }
 
-// ---------- reward form → Google Sheet ----------
-const SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbziQvJq8kqk-CAHRekAHjkSVEJkQmbBp84girc4vjfTPbY20VJl2hz_I-OC-bWBcjQf/exec";
+// ---------- reward form → WhatsApp ----------
+// TODO: replace with your real business WhatsApp number (10-digit, no +91)
+const GIVEAWAY_WHATSAPP_NUMBER = "919999999999";
 
 const rewardForm = document.getElementById("rewardForm");
 if (rewardForm) {
@@ -609,24 +610,18 @@ if (rewardForm) {
     }
 
     const submitBtn = document.getElementById("submitRewardBtn");
-    const payload = {
-      fullName: document.getElementById("fullName").value,
-      whatsapp: document.getElementById("whatsapp").value,
-      brand: document.getElementById("brandSelect").value,
-      email: currentUser.email || "",
-      uid: currentUser.uid || "",
-      submittedAt: new Date().toISOString()
-    };
+    const fullName = document.getElementById("fullName").value;
+    const whatsapp = document.getElementById("whatsapp").value;
+    const brand = document.getElementById("brandSelect").value;
 
     submitBtn.disabled = true;
     submitBtn.textContent = "Submitting...";
     haptic();
 
-    fetch(SHEET_WEBAPP_URL, {
-      method: "POST",
-      mode: "no-cors",
-      body: new URLSearchParams(payload)
-    }).catch((err) => console.error("Sheet submission error in background:", err));
+    const text = encodeURIComponent(
+      `🎁 Cheapster Giveaway Entry\n\nName: ${fullName}\nWhatsApp: ${whatsapp}\nBrand: ${brand}\nEmail: ${currentUser.email || ""}`
+    );
+    openStoreLink({ link: `https://wa.me/${GIVEAWAY_WHATSAPP_NUMBER}?text=${text}` });
 
     setTimeout(() => {
       document.getElementById("rewardForm").hidden = true;
@@ -638,17 +633,54 @@ if (rewardForm) {
   });
 }
 
-// ---------- contact form → WhatsApp ----------
+// ---------- contact form → email (Web3Forms) ----------
+const WEB3FORMS_ACCESS_KEY = "5f013235-2314-452d-8f2e-2064a1f2d2e0";
+
 const contactForm = document.getElementById("contactForm");
 if (contactForm) {
-  contactForm.addEventListener("submit", (e) => {
+  contactForm.addEventListener("submit", async (e) => {
     e.preventDefault();
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
     const name = document.getElementById("contactName").value;
     const issue = document.getElementById("contactIssueText").value;
     const message = document.getElementById("contactMessage").value;
 
-    const text = encodeURIComponent(`Hi Cheapster Support,\nMy Name: ${name}\nIssue: ${issue}\n\nMessage:\n${message}`);
-    openStoreLink({ link: `https://wa.me/919999999999?text=${text}` });
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending...";
+    }
+    haptic();
+
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          subject: `Cheapster Support: ${issue}`,
+          from_name: "Cheapster.in Contact Form",
+          name: name,
+          issue: issue,
+          message: message
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast("Message sent! We'll get back to you soon.", "✅");
+        contactForm.reset();
+        closeModal("contactModal");
+      } else {
+        showToast("Something went wrong. Please try again.", "❌");
+      }
+    } catch (err) {
+      console.error("Web3Forms submission failed:", err);
+      showToast("Network error. Please try again.", "❌");
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Send Message";
+      }
+    }
   });
 }
 
