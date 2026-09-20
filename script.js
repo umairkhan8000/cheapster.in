@@ -77,11 +77,12 @@ const stores = [
   { name: "Beardo", domain: "beardo.in", category: "Beauty & Grooming", description: "Men's grooming", link: "https://beardo.in" },
   { name: "Bombay Shaving Co", domain: "bombayshavingcompany.com", category: "Beauty & Grooming", description: "Premium grooming", link: "https://bombayshavingcompany.com" },
   { name: "The Man Company", domain: "themancompany.com", category: "Beauty & Grooming", description: "Premium essentials", link: "https://bitli.in/bNc5aYS" },
-  
+
   // -- ROUTED BEAUTY BRANDS (Redirects to Nykaa) --
-  { name: "Lakme", domain: "lakmeindia.com", category: "Beauty & Grooming", description: "Indian makeup giant", link: "https://www.nykaa.com/brands/lakme/c/334" },
-  { name: "Maybelline", domain: "maybelline.co.in", category: "Beauty & Grooming", description: "Global makeup", link: "https://www.nykaa.com/brands/maybelline-new-york/c/392" },
-  { name: "L'Oréal", domain: "lorealparis.co.in", category: "Beauty & Grooming", description: "Hair & cosmetics", link: "https://www.nykaa.com/brands/loreal-paris/c/595" },
+  // Uses the SAME Nykaa affiliate link already configured above.
+  { name: "Lakme", domain: "lakmeindia.com", category: "Beauty & Grooming", description: "Indian makeup giant", link: "https://bitli.in/cYKpZba" },
+  { name: "Maybelline", domain: "maybelline.co.in", category: "Beauty & Grooming", description: "Global makeup", link: "https://bitli.in/cYKpZba" },
+  { name: "L'Oréal", domain: "lorealparis.co.in", category: "Beauty & Grooming", description: "Hair & cosmetics", link: "https://bitli.in/cYKpZba" },
 
   // 4. TECH & GADGETS
   { name: "Samsung", domain: "samsung.com", category: "Tech", description: "Mobiles & electronics", link: "https://www.samsung.com/in" },
@@ -110,7 +111,7 @@ const stores = [
   { name: "Traya", domain: "traya.health", category: "Wellness & Health", description: "Hair fall treatment", link: "https://traya.health" },
   { name: "Man Matters", domain: "manmatters.com", category: "Wellness & Health", description: "Men's wellness", link: "https://manmatters.com" },
   { name: "Perfora", domain: "perforacare.com", category: "Wellness & Health", description: "Premium oral care", link: "https://perforacare.com" },
-  
+
   // -- ROUTED HEALTH BRANDS --
   { name: "Optimum Nutrition", domain: "optimumnutrition.com", category: "Wellness & Health", description: "Premium whey protein", link: "https://www.healthkart.com/brand/optimum-nutrition" },
 
@@ -142,14 +143,14 @@ const stores = [
   { name: "SleepyCat", domain: "sleepycat.in", category: "Home", description: "Sleep solutions", link: "https://sleepycat.in" },
   { name: "Rentomojo", domain: "rentomojo.com", category: "Home", description: "Furniture rentals", link: "https://www.rentomojo.com" },
   { name: "Moglix", domain: "moglix.com", category: "Home", description: "Hardware & tools", link: "https://www.moglix.com" },
-  
+
   // -- ROUTED HARDWARE --
   { name: "Bosch Tools", domain: "bosch-pt.co.in", category: "Home", description: "Power tools", link: "https://www.moglix.com/brands/bosch" },
 
   // 9. PETS
   { name: "Supertails", domain: "supertails.com", category: "Pets", description: "Pet care & food", link: "https://supertails.com" },
   { name: "Heads Up For Tails", domain: "headsupfortails.com", category: "Pets", description: "Luxury pet supplies", link: "https://headsupfortails.com" },
-  
+
   // -- ROUTED PETS --
   { name: "Drools", domain: "drools.com", category: "Pets", description: "Dog & cat food", link: "https://supertails.com/collections/drools" },
   { name: "Pedigree", domain: "pedigree.in", category: "Pets", description: "Dog nutrition", link: "https://supertails.com/collections/pedigree" },
@@ -168,7 +169,7 @@ const stores = [
   { name: "Hopscotch", domain: "hopscotch.in", category: "Kids", description: "Kids fashion", link: "https://www.hopscotch.in" },
   { name: "Hamleys", domain: "hamleys.in", category: "Kids", description: "Premium toys", link: "https://www.hamleys.in" },
   { name: "Smartivity", domain: "smartivity.in", category: "Kids", description: "DIY & STEM toys", link: "https://www.smartivity.in" },
-  
+
   // -- ROUTED KIDS TOYS --
   { name: "LEGO", domain: "lego.com", category: "Kids", description: "Building blocks", link: "https://www.hamleys.in/brand/lego.html" }
 ];
@@ -230,11 +231,11 @@ function injectStylesAndNav() {
     const navWrapper = document.createElement("div");
     navWrapper.id = "categoryNavWrapper";
     navWrapper.className = "category-nav-wrapper";
-    
+
     const navScroll = document.createElement("div");
     navScroll.className = "category-nav";
     navScroll.id = "categoryNav";
-    
+
     navWrapper.appendChild(navScroll);
     gridElement.parentNode.insertBefore(navWrapper, gridElement);
   }
@@ -245,29 +246,35 @@ let currentCategory = "All";
 let searchQuery = "";
 
 // ---------- Premium Interactions Helpers ----------
-const haptic = () => { if (navigator.vibrate) navigator.vibrate(40); };
+const haptic = () => {
+  if (navigator.vibrate) navigator.vibrate(40);
+};
 
 function showToast(message, icon = "✨") {
   haptic();
   let container = document.getElementById("toastContainer");
+
   if (!container) {
     container = document.createElement("div");
     container.id = "toastContainer";
     container.className = "toast-container";
     document.body.appendChild(container);
   }
+
   const toast = document.createElement("div");
   toast.className = "toast-msg";
   toast.innerHTML = `<span style="font-size:16px;">${icon}</span> ${message}`;
   container.appendChild(toast);
-  
+
   setTimeout(() => {
     toast.classList.add("toast-exit");
     toast.addEventListener("animationend", () => toast.remove());
   }, 3500);
 }
 
-function initials(name) { return name.substring(0, 2).toUpperCase(); }
+function initials(name) {
+  return name.substring(0, 2).toUpperCase();
+}
 
 function debounce(fn, delay = 160) {
   let timer;
@@ -279,20 +286,31 @@ function debounce(fn, delay = 160) {
 
 function buildLogoChain(store) {
   const chain = [];
+
   if (store.logo) chain.push(store.logo);
+
   if (store.domain) {
-    chain.push(`https://www.google.com/s2/favicons?domain=${store.domain}&sz=128`);
+    chain.push(
+      `https://www.google.com/s2/favicons?domain=${store.domain}&sz=128`
+    );
   }
+
   return chain;
 }
 
+// Kept for existing non-store external links such as WhatsApp.
 function openStoreLink(store) {
-  let url = store.link || (store.domain ? `https://www.${store.domain}` : null);
+  let url = store.link || (
+    store.domain ? `https://www.${store.domain}` : null
+  );
+
   if (!url) return;
+
   const a = document.createElement("a");
   a.href = url;
   a.target = "_blank";
   a.rel = "noopener noreferrer";
+
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -301,10 +319,12 @@ function openStoreLink(store) {
 // ---------- Shuffle Helper ----------
 function shuffleArray(array) {
   let arr = [...array];
+
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
+
   return arr;
 }
 
@@ -312,18 +332,59 @@ function shuffleArray(array) {
 const grid = document.getElementById("storeGrid");
 
 function buildCard(store, index) {
-  const card = document.createElement("div");
+  /*
+    IMPORTANT FOR CUELINKS:
+
+    Store cards are now REAL <a href> elements.
+
+    Previously the site created a temporary anchor only after the
+    user clicked the card. That made outbound merchant links harder
+    for affiliate-link scripts to detect/process.
+
+    Keeping the actual merchant URL in a normal anchor gives the
+    Cuelinks script a standard outbound link in the DOM.
+  */
+
+  const url = store.link || (
+    store.domain ? `https://www.${store.domain}` : null
+  );
+
+  if (!url) {
+    return document.createDocumentFragment();
+  }
+
+  const card = document.createElement("a");
+
   card.className = "store-card";
+  card.href = url;
+  card.target = "_blank";
+  card.rel = "noopener noreferrer";
+
+  card.setAttribute(
+    "aria-label",
+    `Shop from ${store.name}`
+  );
+
+  // Keep existing spotlight hover interaction.
   card.addEventListener("mousemove", (e) => {
     const rect = card.getBoundingClientRect();
-    card.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
-    card.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+
+    card.style.setProperty(
+      "--mouse-x",
+      `${e.clientX - rect.left}px`
+    );
+
+    card.style.setProperty(
+      "--mouse-y",
+      `${e.clientY - rect.top}px`
+    );
   });
 
   const frame = document.createElement("div");
   frame.className = "store-logo-frame";
 
   const chain = buildLogoChain(store);
+
   const img = document.createElement("img");
   img.className = "store-logo";
   img.alt = store.name;
@@ -331,20 +392,40 @@ function buildCard(store, index) {
   img.height = 100;
   img.loading = index < 12 ? "eager" : "lazy";
 
-  const bgColors = ['#1c3f66', '#0d2138', '#142a44']; 
+  const bgColors = [
+    "#1c3f66",
+    "#0d2138",
+    "#142a44"
+  ];
+
   const bg = bgColors[index % bgColors.length];
-  const svgFallback = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='${encodeURIComponent(bg)}'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='38' font-weight='800' fill='%23ffffff'%3E${initials(store.name)}%3C/text%3E%3C/svg%3E`;
+
+  const svgFallback =
+    `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E` +
+    `%3Crect width='100' height='100' rx='20' fill='${encodeURIComponent(bg)}'/%3E` +
+    `%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='38' font-weight='800' fill='%23ffffff'%3E` +
+    `${initials(store.name)}` +
+    `%3C/text%3E%3C/svg%3E`;
 
   if (chain.length > 0) {
     let currentStep = 0;
+
     img.onerror = () => {
       currentStep++;
-      if (currentStep < chain.length) img.src = chain[currentStep];
-      else { img.onerror = null; img.src = svgFallback; }
+
+      if (currentStep < chain.length) {
+        img.src = chain[currentStep];
+      } else {
+        img.onerror = null;
+        img.src = svgFallback;
+      }
     };
-    img.src = chain[0]; 
-  } else { img.src = svgFallback; }
-  
+
+    img.src = chain[0];
+  } else {
+    img.src = svgFallback;
+  }
+
   frame.appendChild(img);
 
   const name = document.createElement("h3");
@@ -355,83 +436,165 @@ function buildCard(store, index) {
   meta.className = "store-meta";
   meta.textContent = store.description;
 
-  const button = document.createElement("button");
-  button.type = "button";
+  /*
+    Keep existing Shop Now visual treatment,
+    but do NOT make it another clickable element.
+
+    The parent card itself is the real anchor.
+  */
+  const button = document.createElement("div");
   button.className = "shop-button";
   button.textContent = "Shop Now";
 
-  card.append(frame, name, meta, button);
-  card.addEventListener("click", () => { haptic(); openStoreLink(store); });
+  card.append(
+    frame,
+    name,
+    meta,
+    button
+  );
+
+  // Haptic feedback only; native anchor navigation remains untouched.
+  card.addEventListener("click", () => {
+    haptic();
+  });
+
   return card;
 }
 
 function renderUI() {
   if (!grid) return;
-  let filtered = stores.filter(store => {
-    const matchesCat = currentCategory === "All" || store.category === currentCategory;
-    const matchesSearch = store.name.toLowerCase().includes(searchQuery) || store.description.toLowerCase().includes(searchQuery);
+
+  let filtered = stores.filter((store) => {
+    const matchesCat =
+      currentCategory === "All" ||
+      store.category === currentCategory;
+
+    const matchesSearch =
+      store.name.toLowerCase().includes(searchQuery) ||
+      store.description.toLowerCase().includes(searchQuery);
+
     return matchesCat && matchesSearch;
   });
 
-  if (currentCategory === "All" && searchQuery === "") {
-    const mega = filtered.filter(s => s.category === "Mega Brands");
-    const others = shuffleArray(filtered.filter(s => s.category !== "Mega Brands"));
+  if (
+    currentCategory === "All" &&
+    searchQuery === ""
+  ) {
+    const mega = filtered.filter(
+      (s) => s.category === "Mega Brands"
+    );
+
+    const others = shuffleArray(
+      filtered.filter(
+        (s) => s.category !== "Mega Brands"
+      )
+    );
+
     filtered = [...mega, ...others];
   } else {
-    filtered.sort((a, b) => a.name.localeCompare(b.name));
+    filtered.sort(
+      (a, b) => a.name.localeCompare(b.name)
+    );
   }
 
   const fragment = document.createDocumentFragment();
-  filtered.forEach((store, i) => fragment.appendChild(buildCard(store, i)));
+
+  filtered.forEach((store, i) => {
+    fragment.appendChild(
+      buildCard(store, i)
+    );
+  });
+
   grid.innerHTML = "";
   grid.appendChild(fragment);
 
   const count = filtered.length;
-  const resultPill = document.getElementById("resultPill");
-  const heroStoreCount = document.getElementById("heroStoreCount");
-  const emptyState = document.getElementById("emptyState");
 
-  if (resultPill) resultPill.textContent = `${count} brands`;
-  if (heroStoreCount) heroStoreCount.textContent = stores.length;
-  if (emptyState) emptyState.hidden = count !== 0;
+  const resultPill =
+    document.getElementById("resultPill");
+
+  const heroStoreCount =
+    document.getElementById("heroStoreCount");
+
+  const emptyState =
+    document.getElementById("emptyState");
+
+  if (resultPill) {
+    resultPill.textContent = `${count} brands`;
+  }
+
+  if (heroStoreCount) {
+    heroStoreCount.textContent = stores.length;
+  }
+
+  if (emptyState) {
+    emptyState.hidden = count !== 0;
+  }
 }
 
 function renderCategoryNav() {
-  const navScroll = document.getElementById("categoryNav");
+  const navScroll =
+    document.getElementById("categoryNav");
+
   if (!navScroll) return;
+
   navScroll.innerHTML = "";
-  
-  CATEGORY_ORDER.forEach(cat => {
+
+  CATEGORY_ORDER.forEach((cat) => {
     const pill = document.createElement("div");
-    pill.className = `cat-pill ${cat === currentCategory ? "active" : ""}`;
+
+    pill.className =
+      `cat-pill ${cat === currentCategory ? "active" : ""}`;
+
     pill.textContent = cat;
+
     pill.addEventListener("click", () => {
       haptic();
+
       currentCategory = cat;
-      pill.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-      renderCategoryNav(); 
+
+      pill.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+        block: "nearest"
+      });
+
+      renderCategoryNav();
       renderUI();
     });
+
     navScroll.appendChild(pill);
   });
 }
 
 // ---------- Search Setup ----------
-const searchInput = document.getElementById("searchInput");
+const searchInput =
+  document.getElementById("searchInput");
+
 if (searchInput) {
-  searchInput.addEventListener("input", debounce((e) => {
-    searchQuery = e.target.value.toLowerCase().trim();
-    renderUI();
-  }));
+  searchInput.addEventListener(
+    "input",
+    debounce((e) => {
+      searchQuery =
+        e.target.value.toLowerCase().trim();
+
+      renderUI();
+    })
+  );
 }
 
-// Populate forms
-const brandSelect = document.getElementById("brandSelect");
+// ---------- Populate Forms ----------
+const brandSelect =
+  document.getElementById("brandSelect");
+
 if (brandSelect) {
-  stores.forEach(store => {
-    const option = document.createElement("option");
+  stores.forEach((store) => {
+    const option =
+      document.createElement("option");
+
     option.value = store.name;
     option.textContent = store.name;
+
     brandSelect.appendChild(option);
   });
 }
@@ -442,26 +605,45 @@ renderCategoryNav();
 renderUI();
 
 if (document.getElementById("currentYear")) {
-  document.getElementById("currentYear").textContent = new Date().getFullYear();
+  document.getElementById("currentYear").textContent =
+    new Date().getFullYear();
 }
 
 // =========================================================
-// REMAINDER OF UTILS (Modals, Auth, Forms, PWA)
+// REMAINDER OF UTILS
+// Modals, Auth, Forms, PWA
 // =========================================================
 
 function openModal(id) {
   haptic();
-  const modal = document.getElementById(id);
-  if (modal) { modal.hidden = false; document.body.classList.add("modal-open"); }
+
+  const modal =
+    document.getElementById(id);
+
+  if (modal) {
+    modal.hidden = false;
+    document.body.classList.add("modal-open");
+  }
 }
+
 function closeModal(id) {
   haptic();
-  const modal = document.getElementById(id);
-  if (modal) { modal.hidden = true; document.body.classList.remove("modal-open"); }
+
+  const modal =
+    document.getElementById(id);
+
+  if (modal) {
+    modal.hidden = true;
+    document.body.classList.remove("modal-open");
+  }
 
   if (id === "formModal") {
-    const form = document.getElementById("rewardForm");
-    const success = document.getElementById("successView");
+    const form =
+      document.getElementById("rewardForm");
+
+    const success =
+      document.getElementById("successView");
+
     if (form && success) {
       form.reset();
       form.hidden = false;
@@ -470,275 +652,655 @@ function closeModal(id) {
   }
 }
 
-document.querySelectorAll("[data-close-modal]").forEach(btn => {
-  btn.addEventListener("click", () => closeModal(btn.dataset.closeModal));
-});
+document
+  .querySelectorAll("[data-close-modal]")
+  .forEach((btn) => {
+    btn.addEventListener("click", () => {
+      closeModal(btn.dataset.closeModal);
+    });
+  });
 
 // ---------- Header offer button + info-modal links ----------
-const headerOfferBtn = document.getElementById("headerOfferBtn");
-if (headerOfferBtn) headerOfferBtn.addEventListener("click", () => openModal("formModal"));
-document.querySelectorAll("[data-info-modal]").forEach(btn => {
-  btn.addEventListener("click", () => openModal(btn.dataset.infoModal));
-});
+const headerOfferBtn =
+  document.getElementById("headerOfferBtn");
+
+if (headerOfferBtn) {
+  headerOfferBtn.addEventListener(
+    "click",
+    () => openModal("formModal")
+  );
+}
+
+document
+  .querySelectorAll("[data-info-modal]")
+  .forEach((btn) => {
+    btn.addEventListener("click", () => {
+      openModal(btn.dataset.infoModal);
+    });
+  });
 
 // ---------- Hamburger menu ----------
-const hamburgerBtn = document.getElementById("hamburgerBtn");
-const headerDropdown = document.getElementById("headerDropdown");
+const hamburgerBtn =
+  document.getElementById("hamburgerBtn");
+
+const headerDropdown =
+  document.getElementById("headerDropdown");
 
 if (hamburgerBtn && headerDropdown) {
+
   function closeHeaderDropdown() {
     headerDropdown.hidden = true;
-    hamburgerBtn.setAttribute("aria-expanded", "false");
+
+    hamburgerBtn.setAttribute(
+      "aria-expanded",
+      "false"
+    );
   }
 
-  hamburgerBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    haptic();
-    const isOpen = !headerDropdown.hidden;
-    if (isOpen) {
-      closeHeaderDropdown();
-    } else {
-      headerDropdown.hidden = false;
-      hamburgerBtn.setAttribute("aria-expanded", "true");
-    }
-  });
+  hamburgerBtn.addEventListener(
+    "click",
+    (e) => {
+      e.stopPropagation();
+      haptic();
 
-  headerDropdown.querySelectorAll("button").forEach(btn => {
-    btn.addEventListener("click", closeHeaderDropdown);
-  });
+      const isOpen =
+        !headerDropdown.hidden;
 
-  document.addEventListener("click", (e) => {
-    if (!headerDropdown.hidden && !headerDropdown.contains(e.target)) {
-      closeHeaderDropdown();
+      if (isOpen) {
+        closeHeaderDropdown();
+      } else {
+        headerDropdown.hidden = false;
+
+        hamburgerBtn.setAttribute(
+          "aria-expanded",
+          "true"
+        );
+      }
     }
-  });
+  );
+
+  headerDropdown
+    .querySelectorAll("button")
+    .forEach((btn) => {
+      btn.addEventListener(
+        "click",
+        closeHeaderDropdown
+      );
+    });
+
+  document.addEventListener(
+    "click",
+    (e) => {
+      if (
+        !headerDropdown.hidden &&
+        !headerDropdown.contains(e.target)
+      ) {
+        closeHeaderDropdown();
+      }
+    }
+  );
 }
 
 // ---------- Google login (Firebase Auth) ----------
-const authBtn = document.getElementById("authBtn");
-const authBtnText = document.getElementById("authBtnText");
-const logoutBtn = document.getElementById("logoutBtn");
-const menuLoginBtn = document.getElementById("menuLoginBtn");
+const authBtn =
+  document.getElementById("authBtn");
+
+const authBtnText =
+  document.getElementById("authBtnText");
+
+const logoutBtn =
+  document.getElementById("logoutBtn");
+
+const menuLoginBtn =
+  document.getElementById("menuLoginBtn");
+
 let currentUser = null;
 
 if (authBtn && window.auth) {
+
   const handleLogin = () => {
     haptic();
+
     if (currentUser) return;
 
-    window.auth.signInWithPopup(window.googleProvider).catch((err) => {
-      console.error("Google sign-in failed:", err.code, err.message);
-      if (
-        err.code === "auth/popup-blocked" ||
-        err.code === "auth/operation-not-supported-in-this-environment" ||
-        err.code === "auth/popup-closed-by-user" ||
-        err.code === "auth/cancelled-popup-request"
-      ) {
-        window.auth.signInWithRedirect(window.googleProvider);
-      } else if (err.code === "auth/unauthorized-domain") {
-        showToast("Domain not authorized for login.", "⚠️");
-      } else {
-        showToast("Login failed. Please try again.", "❌");
-      }
-    });
+    window.auth
+      .signInWithPopup(
+        window.googleProvider
+      )
+      .catch((err) => {
+        console.error(
+          "Google sign-in failed:",
+          err.code,
+          err.message
+        );
+
+        if (
+          err.code === "auth/popup-blocked" ||
+          err.code ===
+            "auth/operation-not-supported-in-this-environment" ||
+          err.code ===
+            "auth/popup-closed-by-user" ||
+          err.code ===
+            "auth/cancelled-popup-request"
+        ) {
+          window.auth.signInWithRedirect(
+            window.googleProvider
+          );
+        } else if (
+          err.code === "auth/unauthorized-domain"
+        ) {
+          showToast(
+            "Domain not authorized for login.",
+            "⚠️"
+          );
+        } else {
+          showToast(
+            "Login failed. Please try again.",
+            "❌"
+          );
+        }
+      });
   };
 
-  authBtn.addEventListener("click", handleLogin);
-  if (menuLoginBtn) menuLoginBtn.addEventListener("click", handleLogin);
+  authBtn.addEventListener(
+    "click",
+    handleLogin
+  );
 
-  window.auth.getRedirectResult().catch((err) => {
-    if (err) console.error("Google sign-in (redirect) failed:", err.code, err.message);
-  });
+  if (menuLoginBtn) {
+    menuLoginBtn.addEventListener(
+      "click",
+      handleLogin
+    );
+  }
 
-  const googleIcon = document.getElementById("googleIcon");
-  const authAvatarImg = document.getElementById("authAvatarImg");
-  const authAvatarFallback = document.getElementById("authAvatarFallback");
+  window.auth
+    .getRedirectResult()
+    .catch((err) => {
+      if (err) {
+        console.error(
+          "Google sign-in (redirect) failed:",
+          err.code,
+          err.message
+        );
+      }
+    });
 
-  window.auth.onAuthStateChanged((user) => {
-    currentUser = user;
-    if (user) {
-      authBtnText.textContent = user.displayName ? user.displayName.split(" ")[0] : "Account";
-      authBtn.title = user.displayName || "Signed in";
-      const nameField = document.getElementById("fullName");
-      if (nameField && !nameField.value) nameField.value = user.displayName || "";
+  const googleIcon =
+    document.getElementById("googleIcon");
 
-      if (googleIcon) googleIcon.hidden = true;
-      if (authAvatarImg && authAvatarFallback) {
-        if (user.photoURL) {
-          authAvatarImg.src = user.photoURL;
-          authAvatarImg.onerror = () => {
-            authAvatarImg.hidden = true;
+  const authAvatarImg =
+    document.getElementById("authAvatarImg");
+
+  const authAvatarFallback =
+    document.getElementById(
+      "authAvatarFallback"
+    );
+
+  window.auth.onAuthStateChanged(
+    (user) => {
+
+      currentUser = user;
+
+      if (user) {
+
+        authBtnText.textContent =
+          user.displayName
+            ? user.displayName.split(" ")[0]
+            : "Account";
+
+        authBtn.title =
+          user.displayName || "Signed in";
+
+        const nameField =
+          document.getElementById("fullName");
+
+        if (
+          nameField &&
+          !nameField.value
+        ) {
+          nameField.value =
+            user.displayName || "";
+        }
+
+        if (googleIcon) {
+          googleIcon.hidden = true;
+        }
+
+        if (
+          authAvatarImg &&
+          authAvatarFallback
+        ) {
+
+          if (user.photoURL) {
+
+            authAvatarImg.src =
+              user.photoURL;
+
+            authAvatarImg.onerror = () => {
+              authAvatarImg.hidden = true;
+              authAvatarFallback.hidden = false;
+            };
+
+            authAvatarImg.hidden = false;
+            authAvatarFallback.hidden = true;
+
+          } else {
+
+            authAvatarFallback.textContent =
+              initials(
+                user.displayName ||
+                user.email ||
+                "?"
+              );
+
             authAvatarFallback.hidden = false;
-          };
-          authAvatarImg.hidden = false;
-          authAvatarFallback.hidden = true;
-        } else {
-          authAvatarFallback.textContent = initials(user.displayName || user.email || "?");
-          authAvatarFallback.hidden = false;
+            authAvatarImg.hidden = true;
+          }
+        }
+
+        if (logoutBtn) {
+          logoutBtn.hidden = false;
+        }
+
+        if (menuLoginBtn) {
+          menuLoginBtn.hidden = true;
+        }
+
+      } else {
+
+        authBtnText.textContent = "Login";
+        authBtn.title =
+          "Login with Google";
+
+        if (googleIcon) {
+          googleIcon.hidden = false;
+        }
+
+        if (authAvatarImg) {
           authAvatarImg.hidden = true;
         }
+
+        if (authAvatarFallback) {
+          authAvatarFallback.hidden = true;
+        }
+
+        if (logoutBtn) {
+          logoutBtn.hidden = true;
+        }
+
+        if (menuLoginBtn) {
+          menuLoginBtn.hidden = false;
+        }
       }
-
-      if (logoutBtn) logoutBtn.hidden = false;
-      if (menuLoginBtn) menuLoginBtn.hidden = true;
-    } else {
-      authBtnText.textContent = "Login";
-      authBtn.title = "Login with Google";
-
-      if (googleIcon) googleIcon.hidden = false;
-      if (authAvatarImg) authAvatarImg.hidden = true;
-      if (authAvatarFallback) authAvatarFallback.hidden = true;
-
-      if (logoutBtn) logoutBtn.hidden = true;
-      if (menuLoginBtn) menuLoginBtn.hidden = false;
     }
-  });
+  );
 
-  if (logoutBtn) logoutBtn.addEventListener("click", () => window.auth.signOut());
+  if (logoutBtn) {
+    logoutBtn.addEventListener(
+      "click",
+      () => window.auth.signOut()
+    );
+  }
+
 } else if (authBtn) {
-  const alertNotConfigured = () => showToast("Login isn't configured yet.", "⚠️");
-  authBtn.addEventListener("click", alertNotConfigured);
-  if (menuLoginBtn) menuLoginBtn.addEventListener("click", alertNotConfigured);
+
+  const alertNotConfigured = () =>
+    showToast(
+      "Login isn't configured yet.",
+      "⚠️"
+    );
+
+  authBtn.addEventListener(
+    "click",
+    alertNotConfigured
+  );
+
+  if (menuLoginBtn) {
+    menuLoginBtn.addEventListener(
+      "click",
+      alertNotConfigured
+    );
+  }
 }
 
 // ---------- reward form → WhatsApp ----------
-const GIVEAWAY_WHATSAPP_NUMBER = "919999999999";
+const GIVEAWAY_WHATSAPP_NUMBER =
+  "919999999999";
 
-const rewardForm = document.getElementById("rewardForm");
+const rewardForm =
+  document.getElementById("rewardForm");
+
 if (rewardForm) {
-  rewardForm.addEventListener("submit", (e) => {
-    e.preventDefault();
 
-    if (!currentUser) {
-      showToast("Please login with Google first.", "🔒");
-      return;
-    }
+  rewardForm.addEventListener(
+    "submit",
+    (e) => {
 
-    const submitBtn = document.getElementById("submitRewardBtn");
-    const fullName = document.getElementById("fullName").value;
-    const whatsapp = document.getElementById("whatsapp").value;
-    const brand = document.getElementById("brandSelect").value;
+      e.preventDefault();
 
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Submitting...";
-    haptic();
+      if (!currentUser) {
+        showToast(
+          "Please login with Google first.",
+          "🔒"
+        );
+        return;
+      }
 
-    const text = encodeURIComponent(
-      `🎁 Cheapster Giveaway Entry\n\nName: ${fullName}\nWhatsApp: ${whatsapp}\nBrand: ${brand}\nEmail: ${currentUser.email || ""}`
-    );
-    openStoreLink({ link: `https://wa.me/${GIVEAWAY_WHATSAPP_NUMBER}?text=${text}` });
+      const submitBtn =
+        document.getElementById(
+          "submitRewardBtn"
+        );
 
-    setTimeout(() => {
-      document.getElementById("rewardForm").hidden = true;
-      document.getElementById("successView").hidden = false;
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Submit Entry";
+      const fullName =
+        document.getElementById(
+          "fullName"
+        ).value;
+
+      const whatsapp =
+        document.getElementById(
+          "whatsapp"
+        ).value;
+
+      const brand =
+        document.getElementById(
+          "brandSelect"
+        ).value;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent =
+        "Submitting...";
+
       haptic();
-    }, 600);
-  });
+
+      const text =
+        encodeURIComponent(
+          `🎁 Cheapster Giveaway Entry\n\n` +
+          `Name: ${fullName}\n` +
+          `WhatsApp: ${whatsapp}\n` +
+          `Brand: ${brand}\n` +
+          `Email: ${currentUser.email || ""}`
+        );
+
+      openStoreLink({
+        link:
+          `https://wa.me/${GIVEAWAY_WHATSAPP_NUMBER}?text=${text}`
+      });
+
+      setTimeout(() => {
+
+        document.getElementById(
+          "rewardForm"
+        ).hidden = true;
+
+        document.getElementById(
+          "successView"
+        ).hidden = false;
+
+        submitBtn.disabled = false;
+        submitBtn.textContent =
+          "Submit Entry";
+
+        haptic();
+
+      }, 600);
+    }
+  );
 }
 
 // ---------- contact form → email (Web3Forms) ----------
-const WEB3FORMS_ACCESS_KEY = "5f013235-2314-452d-8f2e-2064a1f2d2e0";
+const WEB3FORMS_ACCESS_KEY =
+  "5f013235-2314-452d-8f2e-2064a1f2d2e0";
 
-const contactForm = document.getElementById("contactForm");
+const contactForm =
+  document.getElementById("contactForm");
+
 if (contactForm) {
-  contactForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const submitBtn = contactForm.querySelector('button[type="submit"]');
-    const name = document.getElementById("contactName").value;
-    const issue = document.getElementById("contactIssueText").value;
-    const message = document.getElementById("contactMessage").value;
 
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Sending...";
-    }
-    haptic();
+  contactForm.addEventListener(
+    "submit",
+    async (e) => {
 
-    try {
-      const res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          access_key: WEB3FORMS_ACCESS_KEY,
-          subject: `Cheapster Support: ${issue}`,
-          from_name: "Cheapster.in Contact Form",
-          name: name,
-          issue: issue,
-          message: message
-        })
-      });
-      const data = await res.json();
-      if (data.success) {
-        showToast("Message sent! We'll get back to you soon.", "✅");
-        contactForm.reset();
-        closeModal("contactModal");
-      } else {
-        showToast("Something went wrong. Please try again.", "❌");
-      }
-    } catch (err) {
-      console.error("Web3Forms submission failed:", err);
-      showToast("Network error. Please try again.", "❌");
-    } finally {
+      e.preventDefault();
+
+      const submitBtn =
+        contactForm.querySelector(
+          'button[type="submit"]'
+        );
+
+      const name =
+        document.getElementById(
+          "contactName"
+        ).value;
+
+      const issue =
+        document.getElementById(
+          "contactIssueText"
+        ).value;
+
+      const message =
+        document.getElementById(
+          "contactMessage"
+        ).value;
+
       if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Send Message";
+        submitBtn.disabled = true;
+        submitBtn.textContent =
+          "Sending...";
+      }
+
+      haptic();
+
+      try {
+
+        const res = await fetch(
+          "https://api.web3forms.com/submit",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json",
+              Accept:
+                "application/json"
+            },
+            body: JSON.stringify({
+              access_key:
+                WEB3FORMS_ACCESS_KEY,
+              subject:
+                `Cheapster Support: ${issue}`,
+              from_name:
+                "Cheapster.in Contact Form",
+              name: name,
+              issue: issue,
+              message: message
+            })
+          }
+        );
+
+        const data =
+          await res.json();
+
+        if (data.success) {
+
+          showToast(
+            "Message sent! We'll get back to you soon.",
+            "✅"
+          );
+
+          contactForm.reset();
+          closeModal(
+            "contactModal"
+          );
+
+        } else {
+
+          showToast(
+            "Something went wrong. Please try again.",
+            "❌"
+          );
+        }
+
+      } catch (err) {
+
+        console.error(
+          "Web3Forms submission failed:",
+          err
+        );
+
+        showToast(
+          "Network error. Please try again.",
+          "❌"
+        );
+
+      } finally {
+
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent =
+            "Send Message";
+        }
       }
     }
-  });
+  );
 }
 
 // ---------- header shadow on scroll ----------
-const header = document.getElementById("siteHeader");
+const header =
+  document.getElementById("siteHeader");
+
 if (header) {
+
   let ticking = false;
-  window.addEventListener("scroll", () => {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => {
-      header.classList.toggle("is-scrolled", window.scrollY > 12);
-      ticking = false;
-    });
-  }, { passive: true });
+
+  window.addEventListener(
+    "scroll",
+    () => {
+
+      if (ticking) return;
+
+      ticking = true;
+
+      requestAnimationFrame(() => {
+
+        header.classList.toggle(
+          "is-scrolled",
+          window.scrollY > 12
+        );
+
+        ticking = false;
+      });
+
+    },
+    { passive: true }
+  );
 }
 
-window.addEventListener("load", () => {
-  if (localStorage.getItem("cheapster_welcome_seen") !== "1") {
-    setTimeout(() => openModal("welcomeModal"), 800);
+// ---------- Welcome popup ----------
+window.addEventListener(
+  "load",
+  () => {
+
+    if (
+      localStorage.getItem(
+        "cheapster_welcome_seen"
+      ) !== "1"
+    ) {
+
+      setTimeout(
+        () =>
+          openModal(
+            "welcomeModal"
+          ),
+        800
+      );
+    }
   }
-});
-const continueBtn = document.getElementById("continueBtn");
-if(continueBtn) {
-  continueBtn.addEventListener("click", () => {
-    localStorage.setItem("cheapster_welcome_seen", "1");
-    closeModal("welcomeModal");
-  });
+);
+
+const continueBtn =
+  document.getElementById(
+    "continueBtn"
+  );
+
+if (continueBtn) {
+
+  continueBtn.addEventListener(
+    "click",
+    () => {
+
+      localStorage.setItem(
+        "cheapster_welcome_seen",
+        "1"
+      );
+
+      closeModal(
+        "welcomeModal"
+      );
+    }
+  );
 }
 
-// PWA Install Logic
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch((err) => console.log('SW fail', err));
-  });
+// ---------- PWA Install Logic ----------
+if ("serviceWorker" in navigator) {
+
+  window.addEventListener(
+    "load",
+    () => {
+
+      navigator.serviceWorker
+        .register("/sw.js")
+        .catch((err) =>
+          console.log(
+            "SW fail",
+            err
+          )
+        );
+    }
+  );
 }
 
 let deferredPrompt;
-const installBtn = document.getElementById('installAppBtn');
-const isAndroid = /Android/i.test(navigator.userAgent);
+
+const installBtn =
+  document.getElementById(
+    "installAppBtn"
+  );
+
+const isAndroid =
+  /Android/i.test(
+    navigator.userAgent
+  );
 
 if (installBtn && isAndroid) {
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    installBtn.style.display = 'inline-flex';
-  });
-  installBtn.addEventListener('click', async () => {
-    haptic();
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt = null;
-      installBtn.style.display = 'none';
+
+  window.addEventListener(
+    "beforeinstallprompt",
+    (e) => {
+
+      e.preventDefault();
+
+      deferredPrompt = e;
+
+      installBtn.style.display =
+        "inline-flex";
     }
-  });
+  );
+
+  installBtn.addEventListener(
+    "click",
+    async () => {
+
+      haptic();
+
+      if (deferredPrompt) {
+
+        deferredPrompt.prompt();
+
+        deferredPrompt = null;
+
+        installBtn.style.display =
+          "none";
+      }
+    }
+  );
 }
