@@ -1,3 +1,4 @@
+// build: 2026-09-21-fix2
 // =========================================================
 // CHEAPSTER.IN — PREMIUM BRAND DIRECTORY (Category Edition)
 // Haptic Feedback, Spotlight Hover, PWA & Category Routing
@@ -1437,7 +1438,7 @@ if (
 
 // ---------- reward form → WhatsApp ----------
 const GIVEAWAY_WHATSAPP_NUMBER =
-  "919999999999";
+  "919012521219";
 
 const rewardForm =
   document.getElementById(
@@ -1451,6 +1452,11 @@ if (rewardForm) {
     (e) => {
 
       e.preventDefault();
+
+      if (!rewardForm.checkValidity()) {
+        rewardForm.reportValidity();
+        return;
+      }
 
       if (!currentUser) {
 
