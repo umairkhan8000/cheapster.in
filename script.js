@@ -175,56 +175,6 @@ const stores = [
 
 // ---------- Premium UI Injections (Styles & Category Nav) ----------
 function injectStylesAndNav() {
-  if(!document.getElementById("cheapster-cat-styles")) {
-    const style = document.createElement("style");
-    style.id = "cheapster-cat-styles";
-    style.innerHTML = `
-      .category-nav-wrapper {
-        position: sticky;
-        top: 60px;
-        background: rgba(13, 33, 56, 0.95);
-        backdrop-filter: blur(10px);
-        z-index: 100;
-        padding: 12px 16px;
-        margin-bottom: 20px;
-        border-bottom: 1px solid rgba(255,255,255,0.05);
-      }
-      .category-nav {
-        display: flex;
-        gap: 10px;
-        overflow-x: auto;
-        scrollbar-width: none;
-      }
-      .category-nav::-webkit-scrollbar {
-        display: none;
-      }
-      .cat-pill {
-        background: rgba(255, 255, 255, 0.08);
-        color: #a3b8cc;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 20px;
-        padding: 8px 18px;
-        font-size: 14px;
-        font-weight: 600;
-        white-space: nowrap;
-        cursor: pointer;
-        transition: all 0.25s ease;
-        user-select: none;
-      }
-      .cat-pill:hover {
-        background: rgba(255, 255, 255, 0.15);
-        color: #ffffff;
-      }
-      .cat-pill.active {
-        background: #ffffff;
-        color: #0d2138;
-        border-color: #ffffff;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      }
-    `;
-    document.head.appendChild(style);
-  }
-
   const gridElement = document.getElementById("storeGrid");
   if(!document.getElementById("categoryNavWrapper") && gridElement) {
     const navWrapper = document.createElement("div");
