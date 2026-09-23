@@ -1,11 +1,11 @@
-const CACHE_NAME = 'cheapster-cache-v17';
+const CACHE_NAME = 'cheapster-cache-v18';
 
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/privacy.html',
-  '/style.css',
-  '/script.js',
+  '/style-v2.css',
+  '/script-v2.js',
   '/firebase-config.js',
   '/manifest.json',
   '/logo_192x192.png',
