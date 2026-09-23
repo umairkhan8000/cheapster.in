@@ -222,7 +222,16 @@ function debounce(fn, delay = 160) {
 function buildLogoChain(store) {
   const chain = [];
   
-  // Clean Professional Vector Monogram Fallback (100% Crisp & Never Blurry)
+  // 1. Pehle local folder inventory check karega (/logos/amazon.png)
+  const safeName = store.name.toLowerCase().replace(/[^a-z0-9]/g, "");
+  chain.push(`/logos/${safeName}.png`);
+
+  // 2. Agar manual logo link diya ho
+  if (store.logo) {
+    chain.push(store.logo);
+  }
+
+  // 3. Last mein Clean Professional Vector Monogram Fallback (Initials)
   const bgColors = ["#1c3f66", "#0d2138", "#142a44", "#1e293b"];
   const bg = bgColors[Math.floor(Math.random() * bgColors.length)];
   
