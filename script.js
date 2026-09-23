@@ -1,10 +1,8 @@
-// build: 2026-09-21-fix2
+// build: 2026-09-21-Exact-Zip-Logos
 // =========================================================
-// CHEAPSTER.IN — PREMIUM BRAND DIRECTORY (Category Edition)
-// Haptic Feedback, Spotlight Hover, PWA & Category Routing
+// CHEapSTER.IN — PREMIUM BRAND DIRECTORY (Exact Zip Logos)
 // =========================================================
 
-// --- CATEGORY ORDER (Most Selling to Least) ---
 const CATEGORY_ORDER = [
   "All", 
   "Mega Brands", 
@@ -20,149 +18,139 @@ const CATEGORY_ORDER = [
   "Kids"
 ];
 
-// --- BRAND MASTER LIST (Updated & Cleaned) ---
+// --- BRAND MASTER LIST WITH EXACT ZIP LOGO FILENAMES ---
 const stores = [
-  // 1. MEGA BRANDS (Highest Traffic & Volume)
-  { name: "Amazon", domain: "amazon.in", category: "Mega Brands", description: "Everything marketplace", link: "https://link.amazon/B03SYMxWN" },
-  { name: "Flipkart", domain: "flipkart.com", category: "Mega Brands", description: "Shopping marketplace", link: "https://fktr.in/Ve7AKTM" },
-  { name: "Myntra", domain: "myntra.com", category: "Mega Brands", description: "Fashion & lifestyle", link: "https://myntr.it/0IKBm9j" },
-  { name: "Nykaa", domain: "nykaa.com", category: "Mega Brands", description: "Beauty & cosmetics", link: "https://bitli.in/cYKpZba" },
-  { name: "AJIO", domain: "ajio.com", category: "Mega Brands", description: "Fashion destination", link: "https://ajiio.in/hSTHlOO" },
-  { name: "Tata CLiQ", domain: "tatacliq.com", category: "Mega Brands", description: "Multi-category retail", link: "https://bitli.in/Ufnwuqh" },
-  { name: "Croma", domain: "croma.com", category: "Mega Brands", description: "Electronics", link: "https://bitli.in/3MjWfz5" },
-  { name: "Tira", domain: "tirabeauty.com", category: "Mega Brands", description: "Premium beauty", link: "https://www.tirabeauty.com" },
-  { name: "Shopsy", domain: "shopsy.in", category: "Mega Brands", description: "Value shopping", link: "https://bitli.in/q3GTiTJ" },
-  { name: "JioMart", domain: "jiomart.com", category: "Mega Brands", description: "Groceries & more", link: "https://bitli.in/6jJqYGx" },
+  // 1. MEGA BRANDS
+  { name: "Amazon", domain: "amazon.in", category: "Mega Brands", description: "Everything marketplace", link: "https://link.amazon/B03SYMxWN", logo: "hd-logos/amazon.png" },
+  { name: "Flipkart", domain: "flipkart.com", category: "Mega Brands", description: "Shopping marketplace", link: "https://fktr.in/Ve7AKTM", logo: "hd-logos/flipkart.png" },
+  { name: "Myntra", domain: "myntra.com", category: "Mega Brands", description: "Fashion & lifestyle", link: "https://myntr.it/0IKBm9j", logo: "hd-logos/myntra.png" },
+  { name: "Nykaa", domain: "nykaa.com", category: "Mega Brands", description: "Beauty & cosmetics", link: "https://bitli.in/cYKpZba", logo: "hd-logos/nykaa.png" },
+  { name: "AJIO", domain: "ajio.com", category: "Mega Brands", description: "Fashion destination", link: "https://ajiio.in/hSTHlOO", logo: "hd-logos/ajio.png" },
+  { name: "Tata CLiQ", domain: "tatacliq.com", category: "Mega Brands", description: "Multi-category retail", link: "https://bitli.in/Ufnwuqh", logo: "hd-logos/tatacliq.png" },
+  { name: "Croma", domain: "croma.com", category: "Mega Brands", description: "Electronics", link: "https://bitli.in/3MjWfz5", logo: "hd-logos/croma.png" },
+  { name: "Tira", domain: "tirabeauty.com", category: "Mega Brands", description: "Premium beauty", link: "https://www.tirabeauty.com", logo: "hd-logos/tirabeautycom.png" },
+  { name: "Shopsy", domain: "shopsy.in", category: "Mega Brands", description: "Value shopping", link: "https://bitli.in/q3GTiTJ", logo: "hd-logos/shopsy.png" },
+  { name: "JioMart", domain: "jiomart.com", category: "Mega Brands", description: "Groceries & more", link: "https://bitli.in/6jJqYGx", logo: "hd-logos/jiomart.png" },
 
   // 2. FASHION & FOOTWEAR
-  { name: "Snitch", domain: "", category: "Fashion", description: "Men's fashion", link: "https://www.snitch.co.in" },
-  { name: "Urbanic", domain: "urbanic.com", category: "Fashion", description: "Gen-Z women's fashion", link: "https://inr.deals/JNTFEn" },
-  { name: "Beyoung", domain: "beyoung.in", category: "Fashion", description: "Everyday fashion", link: "https://inr.deals/dg4LBQ" },
-  { name: "Savana", domain: "savana.com", category: "Fashion", description: "Trendy fashion", link: "https://www.savana.com" },
-  { name: "Bewakoof", domain: "bewakoof.com", category: "Fashion", description: "Quirky fashion", link: "https://www.bewakoof.com" },
-  { name: "The Souled Store", domain: "thesouledstore.com", category: "Fashion", description: "Pop culture merch", link: "https://inr.deals/FK7yPZ" },
-  { name: "XYXX", domain: "xyxxcrew.com", category: "Fashion", description: "Men's innerwear", link: "https://bitli.in/3zj1f7A" },
-  { name: "Cahoot", domain: "cahoot.in", category: "Fashion", description: "Casual streetwear", link: "https://cahoot.in/collections/men-bestsellers?utm_source=Affiliate&utm_medium=iCubesWire&utm_campaign=CPS_Campaign_97_sup679138037_6ab3af29a899e5328_624" },
-  { name: "Bonkers Corner", domain: "bonkerscorner.com", category: "Fashion", description: "Gen-Z streetwear", link: "https://www.bonkerscorner.com" },
-  { name: "Levi's", domain: "levi.in", category: "Fashion", description: "Premium denim", link: "https://www.levi.in" },
-  { name: "Shoppers Stop", domain: "shoppersstop.com", category: "Fashion", description: "Premium retail", link: "https://www.shoppersstop.com" },
-  { name: "Crocs", domain: "crocs.in", category: "Fashion", description: "Comfort footwear", link: "https://www.crocs.in" },
+  { name: "Snitch", domain: "", category: "Fashion", description: "Men's fashion", link: "https://www.snitch.co.in", logo: "hd-logos/snitchcom.png" },
+  { name: "Urbanic", domain: "urbanic.com", category: "Fashion", description: "Gen-Z women's fashion", link: "https://inr.deals/JNTFEn", logo: "hd-logos/urbanic.png" },
+  { name: "Beyoung", domain: "beyoung.in", category: "Fashion", description: "Everyday fashion", link: "https://inr.deals/dg4LBQ", logo: "hd-logos/beyoungin.png" },
+  { name: "Savana", domain: "savana.com", category: "Fashion", description: "Trendy fashion", link: "https://www.savana.com", logo: "hd-logos/savana.png" },
+  { name: "Bewakoof", domain: "bewakoof.com", category: "Fashion", description: "Quirky fashion", link: "https://www.bewakoof.com", logo: "hd-logos/bewakoof.png" },
+  { name: "The Souled Store", domain: "thesouledstore.com", category: "Fashion", description: "Pop culture merch", link: "https://inr.deals/FK7yPZ", logo: "hd-logos/thesouledstore.png" },
+  { name: "XYXX", domain: "xyxxcrew.com", category: "Fashion", description: "Men's innerwear", link: "https://bitli.in/3zj1f7A", logo: "hd-logos/xyxx.png" },
+  { name: "Cahoot", domain: "cahoot.in", category: "Fashion", description: "Casual streetwear", link: "https://cahoot.in/collections/men-bestsellers", logo: "hd-logos/cahootin.png" },
+  { name: "Bonkers Corner", domain: "bonkerscorner.com", category: "Fashion", description: "Gen-Z streetwear", link: "https://www.bonkerscorner.com", logo: "hd-logos/bonkerscorner.png" },
+  { name: "Levi's", domain: "levi.in", category: "Fashion", description: "Premium denim", link: "https://www.levi.in", logo: "hd-logos/leviin.png" },
+  { name: "Shoppers Stop", domain: "shoppersstop.com", category: "Fashion", description: "Premium retail", link: "https://www.shoppersstop.com", logo: "hd-logos/shoppersstop.png" },
+  { name: "Crocs", domain: "crocs.in", category: "Fashion", description: "Comfort footwear", link: "https://www.crocs.in", logo: "hd-logos/crocs.png" },
 
-  // 3. BEAUTY & GROOMING (Skincare, Makeup & Men's Care)
-  { name: "Minimalist", domain: "beminimalist.co", category: "Beauty & Grooming", description: "Science skincare", link: "https://www.beminimalist.co" },
-  { name: "Plum", domain: "plumgoodness.com", category: "Beauty & Grooming", description: "Vegan beauty", link: "https://www.plumgoodness.com" },
-  { name: "Dot & Key", domain: "dotandkey.com", category: "Beauty & Grooming", description: "Skincare essentials", link: "https://bitli.in/kxVP911" },
-  { name: "Mamaearth", domain: "mamaearth.in", category: "Beauty & Grooming", description: "Toxin-free care", link: "https://www.mamaearth.in" },
-  { name: "MCaffeine", domain: "mcaffeine.com", category: "Beauty & Grooming", description: "Caffeinated care", link: "https://bitli.in/l5q8RB9" },
-  { name: "Foxtale", domain: "foxtale.in", category: "Beauty & Grooming", description: "Skincare essentials", link: "https://bitli.in/0AmuJ4D" },
-  { name: "Pilgrim", domain: "discoverpilgrim.com", category: "Beauty & Grooming", description: "Global beauty secrets", link: "https://www.discoverpilgrim.com" },
-  { name: "WOW Skin Science", domain: "buywow.in", category: "Beauty & Grooming", description: "Natural care", link: "https://www.buywow.in" },
-  { name: "Purplle", domain: "purplle.com", category: "Beauty & Grooming", description: "Beauty shopping", link: "https://www.purplle.com" },
-  { name: "Sugar Cosmetics", domain: "sugarcosmetics.com", category: "Beauty & Grooming", description: "Makeup brand", link: "https://www.sugarcosmetics.com" },
-  { name: "MyGlamm", domain: "myglamm.com", category: "Beauty & Grooming", description: "Makeup & beauty", link: "https://www.myglamm.com" },
-  { name: "Bella Vita", domain: "bellavitaluxury.co.in", category: "Beauty & Grooming", description: "Luxury perfumes", link: "https://bitli.in/my55y0T" },
-  { name: "Skinn by Titan", domain: "skinn.in", category: "Beauty & Grooming", description: "Indian luxury fragrances", link: "https://www.skinn.in" },
-  { name: "Swiss Beauty", domain: "swissbeauty.in", category: "Beauty & Grooming", description: "Budget makeup", link: "https://bitli.in/aIuUSl6" },
-  { name: "MAC Cosmetics", domain: "maccosmetics.in", category: "Beauty & Grooming", description: "Luxury makeup", link: "https://www.maccosmetics.in" },
-  { name: "Bare Anatomy", domain: "innovist.com", category: "Beauty & Grooming", description: "Science hair care", link: "https://innovist.com/collections/bare-anatomy" },
-  { name: "BBlunt", domain: "bblunt.com", category: "Beauty & Grooming", description: "Salon-style hair care", link: "https://bitli.in/8C5fu33" },
-  { name: "Beardo", domain: "beardo.in", category: "Beauty & Grooming", description: "Men's grooming", link: "https://beardo.in" },
-  { name: "Bombay Shaving Co", domain: "bombayshavingcompany.com", category: "Beauty & Grooming", description: "Premium grooming", link: "https://bombayshavingcompany.com" },
-  { name: "The Man Company", domain: "themancompany.com", category: "Beauty & Grooming", description: "Premium essentials", link: "https://bitli.in/bNc5aYS" },
-  { name: "Ghar Soaps", domain: "gharsoaps.in", category: "Beauty & Grooming", description: "Ayurvedic skincare", link: "https://www.gharsoaps.shop/?utm_source=vcommission&utm_medium=132377_&utm_campaign=trackier_13680&click_id=&pub_id=132377&campaign_id=13680" },
-
-  // -- ROUTED BEAUTY BRANDS (Redirects to Nykaa) --
-  { name: "Lakme", domain: "lakmeindia.com", category: "Beauty & Grooming", description: "Indian makeup giant", link: "https://www.nykaa.com/brands/lakme/c/334" },
-  { name: "Maybelline", domain: "maybelline.co.in", category: "Beauty & Grooming", description: "Global makeup", link: "https://www.nykaa.com/brands/maybelline-new-york/c/392" },
-  { name: "L'Oréal", domain: "lorealparis.co.in", category: "Beauty & Grooming", description: "Hair & cosmetics", link: "https://www.nykaa.com/brands/loreal-paris/c/595" },
+  // 3. BEAUTY & GROOMING
+  { name: "Minimalist", domain: "beminimalist.co", category: "Beauty & Grooming", description: "Science skincare", link: "https://www.beminimalist.co", logo: "hd-logos/minimalist.png" },
+  { name: "Plum", domain: "plumgoodness.com", category: "Beauty & Grooming", description: "Vegan beauty", link: "https://www.plumgoodness.com", logo: "hd-logos/plum.png" },
+  { name: "Dot & Key", domain: "dotandkey.com", category: "Beauty & Grooming", description: "Skincare essentials", link: "https://bitli.in/kxVP911", logo: "hd-logos/dotkey.png" },
+  { name: "Mamaearth", domain: "mamaearth.in", category: "Beauty & Grooming", description: "Toxin-free care", link: "https://www.mamaearth.in", logo: "hd-logos/mamaearth.png" },
+  { name: "MCaffeine", domain: "mcaffeine.com", category: "Beauty & Grooming", description: "Caffeinated care", link: "https://bitli.in/l5q8RB9", logo: "hd-logos/mcaffeine.png" },
+  { name: "Foxtale", domain: "foxtale.in", category: "Beauty & Grooming", description: "Skincare essentials", link: "https://bitli.in/0AmuJ4D", logo: "hd-logos/foxtale.png" },
+  { name: "Pilgrim", domain: "discoverpilgrim.com", category: "Beauty & Grooming", description: "Global beauty secrets", link: "https://www.discoverpilgrim.com", logo: "hd-logos/pilgrim.png" },
+  { name: "WOW Skin Science", domain: "buywow.in", category: "Beauty & Grooming", description: "Natural care", link: "https://www.buywow.in", logo: "hd-logos/wowskinscience.png" },
+  { name: "Purplle", domain: "purplle.com", category: "Beauty & Grooming", description: "Beauty shopping", link: "https://www.purplle.com", logo: "hd-logos/purplle.png" },
+  { name: "Sugar Cosmetics", domain: "sugarcosmetics.com", category: "Beauty & Grooming", description: "Makeup brand", link: "https://www.sugarcosmetics.com", logo: "hd-logos/sugarcosmetics.png" },
+  { name: "MyGlamm", domain: "myglamm.com", category: "Beauty & Grooming", description: "Makeup & beauty", link: "https://www.myglamm.com", logo: "hd-logos/myglammcom.png" },
+  { name: "Bella Vita", domain: "bellavitaluxury.co.in", category: "Beauty & Grooming", description: "Luxury perfumes", link: "https://bitli.in/my55y0T", logo: "hd-logos/bellavitaorganiccom.png" },
+  { name: "Skinn by Titan", domain: "skinn.in", category: "Beauty & Grooming", description: "Indian luxury fragrances", link: "https://www.skinn.in", logo: "hd-logos/skinnbytitan.png" },
+  { name: "Swiss Beauty", domain: "swissbeauty.in", category: "Beauty & Grooming", description: "Budget makeup", link: "https://bitli.in/aIuUSl6", logo: "hd-logos/swissbeautyin.png" },
+  { name: "MAC Cosmetics", domain: "maccosmetics.in", category: "Beauty & Grooming", description: "Luxury makeup", link: "https://www.maccosmetics.in", logo: "hd-logos/maccosmeticsin.png" },
+  { name: "Bare Anatomy", domain: "innovist.com", category: "Beauty & Grooming", description: "Science hair care", link: "https://innovist.com/collections/bare-anatomy", logo: "hd-logos/bareanatomy.png" },
+  { name: "BBlunt", domain: "bblunt.com", category: "Beauty & Grooming", description: "Salon-style hair care", link: "https://bitli.in/8C5fu33", logo: "hd-logos/bbluntcom.png" },
+  { name: "Beardo", domain: "beardo.in", category: "Beauty & Grooming", description: "Men's grooming", link: "https://beardo.in", logo: "hd-logos/beardo.png" },
+  { name: "Bombay Shaving Co", domain: "bombayshavingcompany.com", category: "Beauty & Grooming", description: "Premium grooming", link: "https://bombayshavingcompany.com", logo: "hd-logos/bombayshavingcompany.png" },
+  { name: "The Man Company", domain: "themancompany.com", category: "Beauty & Grooming", description: "Premium essentials", link: "https://bitli.in/bNc5aYS", logo: "hd-logos/themancompany.png" },
+  { name: "Ghar Soaps", domain: "gharsoaps.in", category: "Beauty & Grooming", description: "Ayurvedic skincare", link: "https://www.gharsoaps.shop", logo: "hd-logos/gharsoapsin.png" },
+  { name: "Lakme", domain: "lakmeindia.com", category: "Beauty & Grooming", description: "Indian makeup giant", link: "https://www.nykaa.com/brands/lakme/c/334", logo: "hd-logos/lakmeindiacom.png" },
+  { name: "Maybelline", domain: "maybelline.co.in", category: "Beauty & Grooming", description: "Global makeup", link: "https://www.nykaa.com/brands/maybelline-new-york/c/392", logo: "hd-logos/maybellinecoin.png" },
+  { name: "L'Oréal", domain: "lorealparis.co.in", category: "Beauty & Grooming", description: "Hair & cosmetics", link: "https://www.nykaa.com/brands/loreal-paris/c/595", logo: "hd-logos/loral.png" },
 
   // 4. TECH & GADGETS
-  { name: "Dell", domain: "dell.com", category: "Tech", description: "Laptops & PCs", link: "https://bitli.in/iNehXK5" },
-  { name: "Lenovo", domain: "lenovo.com", category: "Tech", description: "Laptops & tech", link: "https://inr.deals/8SVnGa" },
-  { name: "Realme", domain: "realme.com", category: "Tech", description: "Smartphones & AIoT", link: "https://www.realme.com" },
-  { name: "boAt", domain: "boat-lifestyle.com", category: "Tech", description: "Audio & wearables", link: "https://www.boat-lifestyle.com" },
-  { name: "Noise", domain: "gonoise.com", category: "Tech", description: "Smartwatches", link: "https://www.gonoise.com" },
-  { name: "JBL", domain: "jbl.com", category: "Tech", description: "Premium audio", link: "https://inr.deals/lWnHDY" },
-  { name: "Reliance Digital", domain: "reliancedigital.in", category: "Tech", description: "Tech retail", link: "https://www.reliancedigital.in" },
-  { name: "HP", domain: "hp.com", category: "Tech", description: "Laptops & tech", link: "https://bitli.in/6R3BJ2i" },
-  { name: "Vijay Sales", domain: "vijaysales.com", category: "Tech", description: "Electronics retail", link: "https://www.vijaysales.com" },
-  { name: "Cashify", domain: "cashify.in", category: "Tech", description: "Sell & buy phones", link: "https://inr.deals/gW2Iby" },
-  { name: "Spinny", domain: "spinny.com", category: "Tech", description: "Buy & sell used cars", link: "https://inr.deals/mor4Sf" },
+  { name: "Dell", domain: "dell.com", category: "Tech", description: "Laptops & PCs", link: "https://bitli.in/iNehXK5", logo: "hd-logos/dell.png" },
+  { name: "Lenovo", domain: "lenovo.com", category: "Tech", description: "Laptops & tech", link: "https://inr.deals/8SVnGa", logo: "hd-logos/lenovo.png" },
+  { name: "Realme", domain: "realme.com", category: "Tech", description: "Smartphones & AIoT", link: "https://www.realme.com", logo: "hd-logos/realme.png" },
+  { name: "boAt", domain: "boat-lifestyle.com", category: "Tech", description: "Audio & wearables", link: "https://www.boat-lifestyle.com", logo: "hd-logos/boat.png" },
+  { name: "Noise", domain: "gonoise.com", category: "Tech", description: "Smartwatches", link: "https://www.gonoise.com", logo: "hd-logos/noise.png" },
+  { name: "JBL", domain: "jbl.com", category: "Tech", description: "Premium audio", link: "https://inr.deals/lWnHDY", logo: "hd-logos/jbl.png" },
+  { name: "Reliance Digital", domain: "reliancedigital.in", category: "Tech", description: "Tech retail", link: "https://www.reliancedigital.in", logo: "hd-logos/reliancedigital.png" },
+  { name: "HP", domain: "hp.com", category: "Tech", description: "Laptops & tech", link: "https://bitli.in/6R3BJ2i", logo: "hd-logos/hp.png" },
+  { name: "Vijay Sales", domain: "vijaysales.com", category: "Tech", description: "Electronics retail", link: "https://www.vijaysales.com", logo: "hd-logos/vijaysales.png" },
+  { name: "Cashify", domain: "cashify.in", category: "Tech", description: "Sell & buy phones", link: "https://inr.deals/gW2Iby", logo: "hd-logos/cashify.png" },
+  { name: "Spinny", domain: "spinny.com", category: "Tech", description: "Buy & sell used cars", link: "https://inr.deals/mor4Sf", logo: "hd-logos/spinny.png" },
 
   // 5. WELLNESS & HEALTH
-  { name: "Tata 1mg", domain: "1mg.com", category: "Wellness & Health", description: "Online pharmacy", link: "https://www.1mg.com" },
-  { name: "Apollo 24|7", domain: "apollo247.com", category: "Wellness & Health", description: "Healthcare delivery", link: "https://www.apollo247.com" },
-  { name: "Netmeds", domain: "netmeds.com", category: "Wellness & Health", description: "Medicine delivery", link: "https://bitli.in/zXbiP37" },
-  { name: "MuscleBlaze", domain: "muscleblaze.com", category: "Wellness & Health", description: "Sports nutrition", link: "https://www.muscleblaze.com" },
-  { name: "Myprotein", domain: "myprotein.co.in", category: "Wellness & Health", description: "Fitness supplements", link: "https://www.myprotein.co.in" },
-  { name: "Plix", domain: "", category: "Wellness & Health", description: "Plant nutrition", link: "https://www.plixlife.com" },
-  { name: "Kapiva", domain: "kapiva.in", category: "Wellness & Health", description: "Ayurvedic nutrition", link: "https://www.kapiva.in" },
-  { name: "HealthKart", domain: "healthkart.com", category: "Wellness & Health", description: "Health supplements", link: "https://www.healthkart.com" },
-  { name: "Traya", domain: "traya.health", category: "Wellness & Health", description: "Hair fall treatment", link: "https://traya.health" },
-  { name: "Man Matters", domain: "manmatters.com", category: "Wellness & Health", description: "Men's wellness", link: "https://inr.deals/I4BiH6" },
-  { name: "Perfora", domain: "perforacare.com", category: "Wellness & Health", description: "Premium oral care", link: "https://inr.deals/ZAEqzs" },
-
-  // -- ROUTED HEALTH BRANDS --
-  { name: "Optimum Nutrition", domain: "optimumnutrition.com", category: "Wellness & Health", description: "Premium whey protein", link: "https://www.healthkart.com/brand/optimum-nutrition" },
+  { name: "Tata 1mg", domain: "1mg.com", category: "Wellness & Health", description: "Online pharmacy", link: "https://www.1mg.com", logo: "hd-logos/tata1mg.png" },
+  { name: "Apollo 24|7", domain: "apollo247.com", category: "Wellness & Health", description: "Healthcare delivery", link: "https://www.apollo247.com", logo: "hd-logos/apollo247.png" },
+  { name: "Netmeds", domain: "netmeds.com", category: "Wellness & Health", description: "Medicine delivery", link: "https://bitli.in/zXbiP37", logo: "hd-logos/netmeds.png" },
+  { name: "MuscleBlaze", domain: "muscleblaze.com", category: "Wellness & Health", description: "Sports nutrition", link: "https://www.muscleblaze.com", logo: "hd-logos/muscleblaze.png" },
+  { name: "Myprotein", domain: "myprotein.co.in", category: "Wellness & Health", description: "Fitness supplements", link: "https://www.myprotein.co.in", logo: "hd-logos/myproteincoin.png" },
+  { name: "Plix", domain: "", category: "Wellness & Health", description: "Plant nutrition", link: "https://www.plixlife.com", logo: "hd-logos/plix.png" },
+  { name: "Kapiva", domain: "kapiva.in", category: "Wellness & Health", description: "Ayurvedic nutrition", link: "https://www.kapiva.in", logo: "hd-logos/kapiva.png" },
+  { name: "HealthKart", domain: "healthkart.com", category: "Wellness & Health", description: "Health supplements", link: "https://www.healthkart.com", logo: "hd-logos/healthkart.png" },
+  { name: "Traya", domain: "traya.health", category: "Wellness & Health", description: "Hair fall treatment", link: "https://traya.health", logo: "hd-logos/traya.png" },
+  { name: "Man Matters", domain: "manmatters.com", category: "Wellness & Health", description: "Men's wellness", link: "https://inr.deals/I4BiH6", logo: "hd-logos/manmatters.png" },
+  { name: "Perfora", domain: "perforacare.com", category: "Wellness & Health", description: "Premium oral care", link: "https://inr.deals/ZAEqzs", logo: "hd-logos/perfora.png" },
+  { name: "Optimum Nutrition", domain: "optimumnutrition.com", category: "Wellness & Health", description: "Premium whey protein", link: "https://www.healthkart.com/brand/optimum-nutrition", logo: "hd-logos/optimumnutrition.png" },
 
   // 6. JEWELLERY & GIFTING
-  { name: "Lenskart", domain: "lenskart.com", category: "Jewellery & Gifting", description: "Eyewear", link: "https://www.lenskart.com" },
-  { name: "Titan", domain: "titan.co.in", category: "Jewellery & Gifting", description: "Watches & Eyeplus", link: "https://www.titan.co.in" },
-  { name: "Tanishq", domain: "tanishq.co.in", category: "Jewellery & Gifting", description: "Fine jewellery", link: "https://www.tanishq.co.in" },
-  { name: "Giva", domain: "giva.co", category: "Jewellery & Gifting", description: "Silver jewellery", link: "https://www.giva.co" },
-  { name: "Palmonas", domain: "palmonas.com", category: "Jewellery & Gifting", description: "Demi-fine jewellery", link: "https://www.palmonas.com" },
-  { name: "Melorra", domain: "melorra.com", category: "Jewellery & Gifting", description: "Trendy gold", link: "https://www.melorra.com" },
-  { name: "BlueStone", domain: "bluestone.com", category: "Jewellery & Gifting", description: "Fine jewellery", link: "https://www.bluestone.com" },
-  { name: "FNP", domain: "fnp.com", category: "Jewellery & Gifting", description: "Flowers & gifts", link: "https://www.fnp.com" },
+  { name: "Lenskart", domain: "lenskart.com", category: "Jewellery & Gifting", description: "Eyewear", link: "https://www.lenskart.com", logo: "hd-logos/lenskart.png" },
+  { name: "Titan", domain: "titan.co.in", category: "Jewellery & Gifting", description: "Watches & Eyeplus", link: "https://www.titan.co.in", logo: "hd-logos/titancoin.png" },
+  { name: "Tanishq", domain: "tanishq.co.in", category: "Jewellery & Gifting", description: "Fine jewellery", link: "https://www.tanishq.co.in", logo: "hd-logos/tanishqcoin.png" },
+  { name: "Giva", domain: "giva.co", category: "Jewellery & Gifting", description: "Silver jewellery", link: "https://www.giva.co", logo: "hd-logos/giva.png" },
+  { name: "Palmonas", domain: "palmonas.com", category: "Jewellery & Gifting", description: "Demi-fine jewellery", link: "https://www.palmonas.com", logo: "hd-logos/palmonas.png" },
+  { name: "Melorra", domain: "melorra.com", category: "Jewellery & Gifting", description: "Trendy gold", link: "https://www.melorra.com", logo: "hd-logos/melorra.png" },
+  { name: "BlueStone", domain: "bluestone.com", category: "Jewellery & Gifting", description: "Fine jewellery", link: "https://www.bluestone.com", logo: "hd-logos/bluestone.png" },
+  { name: "FNP", domain: "fnp.com", category: "Jewellery & Gifting", description: "Flowers & gifts", link: "https://www.fnp.com", logo: "hd-logos/fnp.png" },
 
   // 7. TRAVEL & FLIGHTS
-  { name: "MakeMyTrip", domain: "makemytrip.com", category: "Travel", description: "Flights & hotels", link: "https://bitli.in/xj6tXro" },
-  { name: "Agoda", domain: "agoda.com", category: "Travel", description: "Hotels & stays", link: "https://inr.deals/E1HvrY" },
-  { name: "Booking.com", domain: "booking.com", category: "Travel", description: "Global travel", link: "https://bitli.in/tuUeY6U" },
-  { name: "Goibibo", domain: "goibibo.com", category: "Travel", description: "Travel bookings", link: "https://bitli.in/nr6ckLO" },
-  { name: "Ixigo", domain: "ixigo.com", category: "Travel", description: "Flight & train bookings", link: "https://www.ixigo.com" },
-  { name: "Oyo Rooms", domain: "oyorooms.com", category: "Travel", description: "Budget stays", link: "https://www.oyorooms.com" },
+  { name: "MakeMyTrip", domain: "makemytrip.com", category: "Travel", description: "Flights & hotels", link: "https://bitli.in/xj6tXro", logo: "hd-logos/makemytrip.png" },
+  { name: "Agoda", domain: "agoda.com", category: "Travel", description: "Hotels & stays", link: "https://inr.deals/E1HvrY", logo: "hd-logos/agodacom.png" },
+  { name: "Booking.com", domain: "booking.com", category: "Travel", description: "Global travel", link: "https://bitli.in/tuUeY6U", logo: "hd-logos/bookingcom.png" },
+  { name: "Goibibo", domain: "goibibo.com", category: "Travel", description: "Travel bookings", link: "https://bitli.in/nr6ckLO", logo: "hd-logos/goibibo.png" },
+  { name: "Ixigo", domain: "ixigo.com", category: "Travel", description: "Flight & train bookings", link: "https://www.ixigo.com", logo: "hd-logos/ixigo.png" },
+  { name: "Oyo Rooms", domain: "oyorooms.com", category: "Travel", description: "Budget stays", link: "https://www.oyorooms.com", logo: "hd-logos/oyorooms.png" },
 
   // 8. HOME & HARDWARE
-  { name: "Pepperfry", domain: "pepperfry.com", category: "Home", description: "Furniture marketplace", link: "https://www.pepperfry.com" },
-  { name: "WoodenStreet", domain: "woodenstreet.com", category: "Home", description: "Solid wood furniture", link: "https://www.woodenstreet.com" },
-  { name: "Urban Ladder", domain: "urbanladder.com", category: "Home", description: "Premium furniture", link: "https://inr.deals/IenJf0" },
-  { name: "Wakefit", domain: "wakefit.co", category: "Home", description: "Mattress & furniture", link: "https://www.wakefit.co" },
-  { name: "SleepyCat", domain: "sleepycat.in", category: "Home", description: "Sleep solutions", link: "https://sleepycat.in" },
-  { name: "Rentomojo", domain: "rentomojo.com", category: "Home", description: "Furniture rentals", link: "https://www.rentomojo.com" },
-  { name: "Moglix", domain: "moglix.com", category: "Home", description: "Hardware & tools", link: "https://www.moglix.com" },
-
-  // -- ROUTED HARDWARE --
-  { name: "Bosch Tools", domain: "bosch-pt.co.in", category: "Home", description: "Power tools", link: "https://www.moglix.com/brands/bosch" },
+  { name: "Pepperfry", domain: "pepperfry.com", category: "Home", description: "Furniture marketplace", link: "https://www.pepperfry.com", logo: "hd-logos/pepperfry.png" },
+  { name: "WoodenStreet", domain: "woodenstreet.com", category: "Home", description: "Solid wood furniture", link: "https://www.woodenstreet.com", logo: "hd-logos/woodenstreet.png" },
+  { name: "Urban Ladder", domain: "urbanladder.com", category: "Home", description: "Premium furniture", link: "https://inr.deals/IenJf0", logo: "hd-logos/urbanladdercom.png" },
+  { name: "Wakefit", domain: "wakefit.co", category: "Home", description: "Mattress & furniture", link: "https://www.wakefit.co", logo: "hd-logos/wakefit.png" },
+  { name: "SleepyCat", domain: "sleepycat.in", category: "Home", description: "Sleep solutions", link: "https://sleepycat.in", logo: "hd-logos/sleepycat.png" },
+  { name: "Rentomojo", domain: "rentomojo.com", category: "Home", description: "Furniture rentals", link: "https://www.rentomojo.com", logo: "hd-logos/rentomojo.png" },
+  { name: "Moglix", domain: "moglix.com", category: "Home", description: "Hardware & tools", link: "https://www.moglix.com", logo: "hd-logos/moglix.png" },
+  { name: "Bosch Tools", domain: "bosch-pt.co.in", category: "Home", description: "Power tools", link: "https://www.moglix.com/brands/bosch", logo: "hd-logos/boschptcoin.png" },
 
   // 9. PETS
-  { name: "Supertails", domain: "supertails.com", category: "Pets", description: "Pet care & food", link: "https://supertails.com" },
-  { name: "Heads Up For Tails", domain: "headsupfortails.com", category: "Pets", description: "Luxury pet supplies", link: "https://headsupfortails.com" },
-
-  // -- ROUTED PETS --
-  { name: "Drools", domain: "drools.com", category: "Pets", description: "Dog & cat food", link: "https://supertails.com/collections/drools" },
-  { name: "Pedigree", domain: "pedigree.in", category: "Pets", description: "Dog nutrition", link: "https://supertails.com/collections/pedigree" },
-  { name: "Royal Canin", domain: "royalcanin.com", category: "Pets", description: "Premium pet nutrition", link: "https://supertails.com/collections/royal-canin" },
+  { name: "Supertails", domain: "supertails.com", category: "Pets", description: "Pet care & food", link: "https://supertails.com", logo: "hd-logos/supertails.png" },
+  { name: "Heads Up For Tails", domain: "headsupfortails.com", category: "Pets", description: "Luxury pet supplies", link: "https://headsupfortails.com", logo: "hd-logos/headsupfortails.png" },
+  { name: "Drools", domain: "drools.com", category: "Pets", description: "Dog & cat food", link: "https://supertails.com/collections/drools", logo: "hd-logos/drools.png" },
+  { name: "Pedigree", domain: "pedigree.in", category: "Pets", description: "Dog nutrition", link: "https://supertails.com/collections/pedigree", logo: "hd-logos/pedigreein.png" },
+  { name: "Royal Canin", domain: "royalcanin.com", category: "Pets", description: "Premium pet nutrition", link: "https://supertails.com/collections/royal-canin", logo: "hd-logos/royalcanin.png" },
 
   // 10. DIGITAL & SOFTWARE
-  { name: "Hostinger", domain: "hostinger.in", category: "Digital", description: "Web hosting", link: "https://inr.deals/8mfMZB" },
-  { name: "GoDaddy", domain: "godaddy.com", category: "Digital", description: "Domains & web tools", link: "https://www.godaddy.com/en-in" },
-  { name: "Microsoft", domain: "microsoft.com", category: "Digital", description: "Office 365 & Xbox", link: "https://www.microsoft.com/en-in" },
-  { name: "Norton", domain: "norton.com", category: "Digital", description: "Antivirus security", link: "https://in.norton.com" },
-  { name: "upGrad", domain: "upgrad.com", category: "Digital", description: "Higher education", link: "https://www.upgrad.com" },
-  { name: "Physics Wallah", domain: "pw.live", category: "Digital", description: "EdTech platform", link: "https://www.pw.live" },
+  { name: "Hostinger", domain: "hostinger.in", category: "Digital", description: "Web hosting", link: "https://inr.deals/8mfMZB", logo: "hd-logos/hostingerin.png" },
+  { name: "GoDaddy", domain: "godaddy.com", category: "Digital", description: "Domains & web tools", link: "https://www.godaddy.com/en-in", logo: "hd-logos/godaddy.png" },
+  { name: "Microsoft", domain: "microsoft.com", category: "Digital", description: "Office 365 & Xbox", link: "https://www.microsoft.com/en-in", logo: "hd-logos/microsoft.png" },
+  { name: "Norton", domain: "norton.com", category: "Digital", description: "Antivirus security", link: "https://in.norton.com", logo: "hd-logos/norton.png" },
+  { name: "upGrad", domain: "upgrad.com", category: "Digital", description: "Higher education", link: "https://www.upgrad.com", logo: "hd-logos/upgrad.png" },
+  { name: "Physics Wallah", domain: "pw.live", category: "Digital", description: "EdTech platform", link: "https://www.pw.live", logo: "hd-logos/pw.png" },
 
   // 11. KIDS & TOYS
-  { name: "FirstCry", domain: "firstcry.com", category: "Kids", description: "Kids & baby gear", link: "https://www.firstcry.com" },
-  { name: "Hopscotch", domain: "hopscotch.in", category: "Kids", description: "Kids fashion", link: "https://www.hopscotch.in" },
-  { name: "Hamleys", domain: "hamleys.in", category: "Kids", description: "Premium toys", link: "https://www.hamleys.in" },
-  { name: "Smartivity", domain: "smartivity.in", category: "Kids", description: "DIY & STEM toys", link: "https://www.smartivity.in" },
-
-  // -- ROUTED KIDS TOYS --
-  { name: "LEGO", domain: "lego.com", category: "Kids", description: "Building blocks", link: "https://www.hamleys.in/brand/lego.html" }
+  { name: "FirstCry", domain: "firstcry.com", category: "Kids", description: "Kids & baby gear", link: "https://www.firstcry.com", logo: "hd-logos/firstcry.png" },
+  { name: "Hopscotch", domain: "hopscotch.in", category: "Kids", description: "Kids fashion", link: "https://www.hopscotch.in", logo: "hd-logos/hopscotch.png" },
+  { name: "Hamleys", domain: "hamleys.in", category: "Kids", description: "Premium toys", link: "https://www.hamleys.in", logo: "hd-logos/hamleysin.png" },
+  { name: "Smartivity", domain: "smartivity.in", category: "Kids", description: "DIY & STEM toys", link: "https://www.smartivity.in", logo: "hd-logos/smartivity.png" },
+  { name: "LEGO", domain: "lego.com", category: "Kids", description: "Building blocks", link: "https://www.hamleys.in/brand/lego.html", logo: "hd-logos/lego.png" }
 ];
 
-// ---------- Premium UI Injections (Styles & Category Nav) ----------
+// ---------- Premium UI Injections ----------
 function injectStylesAndNav() {
   const gridElement = document.getElementById("storeGrid");
   if(!document.getElementById("categoryNavWrapper") && gridElement) {
@@ -221,22 +209,12 @@ function debounce(fn, delay = 160) {
 
 function buildLogoChain(store) {
   const chain = [];
-
   if (store.logo) {
     chain.push(store.logo);
   }
-
-  if (store.domain) {
-    chain.push(`https://www.google.com/s2/favicons?domain=${store.domain}&sz=128`);
-  }
-
   return chain;
 }
 
-/*
- * This helper is still used by the WhatsApp flow.
- * Store cards themselves no longer use it for navigation.
- */
 function openStoreLink(store) {
   let url =
     store.link ||
@@ -281,22 +259,6 @@ const grid =
     "storeGrid"
   );
 
-/*
- * Cuelinks FIX:
- *
- * Every merchant destination is now represented by a real,
- * persistent <a href=""> element.
- *
- * The previous code created:
- *
- *   div -> click -> temporary <a> -> click() -> remove()
- *
- * This version creates:
- *
- *   <a href="merchant-url"> ... </a>
- *
- * and keeps it in the DOM.
- */
 function buildCard(store, index) {
 
   const url =
@@ -380,12 +342,9 @@ function buildCard(store, index) {
     100;
 
   img.loading =
-    index < 4
+    index < 12
       ? "eager"
       : "lazy";
-
-  img.decoding =
-    "async";
 
   const bgColors = [
     "#1c3f66",
@@ -469,12 +428,6 @@ function buildCard(store, index) {
   meta.textContent =
     store.description;
 
-  /*
-   * Keep the visual Shop Now element.
-   *
-   * It is deliberately NOT a nested <button>.
-   * The parent anchor is the clickable element.
-   */
   const button =
     document.createElement(
       "div"
@@ -503,12 +456,6 @@ function buildCard(store, index) {
   return card;
 }
 
-/*
- * Merchant anchors are created only once.
- *
- * Search/category changes will hide/reorder the existing
- * anchor elements rather than destroying and recreating them.
- */
 let storeAnchorsReady =
   false;
 
@@ -565,10 +512,6 @@ function renderUI() {
     return;
   }
 
-  /*
-   * First render creates all permanent merchant anchors.
-   * Cuelinks will be loaded only after this.
-   */
   ensureStoreAnchors();
 
   let filtered =
@@ -636,21 +579,12 @@ function renderUI() {
     );
   }
 
-  /*
-   * Hide all existing anchors first.
-   */
   storeCardMap.forEach(
     (card) => {
       card.hidden = true;
     }
   );
 
-  /*
-   * Show and reorder existing anchors.
-   *
-   * These are the SAME <a> nodes that Cuelinks already sees.
-   * We do not recreate them.
-   */
   filtered.forEach(
     (store) => {
 
@@ -829,15 +763,6 @@ renderUI();
 // =========================================================
 // CUELINKS LOADER
 // =========================================================
-//
-// IMPORTANT:
-// Merchant <a> elements are created FIRST.
-// Cuelinks script is loaded SECOND.
-//
-// This removes the previous race where Cuelinks was loading
-// independently while the merchant cards were still being
-// generated dynamically.
-// =========================================================
 
 (function loadCuelinks() {
 
@@ -862,12 +787,6 @@ renderUI();
   script.type =
     "text/javascript";
 
-  /*
-   * Deliberately NOT async.
-   *
-   * The loader itself is appended only after all
-   * merchant anchors already exist.
-   */
   script.async =
     false;
 
