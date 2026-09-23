@@ -201,6 +201,39 @@ a { color: inherit; text-decoration: none; }
 .store-meta { color: var(--muted); font-size: 11px; min-height: 30px; margin: 0 0 15px; }
 .shop-button { width: 100%; padding: 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); color: var(--champagne-bright); border: 1px solid var(--line); font-size: 12px; font-weight: 700; transition: background .2s ease, color .2s ease, box-shadow .2s ease; }
 .store-card:hover .shop-button { background: linear-gradient(135deg, var(--champagne-bright), var(--champagne)); color: #14100a; box-shadow: 0 6px 16px rgba(205, 161, 92, 0.3); border-color: transparent; }
+/* --- Updated Store Card & Logo Frame Styling --- */
+.store-card {
+  background: var(--panel-solid);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 16px 12px; /* Card ke andar ki extra padding thodi kam ki */
+  text-align: center;
+  box-shadow: var(--shadow-soft);
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease, background-color .22s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.store-logo-frame { 
+  width: 76px;  /* Frame ko thoda bada kiya */
+  height: 76px; 
+  margin: 0 auto 12px; 
+  background: #fff; 
+  border-radius: 16px; 
+  padding: 6px; /* Padding kam ki taaki andar ka logo bada dikhe */
+  display: grid; 
+  place-items: center; 
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35); 
+}
+
+.store-logo { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: contain; 
+  object-position: center center; 
+}
 
 .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
 .empty-state h3 { color: var(--ink); margin-bottom: 8px; }
