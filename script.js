@@ -228,11 +228,11 @@ function buildLogoChain(store) {
   }
 
   if (store.domain) {
-    // 2. Clearbit HD Logo API (Size 256 ya 512 pixels set kar sakte hain)
-    chain.push(`https://logo.clearbit.com/${store.domain}?size=256`);
+    // 2. Clearbit HD Logo API (Primary auto-fetcher)
+    chain.push(`https://logo.clearbit.com/${store.domain}`);
     
-    // 3. Google Favicon API (sz=256 ya sz=512 high resolution ke liye)
-    chain.push(`https://www.google.com/s2/favicons?domain=${store.domain}&sz=256`);
+    // 3. Google Favicon (Clearbit fail hone par Backup)
+    chain.push(`https://www.google.com/s2/favicons?domain=${store.domain}&sz=128`);
   }
 
   return chain;
