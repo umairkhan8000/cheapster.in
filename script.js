@@ -1,15 +1,17 @@
-// build: 2026-09-21-Monochrome-Glass
+// build: 2026-09-21-Monochrome-Glass-Final
 // =========================================================
-// CHEAPSTER.IN — PREMIUM BRAND DIRECTORY 
+// CHEAPSTER.IN — PREMIUM BRAND DIRECTORY (Category Edition)
+// Haptic Feedback, Spotlight Hover, PWA & Category Routing
 // =========================================================
 
+// --- CATEGORY ORDER ---
 const CATEGORY_ORDER = [
   "All", "Mega Brands", "Fashion", "Beauty & Grooming", "Tech", 
   "Wellness & Health", "Jewellery & Gifting", "Travel", "Home", 
   "Pets", "Digital", "Kids"
 ];
 
-// Paste your complete exact stores array here[cite: 19]
+// --- COMPLETE BRAND MASTER LIST (From Source) ---
 const stores = [
   { name: "Amazon", domain: "amazon.in", category: "Mega Brands", description: "Everything marketplace", link: "https://link.amazon/B03SYMxWN" },
   { name: "Flipkart", domain: "flipkart.com", category: "Mega Brands", description: "Shopping marketplace", link: "https://fktr.in/Ve7AKTM" },
@@ -17,22 +19,119 @@ const stores = [
   { name: "Nykaa", domain: "nykaa.com", category: "Mega Brands", description: "Beauty & cosmetics", link: "https://bitli.in/cYKpZba" },
   { name: "AJIO", domain: "ajio.com", category: "Mega Brands", description: "Fashion destination", link: "https://ajiio.in/hSTHlOO" },
   { name: "Tata CLiQ", domain: "tatacliq.com", category: "Mega Brands", description: "Multi-category retail", link: "https://bitli.in/Ufnwuqh" },
-  // ... Include ALL remaining stores exactly as they were ...
+  { name: "Croma", domain: "croma.com", category: "Mega Brands", description: "Electronics", link: "https://bitli.in/3MjWfz5" },
+  { name: "Tira", domain: "tirabeauty.com", category: "Mega Brands", description: "Premium beauty", link: "https://www.tirabeauty.com" },
+  { name: "Shopsy", domain: "shopsy.in", category: "Mega Brands", description: "Value shopping", link: "https://bitli.in/q3GTiTJ" },
+  { name: "JioMart", domain: "jiomart.com", category: "Mega Brands", description: "Groceries & more", link: "https://bitli.in/6jJqYGx" },
   { name: "Snitch", domain: "", category: "Fashion", description: "Men's fashion", link: "https://www.snitch.co.in" },
-  { name: "MakeMyTrip", domain: "makemytrip.com", category: "Travel", description: "Flights & hotels", link: "https://bitli.in/xj6tXro" }
+  { name: "Urbanic", domain: "urbanic.com", category: "Fashion", description: "Gen-Z women's fashion", link: "https://inr.deals/JNTFEn" },
+  { name: "Beyoung", domain: "beyoung.in", category: "Fashion", description: "Everyday fashion", link: "https://inr.deals/dg4LBQ" },
+  { name: "Savana", domain: "savana.com", category: "Fashion", description: "Trendy fashion", link: "https://www.savana.com" },
+  { name: "Bewakoof", domain: "bewakoof.com", category: "Fashion", description: "Quirky fashion", link: "https://www.bewakoof.com" },
+  { name: "The Souled Store", domain: "thesouledstore.com", category: "Fashion", description: "Pop culture merch", link: "https://inr.deals/FK7yPZ" },
+  { name: "XYXX", domain: "xyxxcrew.com", category: "Fashion", description: "Men's innerwear", link: "https://bitli.in/3zj1f7A" },
+  { name: "Cahoot", domain: "cahoot.in", category: "Fashion", description: "Casual streetwear", link: "https://cahoot.in/collections/men-bestsellers?utm_source=Affiliate&utm_medium=iCubesWire&utm_campaign=CPS_Campaign_97_sup679138037_6ab3af29a899e5328_624" },
+  { name: "Bonkers Corner", domain: "bonkerscorner.com", category: "Fashion", description: "Gen-Z streetwear", link: "https://www.bonkerscorner.com" },
+  { name: "Levi's", domain: "levi.in", category: "Fashion", description: "Premium denim", link: "https://www.levi.in" },
+  { name: "Shoppers Stop", domain: "shoppersstop.com", category: "Fashion", description: "Premium retail", link: "https://www.shoppersstop.com" },
+  { name: "Crocs", domain: "crocs.in", category: "Fashion", description: "Comfort footwear", link: "https://www.crocs.in" },
+  { name: "Minimalist", domain: "beminimalist.co", category: "Beauty & Grooming", description: "Science skincare", link: "https://www.beminimalist.co" },
+  { name: "Plum", domain: "plumgoodness.com", category: "Beauty & Grooming", description: "Vegan beauty", link: "https://www.plumgoodness.com" },
+  { name: "Dot & Key", domain: "dotandkey.com", category: "Beauty & Grooming", description: "Skincare essentials", link: "https://bitli.in/kxVP911" },
+  { name: "Mamaearth", domain: "mamaearth.in", category: "Beauty & Grooming", description: "Toxin-free care", link: "https://www.mamaearth.in" },
+  { name: "MCaffeine", domain: "mcaffeine.com", category: "Beauty & Grooming", description: "Caffeinated care", link: "https://bitli.in/l5q8RB9" },
+  { name: "Foxtale", domain: "foxtale.in", category: "Beauty & Grooming", description: "Skincare essentials", link: "https://bitli.in/0AmuJ4D" },
+  { name: "Pilgrim", domain: "discoverpilgrim.com", category: "Beauty & Grooming", description: "Global beauty secrets", link: "https://www.discoverpilgrim.com" },
+  { name: "WOW Skin Science", domain: "buywow.in", category: "Beauty & Grooming", description: "Natural care", link: "https://www.buywow.in" },
+  { name: "Purplle", domain: "purplle.com", category: "Beauty & Grooming", description: "Beauty shopping", link: "https://www.purplle.com" },
+  { name: "Sugar Cosmetics", domain: "sugarcosmetics.com", category: "Beauty & Grooming", description: "Makeup brand", link: "https://www.sugarcosmetics.com" },
+  { name: "MyGlamm", domain: "myglamm.com", category: "Beauty & Grooming", description: "Makeup & beauty", link: "https://www.myglamm.com" },
+  { name: "Bella Vita", domain: "bellavitaluxury.co.in", category: "Beauty & Grooming", description: "Luxury perfumes", link: "https://bitli.in/my55y0T" },
+  { name: "Skinn by Titan", domain: "skinn.in", category: "Beauty & Grooming", description: "Indian luxury fragrances", link: "https://www.skinn.in" },
+  { name: "Swiss Beauty", domain: "swissbeauty.in", category: "Beauty & Grooming", description: "Budget makeup", link: "https://bitli.in/aIuUSl6" },
+  { name: "MAC Cosmetics", domain: "maccosmetics.in", category: "Beauty & Grooming", description: "Luxury makeup", link: "https://www.maccosmetics.in" },
+  { name: "Bare Anatomy", domain: "innovist.com", category: "Beauty & Grooming", description: "Science hair care", link: "https://innovist.com/collections/bare-anatomy" },
+  { name: "BBlunt", domain: "bblunt.com", category: "Beauty & Grooming", description: "Salon-style hair care", link: "https://bitli.in/8C5fu33" },
+  { name: "Beardo", domain: "beardo.in", category: "Beauty & Grooming", description: "Men's grooming", link: "https://beardo.in" },
+  { name: "Bombay Shaving Co", domain: "bombayshavingcompany.com", category: "Beauty & Grooming", description: "Premium grooming", link: "https://bombayshavingcompany.com" },
+  { name: "The Man Company", domain: "themancompany.com", category: "Beauty & Grooming", description: "Premium essentials", link: "https://bitli.in/bNc5aYS" },
+  { name: "Ghar Soaps", domain: "gharsoaps.in", category: "Beauty & Grooming", description: "Ayurvedic skincare", link: "https://www.gharsoaps.shop/?utm_source=vcommission&utm_medium=132377_&utm_campaign=trackier_13680&click_id=&pub_id=132377&campaign_id=13680" },
+  { name: "Lakme", domain: "lakmeindia.com", category: "Beauty & Grooming", description: "Indian makeup giant", link: "https://www.nykaa.com/brands/lakme/c/334" },
+  { name: "Maybelline", domain: "maybelline.co.in", category: "Beauty & Grooming", description: "Global makeup", link: "https://www.nykaa.com/brands/maybelline-new-york/c/392" },
+  { name: "L'Oréal", domain: "lorealparis.co.in", category: "Beauty & Grooming", description: "Hair & cosmetics", link: "https://www.nykaa.com/brands/loreal-paris/c/595" },
+  { name: "Dell", domain: "dell.com", category: "Tech", description: "Laptops & PCs", link: "https://bitli.in/iNehXK5" },
+  { name: "Lenovo", domain: "lenovo.com", category: "Tech", description: "Laptops & tech", link: "https://inr.deals/8SVnGa" },
+  { name: "Realme", domain: "realme.com", category: "Tech", description: "Smartphones & AIoT", link: "https://www.realme.com" },
+  { name: "boAt", domain: "boat-lifestyle.com", category: "Tech", description: "Audio & wearables", link: "https://www.boat-lifestyle.com" },
+  { name: "Noise", domain: "gonoise.com", category: "Tech", description: "Smartwatches", link: "https://www.gonoise.com" },
+  { name: "JBL", domain: "jbl.com", category: "Tech", description: "Premium audio", link: "https://inr.deals/lWnHDY" },
+  { name: "Reliance Digital", domain: "reliancedigital.in", category: "Tech", description: "Tech retail", link: "https://www.reliancedigital.in" },
+  { name: "HP", domain: "hp.com", category: "Tech", description: "Laptops & tech", link: "https://bitli.in/6R3BJ2i" },
+  { name: "Vijay Sales", domain: "vijaysales.com", category: "Tech", description: "Electronics retail", link: "https://www.vijaysales.com" },
+  { name: "Cashify", domain: "cashify.in", category: "Tech", description: "Sell & buy phones", link: "https://inr.deals/gW2Iby" },
+  { name: "Spinny", domain: "spinny.com", category: "Tech", description: "Buy & sell used cars", link: "https://inr.deals/mor4Sf" },
+  { name: "Tata 1mg", domain: "1mg.com", category: "Wellness & Health", description: "Online pharmacy", link: "https://www.1mg.com" },
+  { name: "Apollo 24|7", domain: "apollo247.com", category: "Wellness & Health", description: "Healthcare delivery", link: "https://www.apollo247.com" },
+  { name: "Netmeds", domain: "netmeds.com", category: "Wellness & Health", description: "Medicine delivery", link: "https://bitli.in/zXbiP37" },
+  { name: "MuscleBlaze", domain: "muscleblaze.com", category: "Wellness & Health", description: "Sports nutrition", link: "https://www.muscleblaze.com" },
+  { name: "Myprotein", domain: "myprotein.co.in", category: "Wellness & Health", description: "Fitness supplements", link: "https://www.myprotein.co.in" },
+  { name: "Plix", domain: "", category: "Wellness & Health", description: "Plant nutrition", link: "https://www.plixlife.com" },
+  { name: "Kapiva", domain: "kapiva.in", category: "Wellness & Health", description: "Ayurvedic nutrition", link: "https://www.kapiva.in" },
+  { name: "HealthKart", domain: "healthkart.com", category: "Wellness & Health", description: "Health supplements", link: "https://www.healthkart.com" },
+  { name: "Traya", domain: "traya.health", category: "Wellness & Health", description: "Hair fall treatment", link: "https://traya.health" },
+  { name: "Man Matters", domain: "manmatters.com", category: "Wellness & Health", description: "Men's wellness", link: "https://inr.deals/I4BiH6" },
+  { name: "Perfora", domain: "perforacare.com", category: "Wellness & Health", description: "Premium oral care", link: "https://inr.deals/ZAEqzs" },
+  { name: "Optimum Nutrition", domain: "optimumnutrition.com", category: "Wellness & Health", description: "Premium whey protein", link: "https://www.healthkart.com/brand/optimum-nutrition" },
+  { name: "Lenskart", domain: "lenskart.com", category: "Jewellery & Gifting", description: "Eyewear", link: "https://www.lenskart.com" },
+  { name: "Titan", domain: "titan.co.in", category: "Jewellery & Gifting", description: "Watches & Eyeplus", link: "https://www.titan.co.in" },
+  { name: "Tanishq", domain: "tanishq.co.in", category: "Jewellery & Gifting", description: "Fine jewellery", link: "https://www.tanishq.co.in" },
+  { name: "Giva", domain: "giva.co", category: "Jewellery & Gifting", description: "Silver jewellery", link: "https://www.giva.co" },
+  { name: "Palmonas", domain: "palmonas.com", category: "Jewellery & Gifting", description: "Demi-fine jewellery", link: "https://www.palmonas.com" },
+  { name: "Melorra", domain: "melorra.com", category: "Jewellery & Gifting", description: "Trendy gold", link: "https://www.melorra.com" },
+  { name: "BlueStone", domain: "bluestone.com", category: "Jewellery & Gifting", description: "Fine jewellery", link: "https://www.bluestone.com" },
+  { name: "FNP", domain: "fnp.com", category: "Jewellery & Gifting", description: "Flowers & gifts", link: "https://www.fnp.com" },
+  { name: "MakeMyTrip", domain: "makemytrip.com", category: "Travel", description: "Flights & hotels", link: "https://bitli.in/xj6tXro" },
+  { name: "Agoda", domain: "agoda.com", category: "Travel", description: "Hotels & stays", link: "https://inr.deals/E1HvrY" },
+  { name: "Booking.com", domain: "booking.com", category: "Travel", description: "Global travel", link: "https://bitli.in/tuUeY6U" },
+  { name: "Goibibo", domain: "goibibo.com", category: "Travel", description: "Travel bookings", link: "https://bitli.in/nr6ckLO" },
+  { name: "Ixigo", domain: "ixigo.com", category: "Travel", description: "Flight & train bookings", link: "https://www.ixigo.com" },
+  { name: "Oyo Rooms", domain: "oyorooms.com", category: "Travel", description: "Budget stays", link: "https://www.oyorooms.com" },
+  { name: "Pepperfry", domain: "pepperfry.com", category: "Home", description: "Furniture marketplace", link: "https://www.pepperfry.com" },
+  { name: "WoodenStreet", domain: "woodenstreet.com", category: "Home", description: "Solid wood furniture", link: "https://www.woodenstreet.com" },
+  { name: "Urban Ladder", domain: "urbanladder.com", category: "Home", description: "Premium furniture", link: "https://inr.deals/IenJf0" },
+  { name: "Wakefit", domain: "wakefit.co", category: "Home", description: "Mattress & furniture", link: "https://www.wakefit.co" },
+  { name: "SleepyCat", domain: "sleepycat.in", category: "Home", description: "Sleep solutions", link: "https://sleepycat.in" },
+  { name: "Rentomojo", domain: "rentomojo.com", category: "Home", description: "Furniture rentals", link: "https://www.rentomojo.com" },
+  { name: "Moglix", domain: "moglix.com", category: "Home", description: "Hardware & tools", link: "https://www.moglix.com" },
+  { name: "Bosch Tools", domain: "bosch-pt.co.in", category: "Home", description: "Power tools", link: "https://www.moglix.com/brands/bosch" },
+  { name: "Supertails", domain: "supertails.com", category: "Pets", description: "Pet care & food", link: "https://supertails.com" },
+  { name: "Heads Up For Tails", domain: "headsupfortails.com", category: "Pets", description: "Luxury pet supplies", link: "https://headsupfortails.com" },
+  { name: "Drools", domain: "drools.com", category: "Pets", description: "Dog & cat food", link: "https://supertails.com/collections/drools" },
+  { name: "Pedigree", domain: "pedigree.in", category: "Pets", description: "Dog nutrition", link: "https://supertails.com/collections/pedigree" },
+  { name: "Royal Canin", domain: "royalcanin.com", category: "Pets", description: "Premium pet nutrition", link: "https://supertails.com/collections/royal-canin" },
+  { name: "Hostinger", domain: "hostinger.in", category: "Digital", description: "Web hosting", link: "https://inr.deals/8mfMZB" },
+  { name: "GoDaddy", domain: "godaddy.com", category: "Digital", description: "Domains & web tools", link: "https://www.godaddy.com/en-in" },
+  { name: "Microsoft", domain: "microsoft.com", category: "Digital", description: "Office 365 & Xbox", link: "https://www.microsoft.com/en-in" },
+  { name: "Norton", domain: "norton.com", category: "Digital", description: "Antivirus security", link: "https://in.norton.com" },
+  { name: "upGrad", domain: "upgrad.com", category: "Digital", description: "Higher education", link: "https://www.upgrad.com" },
+  { name: "Physics Wallah", domain: "pw.live", category: "Digital", description: "EdTech platform", link: "https://www.pw.live" },
+  { name: "FirstCry", domain: "firstcry.com", category: "Kids", description: "Kids & baby gear", link: "https://www.firstcry.com" },
+  { name: "Hopscotch", domain: "hopscotch.in", category: "Kids", description: "Kids fashion", link: "https://www.hopscotch.in" },
+  { name: "Hamleys", domain: "hamleys.in", category: "Kids", description: "Premium toys", link: "https://www.hamleys.in" },
+  { name: "Smartivity", domain: "smartivity.in", category: "Kids", description: "DIY & STEM toys", link: "https://www.smartivity.in" },
+  { name: "LEGO", domain: "lego.com", category: "Kids", description: "Building blocks", link: "https://www.hamleys.in/brand/lego.html" }
 ];
 
+// ---------- Premium UI Injections ----------
 function injectStylesAndNav() {
   const gridElement = document.getElementById("storeGrid");
   if(!document.getElementById("categoryNavWrapper") && gridElement) {
     const navWrapper = document.createElement("div");
     navWrapper.id = "categoryNavWrapper";
     navWrapper.className = "category-nav-wrapper";
-    
     const navScroll = document.createElement("div");
     navScroll.className = "category-nav";
     navScroll.id = "categoryNav";
-    
     navWrapper.appendChild(navScroll);
     gridElement.parentNode.insertBefore(navWrapper, gridElement);
   }
@@ -57,7 +156,8 @@ function showToast(message, icon = "✨") {
   toast.innerHTML = `<span style="font-size:16px;">${icon}</span> ${message}`;
   container.appendChild(toast);
   setTimeout(() => {
-    toast.remove();
+    toast.classList.add("toast-exit");
+    toast.addEventListener("animationend", () => toast.remove());
   }, 3500);
 }
 
@@ -105,6 +205,12 @@ function buildCard(store, index) {
   card.className = "store-card";
   card.href = url; card.target = "_blank"; card.rel = "noopener";
   card.setAttribute("aria-label", `Shop from ${store.name}`);
+  
+  card.addEventListener("mousemove", (e) => {
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+    card.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+  });
 
   const frame = document.createElement("div");
   frame.className = "store-logo-frame";
@@ -113,12 +219,13 @@ function buildCard(store, index) {
   const img = document.createElement("img");
   img.className = "store-logo";
   img.alt = store.name;
+  img.width = 100;
+  img.height = 100;
   img.loading = index < 12 ? "eager" : "lazy";
 
-  /* UPDATED SVG FALLBACK COLORS - Premium Light Greys for Monochrome Theme */
   const bgColors = ["#E4E4E7", "#F4F4F5", "#FAFAFA"];
   const bg = bgColors[index % bgColors.length];
-  
+
   const svgFallback = 
     `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E` +
     `%3Crect width='100' height='100' rx='20' fill='${encodeURIComponent(bg)}' stroke='%23D4D4D8' stroke-width='1'/%3E` +
@@ -154,7 +261,7 @@ function buildCard(store, index) {
   button.className = "shop-button"; button.textContent = "Shop Now";
 
   card.append(frame, name, meta, button);
-  card.addEventListener("click", () => haptic());
+  card.addEventListener("click", () => { haptic(); });
   return card;
 }
 
@@ -201,9 +308,13 @@ function renderUI() {
   });
 
   const count = filtered.length;
-  if (document.getElementById("resultPill")) document.getElementById("resultPill").textContent = `${count} brands`;
-  if (document.getElementById("heroStoreCount")) document.getElementById("heroStoreCount").textContent = stores.length;
-  if (document.getElementById("emptyState")) document.getElementById("emptyState").hidden = count !== 0;
+  const resultPill = document.getElementById("resultPill");
+  const heroStoreCount = document.getElementById("heroStoreCount");
+  const emptyState = document.getElementById("emptyState");
+
+  if (resultPill) resultPill.textContent = `${count} brands`;
+  if (heroStoreCount) heroStoreCount.textContent = stores.length;
+  if (emptyState) emptyState.hidden = count !== 0;
 }
 
 function renderCategoryNav() {
@@ -244,15 +355,17 @@ injectStylesAndNav();
 renderCategoryNav();
 renderUI();
 
-/* CUELINKS LOADER */
+// =========================================================
+// CUELINKS LOADER
+// =========================================================
 (function loadCuelinks() {
   if (window.__cheapsterCuelinksLoaded || window.__cheapsterCuelinksLoading) return;
   window.cId = "322092"; window.__cheapsterCuelinksLoading = true;
   const script = document.createElement("script");
   script.type = "text/javascript"; script.async = false;
   script.src = document.location.protocol === "https:" ? "https://cdn0.cuelinks.com/js/cuelinksv2.js" : "http://cdn0.cuelinks.com/js/cuelinksv2.js";
-  script.onload = () => { window.__cheapsterCuelinksLoaded = true; window.__cheapsterCuelinksLoading = false; };
-  script.onerror = () => { window.__cheapsterCuelinksLoading = false; };
+  script.onload = () => { window.__cheapsterCuelinksLoaded = true; window.__cheapsterCuelinksLoading = false; console.log("Cheapster: Cuelinks loaded."); };
+  script.onerror = () => { window.__cheapsterCuelinksLoading = false; console.error("Cheapster: Cuelinks load failed."); };
   document.body.appendChild(script);
 })();
 
@@ -260,12 +373,16 @@ if (document.getElementById("currentYear")) {
   document.getElementById("currentYear").textContent = new Date().getFullYear();
 }
 
-/* Modals & Remaining Script Logic copied identically from original source */
+// =========================================================
+// MODALS, AUTH, FORMS, PWA
+// =========================================================
+
 function openModal(id) {
   haptic();
   const modal = document.getElementById(id);
   if (modal) { modal.hidden = false; document.body.classList.add("modal-open"); }
 }
+
 function closeModal(id) {
   haptic();
   const modal = document.getElementById(id);
@@ -276,12 +393,14 @@ function closeModal(id) {
     if (form && success) { form.reset(); form.hidden = false; success.hidden = true; }
   }
 }
+
 document.querySelectorAll("[data-close-modal]").forEach((btn) => {
   btn.addEventListener("click", () => closeModal(btn.dataset.closeModal));
 });
 
 const headerOfferBtn = document.getElementById("headerOfferBtn");
 if (headerOfferBtn) headerOfferBtn.addEventListener("click", () => openModal("formModal"));
+
 document.querySelectorAll("[data-info-modal]").forEach((btn) => {
   btn.addEventListener("click", () => openModal(btn.dataset.infoModal));
 });
@@ -299,5 +418,175 @@ if (hamburgerBtn && headerDropdown) {
   document.addEventListener("click", (e) => { if (!headerDropdown.hidden && !headerDropdown.contains(e.target)) closeHeaderDropdown(); });
 }
 
-// Google Login, WhatsApp Redirect, Web3Forms, PWA exactly as in your original file...
-// [Please append the remaining Firebase Login & Form functions exactly as they are in your source file to keep it running perfectly!]
+// ---------- Google login (Firebase Auth) ----------
+const authBtn = document.getElementById("authBtn");
+const authBtnText = document.getElementById("authBtnText");
+const logoutBtn = document.getElementById("logoutBtn");
+const menuLoginBtn = document.getElementById("menuLoginBtn");
+let currentUser = null;
+
+if (authBtn && window.auth) {
+  const handleLogin = () => {
+    haptic();
+    if (currentUser) return;
+    window.auth.signInWithPopup(window.googleProvider).catch((err) => {
+      console.error("Google sign-in failed:", err.code, err.message);
+      if (err.code === "auth/popup-blocked" || err.code === "auth/operation-not-supported-in-this-environment" || err.code === "auth/popup-closed-by-user" || err.code === "auth/cancelled-popup-request") {
+        window.auth.signInWithRedirect(window.googleProvider);
+      } else if (err.code === "auth/unauthorized-domain") {
+        showToast("Domain not authorized for login.", "⚠️");
+      } else {
+        showToast("Login failed. Please try again.", "❌");
+      }
+    });
+  };
+
+  authBtn.addEventListener("click", handleLogin);
+  if (menuLoginBtn) menuLoginBtn.addEventListener("click", handleLogin);
+
+  window.auth.getRedirectResult().catch((err) => {
+    if (err) console.error("Google sign-in (redirect) failed:", err.code, err.message);
+  });
+
+  const googleIcon = document.getElementById("googleIcon");
+  const authAvatarImg = document.getElementById("authAvatarImg");
+  const authAvatarFallback = document.getElementById("authAvatarFallback");
+
+  window.auth.onAuthStateChanged((user) => {
+    currentUser = user;
+    if (user) {
+      authBtnText.textContent = user.displayName ? user.displayName.split(" ")[0] : "Account";
+      authBtn.title = user.displayName || "Signed in";
+      const nameField = document.getElementById("fullName");
+      if (nameField && !nameField.value) nameField.value = user.displayName || "";
+      if (googleIcon) googleIcon.hidden = true;
+      if (authAvatarImg && authAvatarFallback) {
+        if (user.photoURL) {
+          authAvatarImg.src = user.photoURL;
+          authAvatarImg.onerror = () => { authAvatarImg.hidden = true; authAvatarFallback.hidden = false; };
+          authAvatarImg.hidden = false; authAvatarFallback.hidden = true;
+        } else {
+          authAvatarFallback.textContent = initials(user.displayName || user.email || "?");
+          authAvatarFallback.hidden = false; authAvatarImg.hidden = true;
+        }
+      }
+      if (logoutBtn) logoutBtn.hidden = false;
+      if (menuLoginBtn) menuLoginBtn.hidden = true;
+    } else {
+      authBtnText.textContent = "Login";
+      authBtn.title = "Login with Google";
+      if (googleIcon) googleIcon.hidden = false;
+      if (authAvatarImg) authAvatarImg.hidden = true;
+      if (authAvatarFallback) authAvatarFallback.hidden = true;
+      if (logoutBtn) logoutBtn.hidden = true;
+      if (menuLoginBtn) menuLoginBtn.hidden = false;
+    }
+  });
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => window.auth.signOut());
+  }
+} else if (authBtn) {
+  const alertNotConfigured = () => showToast("Login isn't configured yet.", "⚠️");
+  authBtn.addEventListener("click", alertNotConfigured);
+  if (menuLoginBtn) menuLoginBtn.addEventListener("click", alertNotConfigured);
+}
+
+// ---------- reward form → WhatsApp ----------
+const GIVEAWAY_WHATSAPP_NUMBER = "919012521219";
+const rewardForm = document.getElementById("rewardForm");
+
+if (rewardForm) {
+  rewardForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (!rewardForm.checkValidity()) { rewardForm.reportValidity(); return; }
+    if (!currentUser) { showToast("Please login with Google first.", "🔒"); return; }
+
+    const submitBtn = document.getElementById("submitRewardBtn");
+    const fullName = document.getElementById("fullName").value;
+    const whatsapp = document.getElementById("whatsapp").value;
+    const brand = document.getElementById("brandSelect").value;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting...";
+    haptic();
+
+    const text = encodeURIComponent(`🎁 Cheapster Giveaway Entry\n\nName: ${fullName}\nWhatsApp: ${whatsapp}\nBrand: ${brand}\nEmail: ${currentUser.email || ""}`);
+    openStoreLink({ link: `https://wa.me/${GIVEAWAY_WHATSAPP_NUMBER}?text=${text}` });
+
+    setTimeout(() => {
+      document.getElementById("rewardForm").hidden = true;
+      document.getElementById("successView").hidden = false;
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit Entry";
+      haptic();
+    }, 600);
+  });
+}
+
+// ---------- contact form → email (Web3Forms) ----------
+const WEB3FORMS_ACCESS_KEY = "5f013235-2314-452d-8f2e-2064a1f2d2e0";
+const contactForm = document.getElementById("contactForm");
+
+if (contactForm) {
+  contactForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    const name = document.getElementById("contactName").value;
+    const issue = document.getElementById("contactIssueText").value;
+    const message = document.getElementById("contactMessage").value;
+
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Sending..."; }
+    haptic();
+
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ access_key: WEB3FORMS_ACCESS_KEY, subject: `Cheapster Support: ${issue}`, from_name: "Cheapster.in Contact Form", name: name, issue: issue, message: message })
+      });
+      const data = await res.json();
+      if (data.success) { showToast("Message sent! We'll get back to you soon.", "✅"); contactForm.reset(); closeModal("contactModal"); } 
+      else { showToast("Something went wrong. Please try again.", "❌"); }
+    } catch (err) {
+      console.error("Web3Forms submission failed:", err); showToast("Network error. Please try again.", "❌");
+    } finally {
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Send Message"; }
+    }
+  });
+}
+
+// ---------- header shadow on scroll ----------
+const header = document.getElementById("siteHeader");
+if (header) {
+  let ticking = false;
+  window.addEventListener("scroll", () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => { header.classList.toggle("is-scrolled", window.scrollY > 12); ticking = false; });
+  }, { passive: true });
+}
+
+// ---------- Welcome popup ----------
+window.addEventListener("load", () => {
+  if (localStorage.getItem("cheapster_welcome_seen") !== "1") { setTimeout(() => openModal("welcomeModal"), 800); }
+});
+
+const continueBtn = document.getElementById("continueBtn");
+if (continueBtn) {
+  continueBtn.addEventListener("click", () => { localStorage.setItem("cheapster_welcome_seen", "1"); closeModal("welcomeModal"); });
+}
+
+// ---------- PWA Install Logic ----------
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => { navigator.serviceWorker.register("/sw.js").catch((err) => console.log("SW fail", err)); });
+}
+
+let deferredPrompt;
+const installBtn = document.getElementById("installAppBtn");
+const isAndroid = /Android/i.test(navigator.userAgent);
+
+if (installBtn && isAndroid) {
+  window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); deferredPrompt = e; installBtn.style.display = "inline-flex"; });
+  installBtn.addEventListener("click", async () => { haptic(); if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; installBtn.style.display = "none"; } });
+}
