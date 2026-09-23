@@ -1,250 +1,357 @@
+<!-- build: 2026-09-21-Monochrome-Glass -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cheapster.in - Ultra Premium Directory</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#F0F0F3">
+  <meta name="description" content="Cheapster.in — India's premium independent affiliate directory.">
+  <title>Cheapster.in — Shop Smart. Discover More.</title>
 
-        :root {
-            /* Ultra Premium Monochrome + Glass Palette */
-            --bg-base: #F0F0F3; 
-            --text-main: #111111;
-            --text-muted: #71717A;
-            --accent-black: #18181B;
-            
-            /* Glassmorphism Essentials */
-            --glass-bg: rgba(255, 255, 255, 0.65);
-            --glass-border: rgba(255, 255, 255, 0.8);
-            --border-soft: rgba(228, 228, 231, 0.6);
-        }
+  <meta name="mitgo-verification" content="0e9732b7-36bf-4378-b145-ec5dd496d345" />
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
-        
-        body { 
-            background-color: var(--bg-base); 
-            color: var(--text-main); 
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="Cheapster.in — The Festive Giveaway is LIVE! 🎁">
+  <meta name="description" content="Shop your favorite fashion, beauty, and tech brands. Participate in the Free Festive Giveaway! 1000+ Winners. No Purchase Necessary.">
 
-        /* Subtle Animated Background to make Glassmorphism pop */
-        .ambient-background {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -1;
-            background: 
-                radial-gradient(circle at 15% 50%, rgba(212, 212, 216, 0.4), transparent 30%),
-                radial-gradient(circle at 85% 30%, rgba(228, 228, 231, 0.7), transparent 40%);
-            animation: pulseBg 15s ease-in-out infinite alternate;
-        }
+  <!-- Open Graph / Facebook / WhatsApp -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cheapster.in/">
+  <meta property="og:title" content="Cheapster.in — The Festive Giveaway is LIVE! 🎁">
+  <meta property="og:description" content="Shop your favorite fashion, beauty, and tech brands. Participate in the Free Festive Giveaway! 1000+ Winners. No Purchase Necessary.">
+  <meta property="og:image" content="https://cheapster.in/banner.jpg">
 
-        @keyframes pulseBg {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.1); }
-        }
+  <!-- Twitter / X -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://cheapster.in/">
+  <meta property="twitter:title" content="Cheapster.in — The Festive Giveaway is LIVE! 🎁">
+  <meta property="twitter:description" content="Shop your favorite fashion, beauty, and tech brands. Participate in the Free Festive Giveaway! 1000+ Winners. No Purchase Necessary.">
+  <meta property="twitter:image" content="https://cheapster.in/banner.jpg">
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
 
-        /* Layout Container */
-        .container { max-width: 1100px; margin: 0 auto; padding: 30px 20px; }
+  <!-- GOOGLE ANALYTICS TRACKING CODE -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-69933BBTXY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-69933BBTXY');
+  </script>
 
-        /* Premium Frosted Glass Header */
-        header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 20px 32px; 
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 20px; 
-            margin-bottom: 40px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
-            position: sticky;
-            top: 20px;
-            z-index: 100;
-        }
-
-        .logo-text { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; color: var(--text-main); }
-        
-        .badge { 
-            background: rgba(255, 255, 255, 0.5); 
-            color: var(--text-main); 
-            padding: 8px 16px; 
-            border-radius: 30px; 
-            font-size: 13px; 
-            font-weight: 700; 
-            border: 1px solid var(--border-soft);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-        }
-
-        /* Hero Search Section */
-        .search-container { max-width: 700px; margin: 0 auto 50px; text-align: center; }
-        .search-container h2 { font-size: 32px; font-weight: 800; margin-bottom: 24px; letter-spacing: -1px; }
-        
-        .search-wrapper { position: relative; }
-        .search-bar { 
-            width: 100%; 
-            padding: 20px 28px; 
-            border-radius: 16px; 
-            border: 1px solid var(--glass-border); 
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            font-size: 16px;
-            font-weight: 500;
-            outline: none;
-            color: var(--text-main);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
-            transition: all 0.3s ease;
-        }
-        .search-bar::placeholder { color: #A1A1AA; }
-        .search-bar:focus {
-            border-color: var(--text-main);
-            background: rgba(255, 255, 255, 0.85);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-            transform: translateY(-2px);
-        }
-
-        /* Directory Grid */
-        .grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
-            gap: 24px; 
-        }
-
-        /* Glassmorphism Cards */
-        .card { 
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-radius: 20px; 
-            padding: 28px; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03); 
-            border: 1px solid var(--glass-border);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card:hover { 
-            transform: translateY(-8px); 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-            border-color: #FFFFFF;
-            background: rgba(255, 255, 255, 0.8);
-        }
-
-        /* Logo Area (With Fallback Logic Support) */
-        .logo-wrapper {
-            width: 64px; 
-            height: 64px; 
-            margin-bottom: 20px;
-            border-radius: 16px;
-            overflow: hidden;
-            background: #FFFFFF;
-            border: 1px solid var(--border-soft);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .logo-wrapper img { width: 100%; height: 100%; object-fit: contain; }
-        
-        /* Fallback Monogram (When Image Fails) */
-        .monogram {
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--text-main);
-            letter-spacing: -0.5px;
-        }
-
-        /* Typography */
-        .store-name { font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text-main); letter-spacing: -0.5px; }
-        .store-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 28px; font-weight: 500; line-height: 1.5; flex-grow: 1; }
-        
-        /* Premium Solid Action Button */
-        .shop-btn { 
-            display: block; 
-            width: 100%; 
-            padding: 14px; 
-            background: var(--accent-black); 
-            color: #ffffff; 
-            text-align: center; 
-            border-radius: 12px; 
-            text-decoration: none; 
-            font-size: 14px; 
-            font-weight: 700; 
-            transition: all 0.3s ease; 
-        }
-        .shop-btn:hover { 
-            background: #3F3F46; 
-            transform: scale(1.02);
-        }
-    </style>
+  <!-- Clean Minimalist Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23111111'/%3E%3Ctext x='50%25' y='53%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='34' font-weight='900' fill='%23ffffff'%3EC.%3C/text%3E%3C/svg%3E">
+  <link rel="icon" type="image/png" sizes="192x192" href="/logo_192x192.png">
+  <link rel="apple-touch-icon" href="/logo_192x192.png">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+  <!-- Animated Background for Glassmorphism -->
+  <div class="ambient-background" aria-hidden="true"></div>
 
-    <div class="ambient-background"></div>
+  <!-- HEADER -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <a class="brand" href="#" aria-label="Cheapster.in home">
+        <!-- New Minimalist CSS Logo -->
+        <div class="css-logo">C<span>.</span></div>
+        <span class="brand-wordmark">Cheapster<span>.in</span></span>
+      </a>
 
-    <div class="container">
-        <header>
-            <div class="logo-text">Cheapster.in</div>
-            <div class="badge">Monochrome Glass</div>
-        </header>
+      <div class="header-actions">
+        <button class="btn btn-premium header-offer-btn" id="headerOfferBtn" type="button">
+          <span class="btn-icon">🎁</span>
+          <span class="offer-text-hide">Claim Giveaway</span>
+        </button>
 
-        <section class="search-container">
-            <h2>Discover Premium Brands</h2>
-            <div class="search-wrapper">
-                <input type="text" class="search-bar" placeholder="Search the directory..." autocomplete="off">
-            </div>
-        </section>
+        <button class="btn btn-google" id="authBtn" type="button" title="Login with Google">
+          <svg class="google-icon" id="googleIcon" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#4285F4" d="M21.35 12.27c0-.79-.07-1.54-.23-2.27H12v4.3h5.24a4.48 4.48 0 0 1-1.95 2.94v2.44h3.15c1.85-1.7 2.91-4.2 2.91-7.41z"/>
+            <path fill="#34A853" d="M12 21.5c2.65 0 4.87-.88 6.49-2.38l-3.15-2.44c-.88.59-2 .94-3.34.94-2.57 0-4.74-1.73-5.52-4.06H3.23V16.1A9.8 9.8 0 0 0 12 21.5z"/>
+            <path fill="#FBBC05" d="M6.48 13.56A5.9 5.9 0 0 1 6.17 12c0-.54.11-1.07.31-1.56V8H3.23A9.5 9.5 0 0 0 2.2 12c0 1.53.37 2.97 1.03 4.25l3.25-2.69z"/>
+            <path fill="#EA4335" d="M12 6.38c1.44 0 2.73.5 3.75 1.48l2.81-2.81C16.86 3.44 14.64 2.5 12 2.5a9.8 9.8 0 0 0-8.77 5.5l3.25 2.44C7.26 8.11 9.43 6.38 12 6.38z"/>
+          </svg>
+          <img class="auth-avatar" id="authAvatarImg" alt="" hidden>
+          <span class="auth-avatar-fallback" id="authAvatarFallback" hidden></span>
+          <span id="authBtnText">Login</span>
+        </button>
 
-        <!-- Dynamic Grid where JS will render our data -->
-        <div class="grid" id="brand-grid"></div>
+        <button class="hamburger-btn" id="hamburgerBtn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="headerDropdown">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+      <nav class="header-dropdown glass-panel" id="headerDropdown" hidden>
+        <button type="button" data-info-modal="aboutModal">About Us</button>
+        <button type="button" data-info-modal="policyModal">Giveaway & Payout Policy</button>
+        <button type="button" data-info-modal="termsModal">Terms & Privacy</button>
+        <button type="button" data-info-modal="contactModal">Contact Us</button>
+        <div class="dropdown-divider"></div>
+        <button type="button" id="menuLoginBtn">Login</button>
+        <button type="button" id="logoutBtn" hidden>Logout</button>
+      </nav>
     </div>
 
-    <script>
-        // Data Inventory: Mixing valid image URLs and broken ones to demonstrate the flawless Fallback
-        const brands = [
-            { name: "Apple", desc: "Premium technology & software.", url: "#", logoUrl: "https://logo.clearbit.com/apple.com" },
-            { name: "Zara", desc: "High-end fashion and lifestyle.", url: "#", logoUrl: "invalid-url-to-trigger-fallback.jpg" },
-            { name: "Nike", desc: "Athletic apparel & footwear.", url: "#", logoUrl: "https://logo.clearbit.com/nike.com" },
-            { name: "Myntra", desc: "Curated fashion marketplace.", url: "#", logoUrl: "broken-link.png" },
-            { name: "Sony", desc: "Electronics and entertainment.", url: "#", logoUrl: "https://logo.clearbit.com/sony.com" },
-            { name: "Nykaa", desc: "Luxury beauty & cosmetics.", url: "#", logoUrl: "" } // Empty URL will also trigger fallback
-        ];
+    <div class="live-contest-banner">
+      <div class="blinking-dot"></div>
+      Giveaway is live
+    </div>
+  </header>
 
-        const grid = document.getElementById('brand-grid');
+  <div class="giveaway-date-bar">
+    Winners will be announced on <span>15 Nov '26</span>
+  </div>
 
-        // Function to extract initials for the monogram fallback
-        function getInitials(name) {
-            return name.substring(0, 2).toUpperCase();
-        }
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-badge">
+          <span class="pulse-dot"></span>
+          INDIA'S INDEPENDENT AFFILIATE DIRECTORY
+        </div>
 
-        // Render Cards dynamically
-        brands.forEach(brand => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            
-            // Generate initials
-            const initials = getInitials(brand.name);
-            
-            // Build card HTML
-            card.innerHTML = `
-                <div class="logo-wrapper">
-                    <!-- Image tag with an onerror event that replaces the image with the monogram -->
-                    <img src="${brand.logoUrl}" alt="${brand.name} logo" 
-                         onerror="this.outerHTML='<div class=\\'monogram\\'>${initials}</div>'">
-                </div>
-                <div class="store-name">${brand.name}</div>
-                <div class="store-desc">${brand.desc}</div>
-                <a href="${brand.url}" class="shop-btn">Explore Brand</a>
-            `;
-            grid.appendChild(card);
-        });
-    </script>
+        <h1>
+          Explore 100+ brands<br>
+          <span>you already love.</span>
+        </h1>
+
+        <div class="festive-pill">
+          <span class="festive-sparkle">✨</span>
+          <span>Festive Giveaway: 1000+ Winners Get a Surprise Reward — No Purchase Necessary!</span>
+          <span class="festive-sparkle">✨</span>
+        </div>
+
+        <p class="hero-copy">
+          Shop your favorite fashion, quick-commerce, and tech brands. Participate in exclusive rewards backed by a premium directory.
+        </p>
+
+        <div class="trust-strip">
+          <span class="trust-item">🔒 100% Free — No Purchase</span>
+          <span class="trust-dot"></span>
+          <span class="trust-item">🔗 Direct Links</span>
+          <span class="trust-dot"></span>
+          <span class="trust-item">🙅 No Bank Details</span>
+          <span class="trust-dot"></span>
+          <span class="trust-item">🔐 Secure Sign-in</span>
+        </div>
+
+        <div class="search-shell glass-panel">
+          <span class="search-leading" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+          <input id="searchInput" class="search-input" type="search" autocomplete="off" placeholder="Search premium brands..." aria-label="Search brands">
+        </div>
+
+        <div class="hero-meta">
+          <span><strong id="heroStoreCount">0</strong> trending brands</span>
+          <span class="meta-dot"></span>
+          <span>One secure portal</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIRECTORY GRID -->
+    <section class="directory-section" id="directory">
+      <div class="section-top">
+        <div>
+          <span class="section-label">THE DIRECTORY</span>
+          <h2>Top Deals & Platforms</h2>
+        </div>
+        <div class="result-pill glass-panel" id="resultPill">0 brands</div>
+      </div>
+
+      <div class="store-grid" id="storeGrid"></div>
+
+      <div class="empty-state glass-panel" id="emptyState" hidden>
+        <h3>No matching brands</h3>
+        <p>Try searching for trending brands like Myntra, Snitch, or Lenskart.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer glass-panel">
+    <div class="footer-main">
+      <div class="footer-brand-block">
+        <a class="brand" href="#">
+          <div class="css-logo" style="width:32px;height:32px;font-size:18px;">C<span>.</span></div>
+          <span class="brand-wordmark">Cheapster<span>.in</span></span>
+        </a>
+        <p>A premium independent directory for discovering India's top fashion, beauty, electronics, and lifestyle brands.</p>
+        
+        <p class="footer-legal-note">
+          <strong>Legal Disclaimer:</strong> The Cheapster Rewards Giveaway is independently sponsored, administered, and funded by Cheapster.in. It is not endorsed by, sponsored by, or affiliated with any listed brand. Entry is completely free — no purchase is required. Winners are verified and notified securely via WhatsApp.
+        </p>
+      </div>
+
+      <div class="footer-nav">
+        <button type="button" data-info-modal="aboutModal">About Us</button>
+        <button type="button" data-info-modal="policyModal">Giveaway & Payout Policy</button>
+        <button type="button" data-info-modal="termsModal">Terms & Privacy</button>
+        <button type="button" data-info-modal="contactModal">Contact Us</button>
+        
+        <!-- PWA INSTALL BUTTON -->
+        <div style="width: 100%; display: flex; justify-content: flex-start; margin-top: 25px;">
+          <button type="button" id="installAppBtn" class="btn-install">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+            Install Cheapster App
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <span>© <span id="currentYear"></span> Cheapster.in</span>
+      <span>Independent affiliate directory</span>
+    </div>
+  </footer>
+
+  <!-- WELCOME POPUP -->
+  <div class="modal-overlay" id="welcomeModal" hidden>
+    <div class="modal glass-panel" role="dialog" aria-modal="true">
+      <button class="modal-close" type="button" data-close-modal="welcomeModal" aria-label="Close">×</button>
+      <span class="modal-label">WELCOME TO CHEAPSTER.IN</span>
+      <h2 id="welcomeTitle">The Rewards Giveaway<br><span>is LIVE.</span></h2>
+      <p><strong>1000+ lucky participants</strong> will be randomly selected to win a surprise reward. Entry is free — no purchase necessary!</p>
+      
+      <div class="welcome-highlight">
+        <span class="highlight-star">✧</span>
+        <div>
+          <strong>Shop Hassle-free & Safely.</strong>
+          <small>"No payment is required on our website. We will never ask for your banking passwords, UPI PINs, or OTPs."</small>
+        </div>
+      </div>
+      
+      <button class="btn btn-premium btn-wide" id="continueBtn" type="button">Explore Directory</button>
+    </div>
+  </div>
+
+  <!-- GIVEAWAY FORM -->
+  <div class="modal-overlay" id="formModal" hidden>
+    <div class="modal glass-panel" role="dialog" aria-modal="true">
+      <button class="modal-close" type="button" data-close-modal="formModal" aria-label="Close">×</button>
+      <div class="modal-icon">🎁</div>
+      <span class="modal-label">EXCLUSIVE EVENT</span>
+      <h2 id="formTitle">Claim Giveaway Entry</h2>
+      <p class="modal-intro">Submit your details to enter — entry is free, no purchase necessary.</p>
+      
+      <form id="rewardForm" novalidate>
+        <div class="field">
+          <label for="fullName">Full Name</label>
+          <input id="fullName" class="glass-input" type="text" autocomplete="name" placeholder="Enter your full name" required>
+        </div>
+        <div class="field">
+          <label for="whatsapp">Phone Number</label>
+          <input id="whatsapp" class="glass-input" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile number" required>
+        </div>
+        <div class="field">
+          <label for="brandSelect">Favorite Brand</label>
+          <select id="brandSelect" class="glass-input">
+            <option value="">Select a brand</option>
+          </select>
+        </div>
+        <button class="btn btn-premium btn-wide submit-btn" id="submitRewardBtn" type="submit">Submit Entry</button>
+        <p class="form-note">Cheapster.in is an independent directory. No purchase necessary. Winners announced on our official Instagram.</p>
+      </form>
+
+      <div class="success-view" id="successView" hidden>
+        <div class="success-mark">✓</div>
+        <h3>Almost done!</h3>
+        <p>We've opened WhatsApp with your entry pre-filled — please tap <strong>Send</strong> there to complete your submission.</p>
+        <button class="btn btn-premium btn-wide" type="button" data-close-modal="formModal">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- POLICY MODAL -->
+  <div class="modal-overlay" id="policyModal" hidden>
+    <div class="modal glass-panel scrollable-modal" role="dialog" aria-modal="true">
+      <button class="modal-close" type="button" data-close-modal="policyModal" aria-label="Close">×</button>
+      <span class="modal-label">TRANSPARENT & SECURE</span>
+      <h2>Giveaway Policy</h2>
+      <div class="legal-copy">
+        <p><strong>1. No Purchase Necessary:</strong> Entry is free. No purchase, minimum order, or brand transaction is required.</p>
+        <p><strong>2. Sponsorship & Affiliation:</strong> Solely sponsored by Cheapster.in. NOT endorsed by Amazon, Flipkart, Myntra, etc.</p>
+        <p><strong>3. Verification:</strong> Winners verified via our official WhatsApp. We never ask for OTPs or PINs.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT US MODAL -->
+  <div class="modal-overlay" id="aboutModal" hidden>
+    <div class="modal glass-panel scrollable-modal" role="dialog" aria-modal="true">
+      <button class="modal-close" type="button" data-close-modal="aboutModal" aria-label="Close">×</button>
+      <span class="modal-label">CHEAPSTER.IN</span>
+      <h2>About Us</h2>
+      <div class="legal-copy">
+        <p>Cheapster.in is an independent affiliate directory built for the Indian market. Our mission is to provide a clean, premium, and lightning-fast portal for users to discover top e-commerce brands.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TERMS MODAL -->
+  <div class="modal-overlay" id="termsModal" hidden>
+    <div class="modal glass-panel scrollable-modal" role="dialog" aria-modal="true">
+      <button class="modal-close" type="button" data-close-modal="termsModal" aria-label="Close">×</button>
+      <span class="modal-label">LEGAL INFORMATION</span>
+      <h2>Terms & Privacy</h2>
+      <div class="legal-copy">
+        <p><strong>Affiliate Disclosure:</strong> We may earn a commission when you click a link and make a purchase, at no additional cost to you.</p>
+        <p>Your name and number are used solely for winner notification. We do not sell data to third-party marketing agencies.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT MODAL -->
+  <div class="modal-overlay" id="contactModal" hidden>
+    <div class="modal glass-panel contact-modal scrollable-modal" role="dialog" aria-modal="true">
+      <button class="modal-close" type="button" data-close-modal="contactModal" aria-label="Close">×</button>
+      <span class="modal-label">WE'RE HERE TO HELP</span>
+      <h2>Contact Us</h2>
+      
+      <div class="contact-card">
+        <p>Email: <strong>support@cheapster.in</strong></p>
+        <p>Instagram: <strong>cheapster.in_</strong></p>
+      </div>
+
+      <form id="contactForm" novalidate>
+        <div class="field">
+          <label for="contactName">Name</label>
+          <input id="contactName" class="glass-input" type="text" maxlength="100" autocomplete="name" placeholder="Your name" required>
+        </div>
+        <div class="field">
+          <label for="contactIssueText">Select Issue</label>
+          <select id="contactIssueText" class="glass-input" required>
+            <option value="">Choose an issue</option>
+            <option value="Giveaway Verification">Giveaway Verification</option>
+            <option value="Report Bug">Report Bug</option>
+            <option value="Partnership">Partnership</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="contactMessage">Message</label>
+          <textarea id="contactMessage" class="glass-input" rows="3" maxlength="1200" placeholder="Tell us how we can help..." required></textarea>
+        </div>
+        <button class="btn btn-premium btn-wide" type="submit">Send Message</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FIREBASE -->
+  <script defer src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+  <script defer src="firebase-config.js"></script>
+
+  <script defer src="script.js"></script>
 </body>
 </html>
