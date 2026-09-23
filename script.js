@@ -222,14 +222,17 @@ function debounce(fn, delay = 160) {
 function buildLogoChain(store) {
   const chain = [];
 
+  // 1. Manual Logo (Agar aapne specific custom link diya ho)
   if (store.logo) {
     chain.push(store.logo);
   }
 
   if (store.domain) {
-    chain.push(
-      `https://www.google.com/s2/favicons?domain=${store.domain}&sz=128`
-    );
+    // 2. Clearbit HD Logo API (Primary auto-fetcher)
+    chain.push(`https://logo.clearbit.com/${store.domain}`);
+    
+    // 3. Google Favicon (Clearbit fail hone par Backup)
+    chain.push(`https://www.google.com/s2/favicons?domain=${store.domain}&sz=128`);
   }
 
   return chain;
