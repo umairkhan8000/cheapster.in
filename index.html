@@ -1,4 +1,4 @@
-<!-- build: 2026-09-21-Monochrome-Glass -->
+<!-- build: 2026-09-21-Monochrome-Glass-V2 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,17 +39,18 @@
     gtag('js', new Date());
     gtag('config', 'G-69933BBTXY');
   </script>
-  <!-- =============================== -->
 
   <!-- Premium Monochrome Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23111111'/%3E%3Ctext x='50%25' y='53%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='34' font-weight='900' fill='%23ffffff'%3EC.%3C/text%3E%3C/svg%3E">
   <link rel="icon" type="image/png" sizes="192x192" href="/logo_192x192.png">
   <link rel="apple-touch-icon" href="/logo_192x192.png">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://www.google.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  
+  <!-- NAYA CSS FILE LINK (Bypass Cache) -->
+  <link rel="stylesheet" href="style-v2.css">
 </head>
 
 <body>
@@ -160,7 +161,7 @@
     </section>
 
     <!-- DIRECTORY GRID -->
-    <section class="directory-section reveal-on-scroll" id="directory">
+    <section class="directory-section" id="directory">
       <div class="section-top">
         <div>
           <span class="section-label">THE DIRECTORY</span>
@@ -179,7 +180,7 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="site-footer glass-panel reveal-on-scroll">
+  <footer class="site-footer glass-panel">
     <div class="footer-main">
       <div class="footer-brand-block">
         <a class="brand" href="#">
@@ -189,7 +190,7 @@
         <p>A premium independent directory for discovering India's top fashion, beauty, electronics, and lifestyle brands.</p>
         
         <p class="footer-legal-note">
-          <strong>Legal Disclaimer:</strong> The Cheapster Rewards Giveaway is independently sponsored, administered, and funded by Cheapster.in. It is not endorsed by, sponsored by, or affiliated with any listed brand. Entry is completely free — no purchase is required or considered when selecting winners. Winners are verified and notified securely via WhatsApp before any reward is disbursed.
+          <strong>Legal Disclaimer:</strong> The Cheapster Rewards Giveaway is independently sponsored, administered, and funded by Cheapster.in. It is not endorsed by, sponsored by, or affiliated with any listed brand. Entry is completely free — no purchase is required. Winners are verified and notified securely via WhatsApp.
         </p>
       </div>
 
@@ -202,7 +203,7 @@
         <!-- PWA INSTALL BUTTON -->
         <div style="width: 100%; display: flex; justify-content: flex-start; margin-top: 25px;">
           <button type="button" id="installAppBtn" class="btn-install">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
             Install Cheapster App
           </button>
         </div>
@@ -274,7 +275,7 @@
 
   <!-- POLICY MODAL -->
   <div class="modal-overlay" id="policyModal" hidden>
-    <div class="modal glass-panel legal-modal scrollable-modal" role="dialog" aria-modal="true">
+    <div class="modal glass-panel legal-modal" role="dialog" aria-modal="true">
       <button class="modal-close" type="button" data-close-modal="policyModal" aria-label="Close">×</button>
       <span class="modal-label">TRANSPARENT & SECURE</span>
       <h2>Giveaway & Payout Policy</h2>
@@ -290,7 +291,7 @@
 
   <!-- ABOUT US MODAL -->
   <div class="modal-overlay" id="aboutModal" hidden>
-    <div class="modal glass-panel legal-modal scrollable-modal" role="dialog" aria-modal="true">
+    <div class="modal glass-panel legal-modal" role="dialog" aria-modal="true">
       <button class="modal-close" type="button" data-close-modal="aboutModal" aria-label="Close">×</button>
       <span class="modal-label">CHEAPSTER.IN</span>
       <h2>About Us</h2>
@@ -303,7 +304,7 @@
 
   <!-- TERMS MODAL -->
   <div class="modal-overlay" id="termsModal" hidden>
-    <div class="modal glass-panel legal-modal scrollable-modal" role="dialog" aria-modal="true">
+    <div class="modal glass-panel legal-modal" role="dialog" aria-modal="true">
       <button class="modal-close" type="button" data-close-modal="termsModal" aria-label="Close">×</button>
       <span class="modal-label">LEGAL INFORMATION</span>
       <h2>Terms & Privacy</h2>
@@ -318,7 +319,7 @@
 
   <!-- CONTACT MODAL -->
   <div class="modal-overlay" id="contactModal" hidden>
-    <div class="modal glass-panel contact-modal scrollable-modal" role="dialog" aria-modal="true">
+    <div class="modal glass-panel contact-modal" role="dialog" aria-modal="true">
       <button class="modal-close" type="button" data-close-modal="contactModal" aria-label="Close">×</button>
       <span class="modal-label">WE'RE HERE TO HELP</span>
       <h2>Contact Us</h2>
@@ -364,6 +365,7 @@
   <script defer src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
   <script defer src="firebase-config.js"></script>
 
-  <script defer type="module" src="script.js"></script>
+  <!-- NAYA JS FILE LINK (Bypass Cache) -->
+  <script defer type="module" src="script-v2.js"></script>
 </body>
 </html>
