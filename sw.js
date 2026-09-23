@@ -1,8 +1,9 @@
-const CACHE_NAME = 'cheapster-cache-v13';
+const CACHE_NAME = 'cheapster-cache-v14';
 
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
+  '/privacy.html',
   '/style.css',
   '/script.js',
   '/firebase-config.js',
@@ -11,73 +12,69 @@ const ASSETS_TO_CACHE = [
   '/logo_512x512.png'
 ];
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
-  );
-
+self.addEventListener('install', (event) => {
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS_TO_CACHE)));
   self.skipWaiting();
 });
 
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches.keys().then((keyList) => {
-      return Promise.all(
-        keyList.map((key) => {
-          if (key !== CACHE_NAME) {
-            return caches.delete(key);
-          }
-        })
-      );
-    })
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)))
+    )
   );
-
   self.clients.claim();
 });
 
-self.addEventListener('fetch', (e) => {
+self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
 
-  // Third-party requests are deliberately not intercepted.
-  if (new URL(e.request.url).origin !== self.location.origin) {
+  if (event.request.method !== 'GET' || url.origin !== self.location.origin) {
     return;
   }
 
-  e.respondWith(
-    caches.match(e.request).then((cachedResponse) => {
+  if (!ASSETS_TO_CACHE.includes(url.pathname)) {
+    return;
+  }
 
-      const fetchPromise =
-        fetch(e.request)
-          .then((networkResponse) => {
+  if (event.request.mode === 'navigate') {
+    const responsePromise = fetch(event.request);
+    event.waitUntil(
+      responsePromise.then((response) => {
+        if (response.ok) {
+          return caches.open(CACHE_NAME).then((cache) => cache.put(url.pathname, response.clone()));
+        }
+      }).catch(() => {})
+    );
+    event.respondWith(
+      responsePromise.catch(async () => {
+        const cached = await caches.match(url.pathname);
+        if (cached) return cached;
+        throw new Error('Offline page unavailable');
+      })
+    );
+    return;
+  }
 
-            if (
-              networkResponse &&
-              networkResponse.status === 200 &&
-              (
-                networkResponse.type === 'basic' ||
-                networkResponse.type === 'cors'
-              )
-            ) {
+  event.respondWith(
+    caches.match(url.pathname).then((cached) => {
+      const update = fetch(event.request).then(async (response) => {
+        if (response.ok) {
+          const cache = await caches.open(CACHE_NAME);
+          await cache.put(url.pathname, response.clone());
+        }
+        return response;
+      }).catch((error) => {
+        if (cached) return cached;
+        throw error;
+      });
 
-              const responseToCache =
-                networkResponse.clone();
+      if (cached) {
+        event.waitUntil(update);
+        return cached;
+      }
 
-              caches.open(CACHE_NAME).then((cache) => {
-                cache.put(
-                  e.request,
-                  responseToCache
-                );
-              });
-            }
-
-            return networkResponse;
-          })
-          .catch(() => {
-            return cachedResponse;
-          });
-
-      return cachedResponse || fetchPromise;
+      return update;
     })
   );
 });
