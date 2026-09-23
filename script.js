@@ -31,7 +31,6 @@ const stores = [
   { name: "Tata CLiQ", domain: "tatacliq.com", category: "Mega Brands", description: "Multi-category retail", link: "https://bitli.in/Ufnwuqh" },
   { name: "Croma", domain: "croma.com", category: "Mega Brands", description: "Electronics", link: "https://bitli.in/3MjWfz5" },
   { name: "Tira", domain: "tirabeauty.com", category: "Mega Brands", description: "Premium beauty", link: "https://www.tirabeauty.com" },
-  { name: "Meesho", domain: "meesho.com", category: "Mega Brands", description: "Value shopping", link: "https://www.meesho.com" },
   { name: "Shopsy", domain: "shopsy.in", category: "Mega Brands", description: "Value shopping", link: "https://bitli.in/q3GTiTJ" },
   { name: "JioMart", domain: "jiomart.com", category: "Mega Brands", description: "Groceries & more", link: "https://bitli.in/6jJqYGx" },
 
@@ -47,19 +46,13 @@ const stores = [
   { name: "Bonkers Corner", domain: "bonkerscorner.com", category: "Fashion", description: "Gen-Z streetwear", link: "https://www.bonkerscorner.com" },
   { name: "Levi's", domain: "levi.in", category: "Fashion", description: "Premium denim", link: "https://www.levi.in" },
   { name: "Shoppers Stop", domain: "shoppersstop.com", category: "Fashion", description: "Premium retail", link: "https://www.shoppersstop.com" },
-  { name: "LimeRoad", domain: "limeroad.com", category: "Fashion", description: "Value fashion", link: "https://www.limeroad.com" },
-  { name: "Nike", domain: "nike.com", category: "Fashion", description: "Sports & streetwear", link: "https://www.nike.com" },
-  { name: "Puma", domain: "puma.com", category: "Fashion", description: "Athletic wear", link: "https://in.puma.com" },
-  { name: "Adidas", domain: "adidas.co.in", category: "Fashion", description: "Sports & fashion", link: "https://www.adidas.co.in" },
   { name: "Crocs", domain: "crocs.in", category: "Fashion", description: "Comfort footwear", link: "https://www.crocs.in" },
 
   // 3. BEAUTY & GROOMING (Skincare, Makeup & Men's Care)
   { name: "Minimalist", domain: "beminimalist.co", category: "Beauty & Grooming", description: "Science skincare", link: "https://www.beminimalist.co" },
   { name: "Plum", domain: "plumgoodness.com", category: "Beauty & Grooming", description: "Vegan beauty", link: "https://www.plumgoodness.com" },
-  { name: "The Derma Co", domain: "thedermaco.com", category: "Beauty & Grooming", description: "Dermatological care", link: "https://www.thedermaco.com" },
   { name: "Dot & Key", domain: "dotandkey.com", category: "Beauty & Grooming", description: "Skincare essentials", link: "https://bitli.in/kxVP911" },
   { name: "Mamaearth", domain: "mamaearth.in", category: "Beauty & Grooming", description: "Toxin-free care", link: "https://www.mamaearth.in" },
-  { name: "Aqualogica", domain: "aqualogica.in", category: "Beauty & Grooming", description: "Hydration skincare", link: "https://www.aqualogica.in" },
   { name: "MCaffeine", domain: "mcaffeine.com", category: "Beauty & Grooming", description: "Caffeinated care", link: "https://bitli.in/l5q8RB9" },
   { name: "Foxtale", domain: "foxtale.in", category: "Beauty & Grooming", description: "Skincare essentials", link: "https://bitli.in/0AmuJ4D" },
   { name: "Pilgrim", domain: "discoverpilgrim.com", category: "Beauty & Grooming", description: "Global beauty secrets", link: "https://www.discoverpilgrim.com" },
@@ -69,10 +62,7 @@ const stores = [
   { name: "MyGlamm", domain: "myglamm.com", category: "Beauty & Grooming", description: "Makeup & beauty", link: "https://www.myglamm.com" },
   { name: "Bella Vita", domain: "bellavitaluxury.co.in", category: "Beauty & Grooming", description: "Luxury perfumes", link: "https://bitli.in/my55y0T" },
   { name: "Skinn by Titan", domain: "skinn.in", category: "Beauty & Grooming", description: "Indian luxury fragrances", link: "https://www.skinn.in" },
-  { name: "Bath & Body Works", domain: "bathandbodyworks.in", category: "Beauty & Grooming", description: "Premium mists & care", link: "https://www.bathandbodyworks.in" },
   { name: "Swiss Beauty", domain: "swissbeauty.in", category: "Beauty & Grooming", description: "Budget makeup", link: "https://bitli.in/aIuUSl6" },
-  { name: "Renee Cosmetics", domain: "reneecosmetics.in", category: "Beauty & Grooming", description: "Trending makeup", link: "https://www.reneecosmetics.in" },
-  { name: "Colorbar", domain: "", category: "Beauty & Grooming", description: "Premium cosmetics", link: "https://www.colorbarcosmetics.com" },
   { name: "MAC Cosmetics", domain: "maccosmetics.in", category: "Beauty & Grooming", description: "Luxury makeup", link: "https://www.maccosmetics.in" },
   { name: "Bare Anatomy", domain: "innovist.com", category: "Beauty & Grooming", description: "Science hair care", link: "https://innovist.com/collections/bare-anatomy" },
   { name: "BBlunt", domain: "bblunt.com", category: "Beauty & Grooming", description: "Salon-style hair care", link: "https://bitli.in/8C5fu33" },
@@ -87,8 +77,6 @@ const stores = [
   { name: "L'Oréal", domain: "lorealparis.co.in", category: "Beauty & Grooming", description: "Hair & cosmetics", link: "https://www.nykaa.com/brands/loreal-paris/c/595" },
 
   // 4. TECH & GADGETS
-  { name: "Samsung", domain: "samsung.com", category: "Tech", description: "Mobiles & electronics", link: "https://www.samsung.com" },
-  { name: "OnePlus", domain: "oneplus.in", category: "Tech", description: "Smartphones", link: "https://www.oneplus.in" },
   { name: "Dell", domain: "dell.com", category: "Tech", description: "Laptops & PCs", link: "https://bitli.in/iNehXK5" },
   { name: "Lenovo", domain: "lenovo.com", category: "Tech", description: "Laptops & tech", link: "https://inr.deals/8SVnGa" },
   { name: "Realme", domain: "realme.com", category: "Tech", description: "Smartphones & AIoT", link: "https://www.realme.com" },
@@ -120,8 +108,6 @@ const stores = [
   // 6. JEWELLERY & GIFTING
   { name: "Lenskart", domain: "lenskart.com", category: "Jewellery & Gifting", description: "Eyewear", link: "https://www.lenskart.com" },
   { name: "Titan", domain: "titan.co.in", category: "Jewellery & Gifting", description: "Watches & Eyeplus", link: "https://www.titan.co.in" },
-  { name: "Fastrack", domain: "fastrack.in", category: "Jewellery & Gifting", description: "Youth accessories", link: "https://www.fastrack.in" },
-  { name: "CaratLane", domain: "caratlane.com", category: "Jewellery & Gifting", description: "Diamond jewellery", link: "https://www.caratlane.com" },
   { name: "Tanishq", domain: "tanishq.co.in", category: "Jewellery & Gifting", description: "Fine jewellery", link: "https://www.tanishq.co.in" },
   { name: "Giva", domain: "giva.co", category: "Jewellery & Gifting", description: "Silver jewellery", link: "https://www.giva.co" },
   { name: "Palmonas", domain: "palmonas.com", category: "Jewellery & Gifting", description: "Demi-fine jewellery", link: "https://www.palmonas.com" },
