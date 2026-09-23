@@ -221,29 +221,20 @@ function debounce(fn, delay = 160) {
 
 function buildLogoChain(store) {
   const chain = [];
-  
-  // 1. Pehle local folder inventory check karega (/logos/amazon.png)
-  const safeName = store.name.toLowerCase().replace(/[^a-z0-9]/g, "");
-  chain.push(`/logos/${safeName}.png`);
 
-  // 2. Agar manual logo link diya ho
+  // 1. Manual Logo (Agar aapne specific custom link diya ho)
   if (store.logo) {
     chain.push(store.logo);
   }
 
-  // 3. Last mein Clean Professional Vector Monogram Fallback (Initials)
-  const bgColors = ["#1c3f66", "#0d2138", "#142a44", "#1e293b"];
-  const bg = bgColors[Math.floor(Math.random() * bgColors.length)];
-  
-  const svgFallback = 
-    `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E` +
-    `%3Crect width='100' height='100' rx='24' fill='${encodeURIComponent(bg)}'/%3E` +
-    `%3Ctext x='50%25' y='53%25' dominant-baseline='middle' text-anchor='middle' ` +
-    `font-family='system-ui, sans-serif' font-size='38' font-weight='700' fill='%23ffffff'%3E` +
-    `${initials(store.name)}` +
-    `%3C/text%3E%3C/svg%3E`;
+  if (store.domain) {
+    // 2. Clearbit HD Logo API (Primary auto-fetcher)
+    chain.push(`https://logo.clearbit.com/${store.domain}`);
+    
+    // 3. Google Favicon (Clearbit fail hone par Backup)
+    chain.push(`https://www.google.com/s2/favicons?domain=${store.domain}&sz=128`);
+  }
 
-  chain.push(svgFallback);
   return chain;
 }
 
