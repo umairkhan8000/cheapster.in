@@ -339,7 +339,7 @@ function buildCard(store, index) {
     "_blank";
 
   card.rel =
-    "noopener noreferrer";
+    "noopener";
 
   card.setAttribute(
     "aria-label",
