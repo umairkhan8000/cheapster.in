@@ -1,10 +1,7 @@
-// build: 2026-09-21-fix2-Monochrome-Glass-Updated
 // =========================================================
-// CHEAPSTER.IN — PREMIUM BRAND DIRECTORY (Category Edition)
-// Haptic Feedback, Spotlight Hover, PWA & Category Routing
+// CHEAPSTER.IN — PREMIUM BRAND DIRECTORY 
 // =========================================================
 
-// --- CATEGORY ORDER (Most Selling to Least) ---
 const CATEGORY_ORDER = [
   "All", 
   "Mega Brands", 
@@ -20,9 +17,7 @@ const CATEGORY_ORDER = [
   "Kids"
 ];
 
-// --- BRAND MASTER LIST (Updated & Cleaned) ---
 const stores = [
-  // 1. MEGA BRANDS (Highest Traffic & Volume)
   { name: "Amazon", domain: "amazon.in", category: "Mega Brands", description: "Everything marketplace", link: "https://link.amazon/B03SYMxWN" },
   { name: "Flipkart", domain: "flipkart.com", category: "Mega Brands", description: "Shopping marketplace", link: "https://fktr.in/Ve7AKTM" },
   { name: "Myntra", domain: "myntra.com", category: "Mega Brands", description: "Fashion & lifestyle", link: "https://myntr.it/0IKBm9j" },
@@ -34,7 +29,6 @@ const stores = [
   { name: "Shopsy", domain: "shopsy.in", category: "Mega Brands", description: "Value shopping", link: "https://bitli.in/q3GTiTJ" },
   { name: "JioMart", domain: "jiomart.com", category: "Mega Brands", description: "Groceries & more", link: "https://bitli.in/6jJqYGx" },
 
-  // 2. FASHION & FOOTWEAR
   { name: "Snitch", domain: "", category: "Fashion", description: "Men's fashion", link: "https://www.snitch.co.in" },
   { name: "Urbanic", domain: "urbanic.com", category: "Fashion", description: "Gen-Z women's fashion", link: "https://inr.deals/JNTFEn" },
   { name: "Beyoung", domain: "beyoung.in", category: "Fashion", description: "Everyday fashion", link: "https://inr.deals/dg4LBQ" },
@@ -42,13 +36,12 @@ const stores = [
   { name: "Bewakoof", domain: "bewakoof.com", category: "Fashion", description: "Quirky fashion", link: "https://www.bewakoof.com" },
   { name: "The Souled Store", domain: "thesouledstore.com", category: "Fashion", description: "Pop culture merch", link: "https://inr.deals/FK7yPZ" },
   { name: "XYXX", domain: "xyxxcrew.com", category: "Fashion", description: "Men's innerwear", link: "https://bitli.in/3zj1f7A" },
-  { name: "Cahoot", domain: "cahoot.in", category: "Fashion", description: "Casual streetwear", link: "https://cahoot.in/collections/men-bestsellers?utm_source=Affiliate&utm_medium=iCubesWire&utm_campaign=CPS_Campaign_97_sup679138037_6ab3af29a899e5328_624" },
+  { name: "Cahoot", domain: "cahoot.in", category: "Fashion", description: "Casual streetwear", link: "https://cahoot.in/collections/men-bestsellers" },
   { name: "Bonkers Corner", domain: "bonkerscorner.com", category: "Fashion", description: "Gen-Z streetwear", link: "https://www.bonkerscorner.com" },
   { name: "Levi's", domain: "levi.in", category: "Fashion", description: "Premium denim", link: "https://www.levi.in" },
   { name: "Shoppers Stop", domain: "shoppersstop.com", category: "Fashion", description: "Premium retail", link: "https://www.shoppersstop.com" },
   { name: "Crocs", domain: "crocs.in", category: "Fashion", description: "Comfort footwear", link: "https://www.crocs.in" },
 
-  // 3. BEAUTY & GROOMING 
   { name: "Minimalist", domain: "beminimalist.co", category: "Beauty & Grooming", description: "Science skincare", link: "https://www.beminimalist.co" },
   { name: "Plum", domain: "plumgoodness.com", category: "Beauty & Grooming", description: "Vegan beauty", link: "https://www.plumgoodness.com" },
   { name: "Dot & Key", domain: "dotandkey.com", category: "Beauty & Grooming", description: "Skincare essentials", link: "https://bitli.in/kxVP911" },
@@ -69,12 +62,11 @@ const stores = [
   { name: "Beardo", domain: "beardo.in", category: "Beauty & Grooming", description: "Men's grooming", link: "https://beardo.in" },
   { name: "Bombay Shaving Co", domain: "bombayshavingcompany.com", category: "Beauty & Grooming", description: "Premium grooming", link: "https://bombayshavingcompany.com" },
   { name: "The Man Company", domain: "themancompany.com", category: "Beauty & Grooming", description: "Premium essentials", link: "https://bitli.in/bNc5aYS" },
-  { name: "Ghar Soaps", domain: "gharsoaps.in", category: "Beauty & Grooming", description: "Ayurvedic skincare", link: "https://www.gharsoaps.shop/?utm_source=vcommission&utm_medium=132377_&utm_campaign=trackier_13680&click_id=&pub_id=132377&campaign_id=13680" },
+  { name: "Ghar Soaps", domain: "gharsoaps.in", category: "Beauty & Grooming", description: "Ayurvedic skincare", link: "https://www.gharsoaps.shop" },
   { name: "Lakme", domain: "lakmeindia.com", category: "Beauty & Grooming", description: "Indian makeup giant", link: "https://www.nykaa.com/brands/lakme/c/334" },
   { name: "Maybelline", domain: "maybelline.co.in", category: "Beauty & Grooming", description: "Global makeup", link: "https://www.nykaa.com/brands/maybelline-new-york/c/392" },
   { name: "L'Oréal", domain: "lorealparis.co.in", category: "Beauty & Grooming", description: "Hair & cosmetics", link: "https://www.nykaa.com/brands/loreal-paris/c/595" },
 
-  // 4. TECH & GADGETS
   { name: "Dell", domain: "dell.com", category: "Tech", description: "Laptops & PCs", link: "https://bitli.in/iNehXK5" },
   { name: "Lenovo", domain: "lenovo.com", category: "Tech", description: "Laptops & tech", link: "https://inr.deals/8SVnGa" },
   { name: "Realme", domain: "realme.com", category: "Tech", description: "Smartphones & AIoT", link: "https://www.realme.com" },
@@ -87,7 +79,6 @@ const stores = [
   { name: "Cashify", domain: "cashify.in", category: "Tech", description: "Sell & buy phones", link: "https://inr.deals/gW2Iby" },
   { name: "Spinny", domain: "spinny.com", category: "Tech", description: "Buy & sell used cars", link: "https://inr.deals/mor4Sf" },
 
-  // 5. WELLNESS & HEALTH
   { name: "Tata 1mg", domain: "1mg.com", category: "Wellness & Health", description: "Online pharmacy", link: "https://www.1mg.com" },
   { name: "Apollo 24|7", domain: "apollo247.com", category: "Wellness & Health", description: "Healthcare delivery", link: "https://www.apollo247.com" },
   { name: "Netmeds", domain: "netmeds.com", category: "Wellness & Health", description: "Medicine delivery", link: "https://bitli.in/zXbiP37" },
@@ -101,7 +92,6 @@ const stores = [
   { name: "Perfora", domain: "perforacare.com", category: "Wellness & Health", description: "Premium oral care", link: "https://inr.deals/ZAEqzs" },
   { name: "Optimum Nutrition", domain: "optimumnutrition.com", category: "Wellness & Health", description: "Premium whey protein", link: "https://www.healthkart.com/brand/optimum-nutrition" },
 
-  // 6. JEWELLERY & GIFTING
   { name: "Lenskart", domain: "lenskart.com", category: "Jewellery & Gifting", description: "Eyewear", link: "https://www.lenskart.com" },
   { name: "Titan", domain: "titan.co.in", category: "Jewellery & Gifting", description: "Watches & Eyeplus", link: "https://www.titan.co.in" },
   { name: "Tanishq", domain: "tanishq.co.in", category: "Jewellery & Gifting", description: "Fine jewellery", link: "https://www.tanishq.co.in" },
@@ -111,7 +101,6 @@ const stores = [
   { name: "BlueStone", domain: "bluestone.com", category: "Jewellery & Gifting", description: "Fine jewellery", link: "https://www.bluestone.com" },
   { name: "FNP", domain: "fnp.com", category: "Jewellery & Gifting", description: "Flowers & gifts", link: "https://www.fnp.com" },
 
-  // 7. TRAVEL & FLIGHTS
   { name: "MakeMyTrip", domain: "makemytrip.com", category: "Travel", description: "Flights & hotels", link: "https://bitli.in/xj6tXro" },
   { name: "Agoda", domain: "agoda.com", category: "Travel", description: "Hotels & stays", link: "https://inr.deals/E1HvrY" },
   { name: "Booking.com", domain: "booking.com", category: "Travel", description: "Global travel", link: "https://bitli.in/tuUeY6U" },
@@ -119,7 +108,6 @@ const stores = [
   { name: "Ixigo", domain: "ixigo.com", category: "Travel", description: "Flight & train bookings", link: "https://www.ixigo.com" },
   { name: "Oyo Rooms", domain: "oyorooms.com", category: "Travel", description: "Budget stays", link: "https://www.oyorooms.com" },
 
-  // 8. HOME & HARDWARE
   { name: "Pepperfry", domain: "pepperfry.com", category: "Home", description: "Furniture marketplace", link: "https://www.pepperfry.com" },
   { name: "WoodenStreet", domain: "woodenstreet.com", category: "Home", description: "Solid wood furniture", link: "https://www.woodenstreet.com" },
   { name: "Urban Ladder", domain: "urbanladder.com", category: "Home", description: "Premium furniture", link: "https://inr.deals/IenJf0" },
@@ -129,14 +117,12 @@ const stores = [
   { name: "Moglix", domain: "moglix.com", category: "Home", description: "Hardware & tools", link: "https://www.moglix.com" },
   { name: "Bosch Tools", domain: "bosch-pt.co.in", category: "Home", description: "Power tools", link: "https://www.moglix.com/brands/bosch" },
 
-  // 9. PETS
   { name: "Supertails", domain: "supertails.com", category: "Pets", description: "Pet care & food", link: "https://supertails.com" },
   { name: "Heads Up For Tails", domain: "headsupfortails.com", category: "Pets", description: "Luxury pet supplies", link: "https://headsupfortails.com" },
   { name: "Drools", domain: "drools.com", category: "Pets", description: "Dog & cat food", link: "https://supertails.com/collections/drools" },
   { name: "Pedigree", domain: "pedigree.in", category: "Pets", description: "Dog nutrition", link: "https://supertails.com/collections/pedigree" },
   { name: "Royal Canin", domain: "royalcanin.com", category: "Pets", description: "Premium pet nutrition", link: "https://supertails.com/collections/royal-canin" },
 
-  // 10. DIGITAL & SOFTWARE
   { name: "Hostinger", domain: "hostinger.in", category: "Digital", description: "Web hosting", link: "https://inr.deals/8mfMZB" },
   { name: "GoDaddy", domain: "godaddy.com", category: "Digital", description: "Domains & web tools", link: "https://www.godaddy.com/en-in" },
   { name: "Microsoft", domain: "microsoft.com", category: "Digital", description: "Office 365 & Xbox", link: "https://www.microsoft.com/en-in" },
@@ -144,7 +130,6 @@ const stores = [
   { name: "upGrad", domain: "upgrad.com", category: "Digital", description: "Higher education", link: "https://www.upgrad.com" },
   { name: "Physics Wallah", domain: "pw.live", category: "Digital", description: "EdTech platform", link: "https://www.pw.live" },
 
-  // 11. KIDS & TOYS
   { name: "FirstCry", domain: "firstcry.com", category: "Kids", description: "Kids & baby gear", link: "https://www.firstcry.com" },
   { name: "Hopscotch", domain: "hopscotch.in", category: "Kids", description: "Kids fashion", link: "https://www.hopscotch.in" },
   { name: "Hamleys", domain: "hamleys.in", category: "Kids", description: "Premium toys", link: "https://www.hamleys.in" },
@@ -152,10 +137,10 @@ const stores = [
   { name: "LEGO", domain: "lego.com", category: "Kids", description: "Building blocks", link: "https://www.hamleys.in/brand/lego.html" }
 ];
 
-// ---------- Premium UI Injections (Styles & Category Nav) ----------
+// ---------- Premium UI Injections ----------
 function injectStylesAndNav() {
   const gridElement = document.getElementById("storeGrid");
-  if(!document.getElementById("categoryNavWrapper") && gridElement) {
+  if (!document.getElementById("categoryNavWrapper") && gridElement) {
     const navWrapper = document.createElement("div");
     navWrapper.id = "categoryNavWrapper";
     navWrapper.className = "category-nav-wrapper";
@@ -169,12 +154,12 @@ function injectStylesAndNav() {
   }
 }
 
-// ---------- App State ----------
 let currentCategory = "All";
 let searchQuery = "";
 
-// ---------- Premium Interactions Helpers ----------
-const haptic = () => { if (navigator.vibrate) navigator.vibrate(40); };
+const haptic = () => { 
+  if (navigator.vibrate) navigator.vibrate(40); 
+};
 
 function showToast(message, icon = "✨") {
   haptic();
@@ -222,16 +207,14 @@ function buildLogoChain(store) {
 }
 
 function openStoreLink(store) {
-  let url =
-    store.link ||
-    (store.domain ? `https://www.${store.domain}` : null);
-
+  let url = store.link || (store.domain ? `https://www.${store.domain}` : null);
   if (!url) return;
+  
   const a = document.createElement("a");
   a.href = url;
   a.target = "_blank";
   a.rel = "noopener noreferrer";
-
+  
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -261,6 +244,12 @@ function buildCard(store, index) {
   card.rel = "noopener";
   card.setAttribute("aria-label", `Shop from ${store.name}`);
 
+  card.addEventListener("mousemove", (e) => {
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+    card.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+  });
+
   const frame = document.createElement("div");
   frame.className = "store-logo-frame";
 
@@ -272,10 +261,9 @@ function buildCard(store, index) {
   img.height = 100;
   img.loading = index < 12 ? "eager" : "lazy";
 
-  // PREMIUM FALLBACK SVG LOGIC (Grey/White base with Dark text)
   const bgColors = ["#E4E4E7", "#F4F4F5", "#FAFAFA"];
   const bg = bgColors[index % bgColors.length];
-  
+
   const svgFallback = 
     `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E` +
     `%3Crect width='100' height='100' rx='20' fill='${encodeURIComponent(bg)}' stroke='%23D4D4D8' stroke-width='1'/%3E` +
@@ -299,6 +287,7 @@ function buildCard(store, index) {
   } else {
     img.src = svgFallback;
   }
+  
   frame.appendChild(img);
 
   const name = document.createElement("h3");
@@ -329,7 +318,9 @@ function ensureStoreAnchors() {
   if (storeAnchorsReady || !grid) {
     return;
   }
+  
   const fragment = document.createDocumentFragment();
+  
   stores.forEach((store, index) => {
     const card = buildCard(store, index);
     if (!card) {
@@ -338,6 +329,7 @@ function ensureStoreAnchors() {
     storeCardMap.set(store.name, card);
     fragment.appendChild(card);
   });
+  
   grid.appendChild(fragment);
   storeAnchorsReady = true;
 }
@@ -402,6 +394,7 @@ function renderCategoryNav() {
     const pill = document.createElement("div");
     pill.className = `cat-pill ${cat === currentCategory ? "active" : ""}`;
     pill.textContent = cat;
+    
     pill.addEventListener("click", () => {
       haptic();
       currentCategory = cat;
@@ -409,19 +402,17 @@ function renderCategoryNav() {
       renderCategoryNav();
       renderUI();
     });
+    
     navScroll.appendChild(pill);
   });
 }
 
 const searchInput = document.getElementById("searchInput");
 if (searchInput) {
-  searchInput.addEventListener(
-    "input",
-    debounce((e) => {
+  searchInput.addEventListener("input", debounce((e) => {
       searchQuery = e.target.value.toLowerCase().trim();
       renderUI();
-    })
-  );
+  }));
 }
 
 const brandSelect = document.getElementById("brandSelect");
@@ -460,12 +451,12 @@ renderUI();
       window.__cheapsterCuelinksLoaded = true;
       window.__cheapsterCuelinksLoading = false;
       console.log("Cheapster: Cuelinks loaded after merchant anchors were rendered.");
-    };
+  };
 
   script.onerror = () => {
       window.__cheapsterCuelinksLoading = false;
       console.error("Cheapster: Cuelinks script failed to load.");
-    };
+  };
 
   document.body.appendChild(script);
 })();
@@ -564,21 +555,21 @@ if (authBtn && window.auth) {
         return;
       }
       window.auth.signInWithPopup(window.googleProvider).catch((err) => {
-            console.error("Google sign-in failed:", err.code, err.message);
-            if (
-              err.code === "auth/popup-blocked" ||
-              err.code === "auth/operation-not-supported-in-this-environment" ||
-              err.code === "auth/popup-closed-by-user" ||
-              err.code === "auth/cancelled-popup-request"
-            ) {
-              window.auth.signInWithRedirect(window.googleProvider);
-            } else if (err.code === "auth/unauthorized-domain") {
-              showToast("Domain not authorized for login.", "⚠️");
-            } else {
-              showToast("Login failed. Please try again.", "❌");
-            }
-          });
-    };
+          console.error("Google sign-in failed:", err.code, err.message);
+          if (
+            err.code === "auth/popup-blocked" ||
+            err.code === "auth/operation-not-supported-in-this-environment" ||
+            err.code === "auth/popup-closed-by-user" ||
+            err.code === "auth/cancelled-popup-request"
+          ) {
+            window.auth.signInWithRedirect(window.googleProvider);
+          } else if (err.code === "auth/unauthorized-domain") {
+            showToast("Domain not authorized for login.", "⚠️");
+          } else {
+            showToast("Login failed. Please try again.", "❌");
+          }
+      });
+  };
 
   authBtn.addEventListener("click", handleLogin);
   if (menuLoginBtn) {
@@ -589,7 +580,7 @@ if (authBtn && window.auth) {
       if (err) {
         console.error("Google sign-in (redirect) failed:", err.code, err.message);
       }
-    });
+  });
 
   const googleIcon = document.getElementById("googleIcon");
   const authAvatarImg = document.getElementById("authAvatarImg");
@@ -601,6 +592,7 @@ if (authBtn && window.auth) {
         authBtnText.textContent = user.displayName ? user.displayName.split(" ")[0] : "Account";
         authBtn.title = user.displayName || "Signed in";
         const nameField = document.getElementById("fullName");
+        
         if (nameField && !nameField.value) {
           nameField.value = user.displayName || "";
         }
@@ -613,7 +605,7 @@ if (authBtn && window.auth) {
             authAvatarImg.onerror = () => {
                 authAvatarImg.hidden = true;
                 authAvatarFallback.hidden = false;
-              };
+            };
             authAvatarImg.hidden = false;
             authAvatarFallback.hidden = true;
           } else {
@@ -631,6 +623,7 @@ if (authBtn && window.auth) {
       } else {
         authBtnText.textContent = "Login";
         authBtn.title = "Login with Google";
+        
         if (googleIcon) {
           googleIcon.hidden = false;
         }
@@ -647,7 +640,7 @@ if (authBtn && window.auth) {
           menuLoginBtn.hidden = false;
         }
       }
-    });
+  });
 
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => window.auth.signOut());
@@ -667,6 +660,7 @@ const rewardForm = document.getElementById("rewardForm");
 if (rewardForm) {
   rewardForm.addEventListener("submit", (e) => {
       e.preventDefault();
+      
       if (!rewardForm.checkValidity()) {
         rewardForm.reportValidity();
         return;
@@ -675,6 +669,7 @@ if (rewardForm) {
         showToast("Please login with Google first.", "🔒");
         return;
       }
+      
       const submitBtn = document.getElementById("submitRewardBtn");
       const fullName = document.getElementById("fullName").value;
       const whatsapp = document.getElementById("whatsapp").value;
@@ -690,7 +685,7 @@ if (rewardForm) {
           `WhatsApp: ${whatsapp}\n` +
           `Brand: ${brand}\n` +
           `Email: ${currentUser.email || ""}`
-        );
+      );
 
       openStoreLink({
         link: `https://wa.me/${GIVEAWAY_WHATSAPP_NUMBER}?text=${text}`
@@ -702,8 +697,8 @@ if (rewardForm) {
           submitBtn.disabled = false;
           submitBtn.textContent = "Submit Entry";
           haptic();
-        }, 600);
-    });
+      }, 600);
+  });
 }
 
 // ---------- contact form → email (Web3Forms) ----------
@@ -713,6 +708,7 @@ const contactForm = document.getElementById("contactForm");
 if (contactForm) {
   contactForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+      
       const submitBtn = contactForm.querySelector('button[type="submit"]');
       const name = document.getElementById("contactName").value;
       const issue = document.getElementById("contactIssueText").value;
@@ -738,10 +734,11 @@ if (contactForm) {
                   name: name,
                   issue: issue,
                   message: message
-                })
-            });
+              })
+        });
 
         const data = await res.json();
+        
         if (data.success) {
           showToast("Message sent! We'll get back to you soon.", "✅");
           contactForm.reset();
@@ -758,7 +755,7 @@ if (contactForm) {
           submitBtn.textContent = "Send Message";
         }
       }
-    });
+  });
 }
 
 // ---------- header shadow on scroll ----------
@@ -773,8 +770,8 @@ if (header) {
       requestAnimationFrame(() => {
           header.classList.toggle("is-scrolled", window.scrollY > 12);
           ticking = false;
-        });
-    }, { passive: true });
+      });
+  }, { passive: true });
 }
 
 // ---------- Welcome popup ----------
@@ -782,21 +779,21 @@ window.addEventListener("load", () => {
     if (localStorage.getItem("cheapster_welcome_seen") !== "1") {
       setTimeout(() => openModal("welcomeModal"), 800);
     }
-  });
+});
 
 const continueBtn = document.getElementById("continueBtn");
 if (continueBtn) {
   continueBtn.addEventListener("click", () => {
       localStorage.setItem("cheapster_welcome_seen", "1");
       closeModal("welcomeModal");
-    });
+  });
 }
 
 // ---------- PWA Install Logic ----------
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
       navigator.serviceWorker.register("/sw.js").catch((err) => console.log("SW fail", err));
-    });
+  });
 }
 
 let deferredPrompt;
@@ -808,7 +805,7 @@ if (installBtn && isAndroid) {
       e.preventDefault();
       deferredPrompt = e;
       installBtn.style.display = "inline-flex";
-    });
+  });
 
   installBtn.addEventListener("click", async () => {
       haptic();
@@ -817,5 +814,5 @@ if (installBtn && isAndroid) {
         deferredPrompt = null;
         installBtn.style.display = "none";
       }
-    });
+  });
 }
