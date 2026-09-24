@@ -21,7 +21,7 @@ const CATEGORY_ORDER = [
 // --- BRAND MASTER LIST WITH EXACT ZIP LOGO FILENAMES ---
 const stores = [
   // 1. MEGA BRANDS
-  { name: "Amazon", domain: "amazon.in", category: "Mega Brands", description: "Everything marketplace", link: "https://link.amazon/B03SYMxWN", logo: "hd-logos/amazon.png" },
+  { name: "Amazon", domain: "amazon.in", category: "Mega Brands", description: "Everything marketplace", link: "https://www.amazon.in/?tag=cheapster0a-21", logo: "hd-logos/amazon.png" },
   { name: "Flipkart", domain: "flipkart.com", category: "Mega Brands", description: "Shopping marketplace", link: "https://fktr.in/Ve7AKTM", logo: "hd-logos/flipkart.png" },
   { name: "Myntra", domain: "myntra.com", category: "Mega Brands", description: "Fashion & lifestyle", link: "https://myntr.it/0IKBm9j", logo: "hd-logos/myntra.png" },
   { name: "Nykaa", domain: "nykaa.com", category: "Mega Brands", description: "Beauty & cosmetics", link: "https://bitli.in/cYKpZba", logo: "hd-logos/nykaa.png" },
