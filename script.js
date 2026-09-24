@@ -1472,6 +1472,13 @@ if (contactForm) {
 
       e.preventDefault();
 
+      // ---- YAHAN SE NAYA VALIDATION CHECK ADD KIYA HAI ----
+      if (!contactForm.checkValidity()) {
+        contactForm.reportValidity();
+        return;
+      }
+      // -----------------------------------------------------
+
       const submitBtn =
         contactForm.querySelector(
           'button[type="submit"]'
