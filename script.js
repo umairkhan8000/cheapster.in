@@ -33,7 +33,7 @@ const stores = [
   { name: "JioMart", domain: "jiomart.com", category: "Mega Brands", description: "Groceries & more", link: "https://bitli.in/6jJqYGx", logo: "hd-logos/jiomart.png" },
 
   // 2. FASHION & FOOTWEAR
-  { name: "Snitch", domain: "", category: "Fashion", description: "Men's fashion", link: "https://www.myntra.com/snitch", logo: "hd-logos/snitchcom.png" }, // Routed to Myntra
+  { name: "Snitch", domain: "", category: "Fashion", description: "Men's fashion", link: "https://myntr.it/4Z4putW", logo: "hd-logos/snitchcom.png" }, // Routed to Myntra
   { name: "Urbanic", domain: "urbanic.com", category: "Fashion", description: "Gen-Z women's fashion", link: "https://inr.deals/JNTFEn", logo: "hd-logos/urbanic.png" },
   { name: "Beyoung", domain: "beyoung.in", category: "Fashion", description: "Everyday fashion", link: "https://inr.deals/dg4LBQ", logo: "hd-logos/beyoungin.png" },
   { name: "Savana", domain: "savana.com", category: "Fashion", description: "Trendy fashion", link: "https://www.savana.com", logo: "hd-logos/savana.png" },
