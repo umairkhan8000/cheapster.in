@@ -138,7 +138,6 @@ const stores = [
   { name: "Hostinger", domain: "hostinger.in", category: "Digital", description: "Web hosting", link: "https://inr.deals/8mfMZB", logo: "hd-logos/hostingerin.png" },
   { name: "GoDaddy", domain: "godaddy.com", category: "Digital", description: "Domains & web tools", link: "https://www.godaddy.com/en-in", logo: "hd-logos/godaddy.png" },
   { name: "Microsoft", domain: "microsoft.com", category: "Digital", description: "Office 365 & Xbox", link: "https://www.microsoft.com/en-in", logo: "hd-logos/microsoft.png" },
-  { name: "Norton", domain: "norton.com", category: "Digital", description: "Antivirus security", link: "https://in.norton.com", logo: "hd-logos/norton.png" },
   { name: "upGrad", domain: "upgrad.com", category: "Digital", description: "Higher education", link: "https://www.upgrad.com", logo: "hd-logos/upgrad.png" },
   { name: "Physics Wallah", domain: "pw.live", category: "Digital", description: "EdTech platform", link: "https://www.pw.live", logo: "hd-logos/pw.png" },
 
