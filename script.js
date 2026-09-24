@@ -1359,7 +1359,8 @@ const GIVEAWAY_WHATSAPP_NUMBER = "919012521219";
 const rewardForm = document.getElementById("rewardForm");
 
 if (rewardForm) {
-  rewardForm.addEventListener("submit", (e) => {
+  // YAHAN 'async' ADD KIYA HAI
+  rewardForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     // Validation Check
@@ -1384,23 +1385,28 @@ if (rewardForm) {
     haptic();
 
     // ==========================================
-    // ACTION 1: GOOGLE SHEETS B/G SAVE 
+    // ACTION 1: GOOGLE SHEETS B/G SAVE (AWAIT ADDED)
     // ==========================================
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbziQvJq8kqk-CAHRekAHjkSVEJkQmbBp84girc4vjfTPbY20VJl2hz_I-OC-bWBcjQf/exec"; 
     
-    fetch(GOOGLE_SCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors", 
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        fullName: fullName,
-        whatsapp: whatsapp,
-        brand: brand,
-        email: currentUser.email || "",
-        uid: currentUser.uid || "",
-        submittedAt: new Date().toISOString()
-      })
-    }).catch(err => console.log("Save error:", err));
+    try {
+      // 'await' browser ko thoda rukne bolega jab tak request send na ho jaye
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors", 
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          fullName: fullName,
+          whatsapp: whatsapp,
+          brand: brand,
+          email: currentUser.email || "",
+          uid: currentUser.uid || "",
+          submittedAt: new Date().toISOString()
+        })
+      });
+    } catch (err) {
+      console.log("Save error:", err);
+    }
 
     // ==========================================
     // ACTION 2: WHATSAPP OPEN KARNA 
