@@ -451,9 +451,13 @@ function buildCard(store, index) {
     button
   );
 
-  card.addEventListener(
+card.addEventListener(
     "click",
-    () => {
+    (e) => {
+      // Cuelinks Ninja Bypass
+      if (url.includes("amazon.in")) {
+        e.stopPropagation();
+      }
       haptic();
     }
   );
