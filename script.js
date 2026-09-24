@@ -1353,14 +1353,13 @@ if (
   }
 }
 
-// ---------- reward form → WhatsApp & Google Sheets ----------
+// ---------- reward form → Instant WhatsApp & Background Sheet Save ----------
 const GIVEAWAY_WHATSAPP_NUMBER = "919012521219";
 
 const rewardForm = document.getElementById("rewardForm");
 
 if (rewardForm) {
-  // YAHAN 'async' ADD KIYA HAI
-  rewardForm.addEventListener("submit", async (e) => {
+  rewardForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
     // Validation Check
@@ -1381,17 +1380,28 @@ if (rewardForm) {
     const brand = document.getElementById("brandSelect").value;
 
     submitBtn.disabled = true;
-    submitBtn.textContent = "Submitting...";
+    submitBtn.textContent = "Opening WhatsApp...";
     haptic();
 
-    // ==========================================
-    // ACTION 1: GOOGLE SHEETS B/G SAVE (AWAIT ADDED)
-    // ==========================================
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbziQvJq8kqk-CAHRekAHjkSVEJkQmbBp84girc4vjfTPbY20VJl2hz_I-OC-bWBcjQf/exec"; 
-    
-    try {
-      // 'await' browser ko thoda rukne bolega jab tak request send na ho jaye
-      await fetch(GOOGLE_SCRIPT_URL, {
+    // 1. WhatsApp Message Text Tayar karna
+    const text = encodeURIComponent(
+      `🎁 Cheapster Giveaway Entry\n\n` +
+      `Name: ${fullName}\n` +
+      `WhatsApp: ${whatsapp}\n` +
+      `Brand: ${brand}\n` +
+      `Email: ${currentUser.email || ""}`
+    );
+
+    // 2. PEHLE TURANT WHATSAPP KHOLNA (Bina kisi wait ke)
+    openStoreLink({
+      link: `https://wa.me/${GIVEAWAY_WHATSAPP_NUMBER}?text=${text}`
+    });
+
+    // 3. WHATSAPP KHULNE KE JUST BAAD BACKGROUND MEIN GOOGLE SHEET BHEJNA
+    setTimeout(() => {
+      const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbziQvJq8kqk-CAHRekAHjkSVEJkQmbBp84girc4vjfTPbY20VJl2hz_I-OC-bWBcjQf/exec"; 
+      
+      fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
         mode: "no-cors", 
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -1403,27 +1413,10 @@ if (rewardForm) {
           uid: currentUser.uid || "",
           submittedAt: new Date().toISOString()
         })
-      });
-    } catch (err) {
-      console.log("Save error:", err);
-    }
+      }).catch(err => console.log("Background Sheet Save Error:", err));
+    }, 300); // 300 milliseconds ka chota sa delay taaki WhatsApp pehle khul jaye
 
-    // ==========================================
-    // ACTION 2: WHATSAPP OPEN KARNA 
-    // ==========================================
-    const text = encodeURIComponent(
-      `🎁 Cheapster Giveaway Entry\n\n` +
-      `Name: ${fullName}\n` +
-      `WhatsApp: ${whatsapp}\n` +
-      `Brand: ${brand}\n` +
-      `Email: ${currentUser.email || ""}`
-    );
-
-    openStoreLink({
-      link: `https://wa.me/${GIVEAWAY_WHATSAPP_NUMBER}?text=${text}`
-    });
-
-    // Form Reset aur Success Screen
+    // 4. Success Screen & Reset
     setTimeout(() => {
       document.getElementById("rewardForm").hidden = true;
       document.getElementById("successView").hidden = false;
