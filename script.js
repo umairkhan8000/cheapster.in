@@ -272,7 +272,7 @@ function buildCard(store, index) {
     return null;
   }
 
-  const card =
+ const card =
     document.createElement("a");
 
   card.className =
@@ -284,8 +284,14 @@ function buildCard(store, index) {
   card.target =
     "_blank";
 
-  card.rel =
-    "noopener";
+  // CUELINKS BYPASS LOGIC START
+  if (url.includes("amazon.in")) {
+      card.rel = "noopener noskim";
+      card.classList.add("noskim");
+  } else {
+      card.rel = "noopener";
+  }
+  // CUELINKS BYPASS LOGIC END
 
   card.setAttribute(
     "aria-label",
