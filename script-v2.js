@@ -1,4 +1,4 @@
-// build: 2026-09-21-Exact-Zip-Logos-V2
+// build: 2026-09-21-Exact-Zip-Logos
 // =========================================================
 // CHEapSTER.IN — PREMIUM BRAND DIRECTORY (Exact Zip Logos)
 // =========================================================
@@ -513,6 +513,13 @@ function closeModal(id) {
 
 document.querySelectorAll("[data-close-modal]").forEach((btn) => {
   btn.addEventListener("click", () => closeModal(btn.dataset.closeModal));
+});
+
+// NEW SAFETY FEATURE: CLOSE MODAL ON OVERLAY CLICK
+window.addEventListener("click", (e) => {
+  if (e.target.classList.contains("modal-overlay")) {
+    closeModal(e.target.id);
+  }
 });
 
 const headerOfferBtn = document.getElementById("headerOfferBtn");
