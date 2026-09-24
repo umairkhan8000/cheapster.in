@@ -86,16 +86,16 @@ const stores = [
   { name: "Spinny", domain: "spinny.com", category: "Tech", description: "Buy & sell used cars", link: "https://inr.deals/mor4Sf", logo: "hd-logos/spinny.png" },
 
   // 5. WELLNESS & HEALTH
-  { name: "Tata 1mg", domain: "1mg.com", category: "Wellness & Health", description: "Online pharmacy", link: "https://www.amazon.in/b?node=22180802031", logo: "hd-logos/tata1mg.png" }, // Routed to Amazon Pharmacy
-  { name: "Apollo 24|7", domain: "apollo247.com", category: "Wellness & Health", description: "Healthcare delivery", link: "https://www.amazon.in/b?node=22180802031", logo: "hd-logos/apollo247.png" }, // Routed to Amazon Pharmacy
+  { name: "Tata 1mg", domain: "1mg.com", category: "Wellness & Health", description: "Online pharmacy", link: "https://www.amazon.in/b?node=22180802031&tag=cheapster0a-21", logo: "hd-logos/tata1mg.png" }, // Routed to Amazon Pharmacy
+  { name: "Apollo 24|7", domain: "apollo247.com", category: "Wellness & Health", description: "Healthcare delivery", link: "https://www.amazon.in/b?node=22180802031&tag=cheapster0a-21", logo: "hd-logos/apollo247.png" }, // Routed to Amazon Pharmacy
   { name: "Netmeds", domain: "netmeds.com", category: "Wellness & Health", description: "Medicine delivery", link: "https://bitli.in/zXbiP37", logo: "hd-logos/netmeds.png" },
   { name: "MuscleBlaze", domain: "muscleblaze.com", category: "Wellness & Health", description: "Sports nutrition", link: "https://www.muscleblaze.com", logo: "hd-logos/muscleblaze.png" },
   { name: "Myprotein", domain: "myprotein.co.in", category: "Wellness & Health", description: "Fitness supplements", link: "https://www.myprotein.co.in", logo: "hd-logos/myproteincoin.png" },
-  { name: "Plix", domain: "", category: "Wellness & Health", description: "Plant nutrition", link: "https://www.amazon.in/s?k=Plix", logo: "hd-logos/plix.png" }, // Routed to Amazon
+  { name: "Plix", domain: "", category: "Wellness & Health", description: "Plant nutrition", link: "https://www.amazon.in/s?k=Plix&tag=cheapster0a-21", logo: "hd-logos/plix.png" }, // Routed to Amazon
   { name: "Kapiva", domain: "kapiva.in", category: "Wellness & Health", description: "Ayurvedic nutrition", link: "https://www.kapiva.in", logo: "hd-logos/kapiva.png" },
   { name: "HealthKart", domain: "healthkart.com", category: "Wellness & Health", description: "Health supplements", link: "https://www.healthkart.com", logo: "hd-logos/healthkart.png" },
-  { name: "Traya", domain: "traya.health", category: "Wellness & Health", description: "Hair fall treatment", link: "https://www.amazon.in/s?k=Traya", logo: "hd-logos/traya.png" }, // Routed to Amazon
-  { name: "Man Matters", domain: "manmatters.com", category: "Wellness & Health", description: "Men's wellness", link: "https://www.amazon.in/s?k=Man+Matters", logo: "hd-logos/manmatters.png" }, // Routed to Amazon
+  { name: "Traya", domain: "traya.health", category: "Wellness & Health", description: "Hair fall treatment", link: "https://www.amazon.in/s?k=Traya&tag=cheapster0a-21", logo: "hd-logos/traya.png" }, // Routed to Amazon
+  { name: "Man Matters", domain: "manmatters.com", category: "Wellness & Health", description: "Men's wellness", link: "https://www.amazon.in/s?k=Man+Matters&tag=cheapster0a-21", logo: "hd-logos/manmatters.png" }, // Routed to Amazon
   { name: "Perfora", domain: "perforacare.com", category: "Wellness & Health", description: "Premium oral care", link: "https://inr.deals/ZAEqzs", logo: "hd-logos/perfora.png" },
   { name: "Optimum Nutrition", domain: "optimumnutrition.com", category: "Wellness & Health", description: "Premium whey protein", link: "https://www.healthkart.com/brand/optimum-nutrition", logo: "hd-logos/optimumnutrition.png" },
 
@@ -103,11 +103,11 @@ const stores = [
   { name: "Lenskart", domain: "lenskart.com", category: "Jewellery & Gifting", description: "Eyewear", link: "https://www.lenskart.com", logo: "hd-logos/lenskart.png" },
   { name: "Titan", domain: "titan.co.in", category: "Jewellery & Gifting", description: "Watches & Eyeplus", link: "https://www.titan.co.in", logo: "hd-logos/titancoin.png" },
   { name: "Tanishq", domain: "tanishq.co.in", category: "Jewellery & Gifting", description: "Fine jewellery", link: "https://www.tanishq.co.in", logo: "hd-logos/tanishqcoin.png" },
-  { name: "Giva", domain: "giva.co", category: "Jewellery & Gifting", description: "Silver jewellery", link: "https://www.amazon.in/s?k=Giva", logo: "hd-logos/giva.png" }, // Routed to Amazon
+  { name: "Giva", domain: "giva.co", category: "Jewellery & Gifting", description: "Silver jewellery", link: "https://www.amazon.in/s?k=Giva&tag=cheapster0a-21", logo: "hd-logos/giva.png" }, // Routed to Amazon
   { name: "Palmonas", domain: "palmonas.com", category: "Jewellery & Gifting", description: "Demi-fine jewellery", link: "https://www.palmonas.com", logo: "hd-logos/palmonas.png" },
-  { name: "Melorra", domain: "melorra.com", category: "Jewellery & Gifting", description: "Trendy gold", link: "https://www.amazon.in/s?k=Melorra", logo: "hd-logos/melorra.png" }, // Routed to Amazon
+  { name: "Melorra", domain: "melorra.com", category: "Jewellery & Gifting", description: "Trendy gold", link: "https://www.amazon.in/s?k=Melorra&tag=cheapster0a-21", logo: "hd-logos/melorra.png" }, // Routed to Amazon
   { name: "BlueStone", domain: "bluestone.com", category: "Jewellery & Gifting", description: "Fine jewellery", link: "https://www.bluestone.com", logo: "hd-logos/bluestone.png" },
-  { name: "FNP", domain: "fnp.com", category: "Jewellery & Gifting", description: "Flowers & gifts", link: "https://www.amazon.in/s?k=FNP+gifts", logo: "hd-logos/fnp.png" }, // Routed to Amazon
+  { name: "FNP", domain: "fnp.com", category: "Jewellery & Gifting", description: "Flowers & gifts", link: "https://www.amazon.in/s?k=FNP+gifts&tag=cheapster0a-21", logo: "hd-logos/fnp.png" }, // Routed to Amazon
 
   // 7. TRAVEL & FLIGHTS
   { name: "MakeMyTrip", domain: "makemytrip.com", category: "Travel", description: "Flights & hotels", link: "https://bitli.in/xj6tXro", logo: "hd-logos/makemytrip.png" },
@@ -119,20 +119,20 @@ const stores = [
 
   // 8. HOME & HARDWARE
   { name: "Pepperfry", domain: "pepperfry.com", category: "Home", description: "Furniture marketplace", link: "https://www.pepperfry.com", logo: "hd-logos/pepperfry.png" },
-  { name: "WoodenStreet", domain: "woodenstreet.com", category: "Home", description: "Solid wood furniture", link: "https://www.amazon.in/s?k=Wooden+Street", logo: "hd-logos/woodenstreet.png" }, // Routed to Amazon
+  { name: "WoodenStreet", domain: "woodenstreet.com", category: "Home", description: "Solid wood furniture", link: "https://www.amazon.in/s?k=Wooden+Street&tag=cheapster0a-21", logo: "hd-logos/woodenstreet.png" }, // Routed to Amazon
   { name: "Urban Ladder", domain: "urbanladder.com", category: "Home", description: "Premium furniture", link: "https://inr.deals/IenJf0", logo: "hd-logos/urbanladdercom.png" },
-  { name: "Wakefit", domain: "wakefit.co", category: "Home", description: "Mattress & furniture", link: "https://www.amazon.in/s?k=Wakefit", logo: "hd-logos/wakefit.png" }, // Routed to Amazon
+  { name: "Wakefit", domain: "wakefit.co", category: "Home", description: "Mattress & furniture", link: "https://www.amazon.in/s?k=Wakefit&tag=cheapster0a-21", logo: "hd-logos/wakefit.png" }, // Routed to Amazon
   { name: "SleepyCat", domain: "sleepycat.in", category: "Home", description: "Sleep solutions", link: "https://sleepycat.in", logo: "hd-logos/sleepycat.png" },
   { name: "Rentomojo", domain: "rentomojo.com", category: "Home", description: "Furniture rentals", link: "https://www.rentomojo.com", logo: "hd-logos/rentomojo.png" },
   { name: "Moglix", domain: "moglix.com", category: "Home", description: "Hardware & tools", link: "https://www.moglix.com", logo: "hd-logos/moglix.png" },
   { name: "Bosch Tools", domain: "bosch-pt.co.in", category: "Home", description: "Power tools", link: "https://www.moglix.com/brands/bosch", logo: "hd-logos/boschptcoin.png" },
 
   // 9. PETS
-  { name: "Supertails", domain: "supertails.com", category: "Pets", description: "Pet care & food", link: "https://www.amazon.in/h/pets", logo: "hd-logos/supertails.png" }, // Routed to Amazon Pets
-  { name: "Heads Up For Tails", domain: "headsupfortails.com", category: "Pets", description: "Luxury pet supplies", link: "https://www.amazon.in/s?k=Heads+Up+For+Tails", logo: "hd-logos/headsupfortails.png" }, // Routed to Amazon
-  { name: "Drools", domain: "drools.com", category: "Pets", description: "Dog & cat food", link: "https://www.amazon.in/s?k=Drools", logo: "hd-logos/drools.png" }, // Routed to Amazon
-  { name: "Pedigree", domain: "pedigree.in", category: "Pets", description: "Dog nutrition", link: "https://www.amazon.in/s?k=Pedigree", logo: "hd-logos/pedigreein.png" }, // Routed to Amazon
-  { name: "Royal Canin", domain: "royalcanin.com", category: "Pets", description: "Premium pet nutrition", link: "https://www.amazon.in/s?k=Royal+Canin", logo: "hd-logos/royalcanin.png" }, // Routed to Amazon
+  { name: "Supertails", domain: "supertails.com", category: "Pets", description: "Pet care & food", link: "https://www.amazon.in/h/pets?tag=cheapster0a-21", logo: "hd-logos/supertails.png" }, // Routed to Amazon Pets
+  { name: "Heads Up For Tails", domain: "headsupfortails.com", category: "Pets", description: "Luxury pet supplies", link: "https://www.amazon.in/s?k=Heads+Up+For+Tails&tag=cheapster0a-21", logo: "hd-logos/headsupfortails.png" }, // Routed to Amazon
+  { name: "Drools", domain: "drools.com", category: "Pets", description: "Dog & cat food", link: "https://www.amazon.in/s?k=Drools&tag=cheapster0a-21", logo: "hd-logos/drools.png" }, // Routed to Amazon
+  { name: "Pedigree", domain: "pedigree.in", category: "Pets", description: "Dog nutrition", link: "https://www.amazon.in/s?k=Pedigree&tag=cheapster0a-21", logo: "hd-logos/pedigreein.png" }, // Routed to Amazon
+  { name: "Royal Canin", domain: "royalcanin.com", category: "Pets", description: "Premium pet nutrition", link: "https://www.amazon.in/s?k=Royal+Canin&tag=cheapster0a-21", logo: "hd-logos/royalcanin.png" }, // Routed to Amazon
 
   // 10. DIGITAL & SOFTWARE
   { name: "Hostinger", domain: "hostinger.in", category: "Digital", description: "Web hosting", link: "https://inr.deals/8mfMZB", logo: "hd-logos/hostingerin.png" },
@@ -143,10 +143,10 @@ const stores = [
 
   // 11. KIDS & TOYS
   { name: "FirstCry", domain: "firstcry.com", category: "Kids", description: "Kids & baby gear", link: "https://www.firstcry.com", logo: "hd-logos/firstcry.png" },
-  { name: "Hopscotch", domain: "hopscotch.in", category: "Kids", description: "Kids fashion", link: "https://www.amazon.in/s?k=Hopscotch", logo: "hd-logos/hopscotch.png" }, // Routed to Amazon
-  { name: "Hamleys", domain: "hamleys.in", category: "Kids", description: "Premium toys", link: "https://www.amazon.in/s?k=Hamleys", logo: "hd-logos/hamleysin.png" }, // Routed to Amazon
-  { name: "Smartivity", domain: "smartivity.in", category: "Kids", description: "DIY & STEM toys", link: "https://www.amazon.in/s?k=Smartivity", logo: "hd-logos/smartivity.png" }, // Routed to Amazon
-  { name: "LEGO", domain: "lego.com", category: "Kids", description: "Building blocks", link: "https://www.amazon.in/s?k=LEGO", logo: "hd-logos/lego.png" } // Routed to Amazon
+  { name: "Hopscotch", domain: "hopscotch.in", category: "Kids", description: "Kids fashion", link: "https://www.amazon.in/s?k=Hopscotch&tag=cheapster0a-21", logo: "hd-logos/hopscotch.png" }, // Routed to Amazon
+  { name: "Hamleys", domain: "hamleys.in", category: "Kids", description: "Premium toys", link: "https://www.amazon.in/s?k=Hamleys&tag=cheapster0a-21", logo: "hd-logos/hamleysin.png" }, // Routed to Amazon
+  { name: "Smartivity", domain: "smartivity.in", category: "Kids", description: "DIY & STEM toys", link: "https://www.amazon.in/s?k=Smartivity&tag=cheapster0a-21", logo: "hd-logos/smartivity.png" }, // Routed to Amazon
+  { name: "LEGO", domain: "lego.com", category: "Kids", description: "Building blocks", link: "https://www.amazon.in/s?k=LEGO&tag=cheapster0a-21", logo: "hd-logos/lego.png" } // Routed to Amazon
 ];
 
 // ---------- Premium UI Injections ----------
