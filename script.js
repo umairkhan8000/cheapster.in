@@ -1353,106 +1353,79 @@ if (
   }
 }
 
-// ---------- reward form → WhatsApp ----------
-const GIVEAWAY_WHATSAPP_NUMBER =
-  "919012521219";
+// ---------- reward form → WhatsApp & Google Sheets ----------
+const GIVEAWAY_WHATSAPP_NUMBER = "919012521219";
 
-const rewardForm =
-  document.getElementById(
-    "rewardForm"
-  );
+const rewardForm = document.getElementById("rewardForm");
 
 if (rewardForm) {
+  rewardForm.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-  rewardForm.addEventListener(
-    "submit",
-    (e) => {
-
-      e.preventDefault();
-
-      if (!rewardForm.checkValidity()) {
-        rewardForm.reportValidity();
-        return;
-      }
-
-      if (!currentUser) {
-
-        showToast(
-          "Please login with Google first.",
-          "🔒"
-        );
-
-        return;
-      }
-
-      const submitBtn =
-        document.getElementById(
-          "submitRewardBtn"
-        );
-
-      const fullName =
-        document.getElementById(
-          "fullName"
-        ).value;
-
-      const whatsapp =
-        document.getElementById(
-          "whatsapp"
-        ).value;
-
-      const brand =
-        document.getElementById(
-          "brandSelect"
-        ).value;
-
-      submitBtn.disabled =
-        true;
-
-      submitBtn.textContent =
-        "Submitting...";
-
-      haptic();
-
-      const text =
-        encodeURIComponent(
-          `🎁 Cheapster Giveaway Entry\n\n` +
-          `Name: ${fullName}\n` +
-          `WhatsApp: ${whatsapp}\n` +
-          `Brand: ${brand}\n` +
-          `Email: ${currentUser.email || ""}`
-        );
-
-      openStoreLink({
-        link:
-          `https://wa.me/${GIVEAWAY_WHATSAPP_NUMBER}?text=${text}`
-      });
-
-      setTimeout(
-        () => {
-
-          document.getElementById(
-            "rewardForm"
-          ).hidden =
-            true;
-
-          document.getElementById(
-            "successView"
-          ).hidden =
-            false;
-
-          submitBtn.disabled =
-            false;
-
-          submitBtn.textContent =
-            "Submit Entry";
-
-          haptic();
-
-        },
-        600
-      );
+    // Validation Check
+    if (!rewardForm.checkValidity()) {
+      rewardForm.reportValidity();
+      return;
     }
-  );
+
+    // Login Check
+    if (!currentUser) {
+      showToast("Please login with Google first.", "🔒");
+      return;
+    }
+
+    const submitBtn = document.getElementById("submitRewardBtn");
+    const fullName = document.getElementById("fullName").value;
+    const whatsapp = document.getElementById("whatsapp").value;
+    const brand = document.getElementById("brandSelect").value;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting...";
+    haptic();
+
+    // ==========================================
+    // ACTION 1: GOOGLE SHEETS B/G SAVE 
+    // ==========================================
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbziQvJq8kqk-CAHRekAHjkSVEJkQmbBp84girc4vjfTPbY20VJl2hz_I-OC-bWBcjQf/exec"; 
+    
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors", 
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        fullName: fullName,
+        whatsapp: whatsapp,
+        brand: brand,
+        email: currentUser.email || "",
+        uid: currentUser.uid || "",
+        submittedAt: new Date().toISOString()
+      })
+    }).catch(err => console.log("Save error:", err));
+
+    // ==========================================
+    // ACTION 2: WHATSAPP OPEN KARNA 
+    // ==========================================
+    const text = encodeURIComponent(
+      `🎁 Cheapster Giveaway Entry\n\n` +
+      `Name: ${fullName}\n` +
+      `WhatsApp: ${whatsapp}\n` +
+      `Brand: ${brand}\n` +
+      `Email: ${currentUser.email || ""}`
+    );
+
+    openStoreLink({
+      link: `https://wa.me/${GIVEAWAY_WHATSAPP_NUMBER}?text=${text}`
+    });
+
+    // Form Reset aur Success Screen
+    setTimeout(() => {
+      document.getElementById("rewardForm").hidden = true;
+      document.getElementById("successView").hidden = false;
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit Entry";
+      haptic();
+    }, 600);
+  });
 }
 
 // ---------- contact form → email (Web3Forms) ----------
