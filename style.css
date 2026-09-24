@@ -295,13 +295,3 @@ a { color: inherit; text-decoration: none; }
   .store-card { padding: 14px 8px; }
 }
 
-/* Footer links, modals, legal text aur descriptions ko white karne ke liye */
-footer a,
-.footer-links a,
-.modal-body p,
-.modal-content p,
-.hero-subtitle,
-p.legal-text,
-.footer-text {
-  color: #ffffff !important;
-}
