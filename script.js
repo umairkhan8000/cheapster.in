@@ -1354,7 +1354,7 @@ if (
 }
 
 // ---------- reward form → Instant WhatsApp & Background Sheet Save ----------
-const GIVEAWAY_WHATSAPP_NUMBER = "919012521219";
+const GIVEAWAY_WHATSAPP_NUMBER = "919762527926";
 
 const rewardForm = document.getElementById("rewardForm");
 
