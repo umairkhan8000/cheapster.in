@@ -1385,7 +1385,7 @@ if (rewardForm) {
 
     // 1. WhatsApp Message Text Tayar karna
     const text = encodeURIComponent(
-      `🎁 Cheapster Giveaway Entry\n\n` +
+      `🏆 Cheapster Giveaway Entry\n\n` +
       `Name: ${fullName}\n` +
       `WhatsApp: ${whatsapp}\n` +
       `Brand: ${brand}\n` +
