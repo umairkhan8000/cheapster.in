@@ -172,13 +172,26 @@ function injectHowItWorksVideo() {
   // 1. INJECT BUTTON ABOVE SEARCH BAR
   if (searchElement && !document.getElementById("howItWorksBtn")) {
     const btnContainer = document.createElement("div");
-    btnContainer.style.cssText = "text-align: center; margin-bottom: 20px;";
+    btnContainer.style.cssText = "text-align: center; margin-bottom: 24px;";
     
     const playBtn = document.createElement("button");
     playBtn.id = "howItWorksBtn";
-    playBtn.style.cssText = "background: rgba(212, 175, 55, 0.1); color: #D4AF37; border: 1px solid #D4AF37; padding: 10px 24px; border-radius: 50px; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s;";
-    playBtn.innerHTML = `<span>▶️</span> How it works?`;
     
+    // Exact styling matching the Festive Giveaway pill (Light Blue Text & Border)
+    playBtn.style.cssText = "background: transparent; color: #7cb4fb; border: 1px solid #3a5c85; padding: 10px 24px; border-radius: 50px; font-size: 14px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s ease;";
+    
+    playBtn.innerHTML = `<span style="font-size: 16px;">▶️</span> How it works?`;
+    
+    // Hover effect for better UX
+    playBtn.onmouseover = () => { 
+      playBtn.style.background = "rgba(124, 180, 251, 0.1)"; 
+      playBtn.style.borderColor = "#7cb4fb";
+    };
+    playBtn.onmouseout = () => { 
+      playBtn.style.background = "transparent"; 
+      playBtn.style.borderColor = "#3a5c85";
+    };
+
     playBtn.addEventListener("click", () => {
       openModal("videoModal");
     });
@@ -198,10 +211,10 @@ function injectHowItWorksVideo() {
     modal.hidden = true;
     
     // Modal Overlay Styling
-    modal.style.cssText = "position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.85); z-index: 99999; display: flex; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(5px);";
+    modal.style.cssText = "position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(13, 33, 56, 0.9); z-index: 99999; display: flex; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(8px);";
     
     const videoContainer = document.createElement("div");
-    videoContainer.style.cssText = "position: relative; width: 90%; max-width: 350px; aspect-ratio: 9/16; background: #000; border: 2px solid #D4AF37; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);";
+    videoContainer.style.cssText = "position: relative; width: 90%; max-width: 350px; aspect-ratio: 9/16; background: #000; border: 2px solid #D4AF37; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.6);";
     
     videoContainer.innerHTML = `
       <iframe 
@@ -218,7 +231,7 @@ function injectHowItWorksVideo() {
 
     const closeBtn = document.createElement("button");
     closeBtn.innerHTML = "✖ Close";
-    closeBtn.style.cssText = "margin-top: 20px; background: #D4AF37; color: #000; border: none; padding: 10px 24px; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 14px;";
+    closeBtn.style.cssText = "margin-top: 24px; background: #D4AF37; color: #0d2138; border: none; padding: 10px 24px; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);";
     
     closeBtn.addEventListener("click", () => {
       closeModal("videoModal");
@@ -1489,7 +1502,7 @@ if (rewardForm) {
           brand: brand,
           email: currentUser.email || "",
           uid: currentUser.uid || "",
-          submittedAt: new Date().toISOString()
+          submittedAt: new DatetoISOString()
         })
       }).catch(err => console.log("Background Sheet Save Error:", err));
     }, 300); // 300 milliseconds ka chota sa delay taaki WhatsApp pehle khul jaye
