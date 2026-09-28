@@ -156,6 +156,8 @@ function injectStylesAndNav() {
     const navWrapper = document.createElement("div");
     navWrapper.id = "categoryNavWrapper";
     
+    navWrapper.className = "category-nav-wrapper"; 
+    
     const navScroll = document.createElement("div");
     navScroll.className = "category-nav";
     navScroll.id = "categoryNav";
