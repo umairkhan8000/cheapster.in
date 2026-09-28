@@ -165,19 +165,47 @@ function injectStylesAndNav() {
   }
 }
 
-// ---------- How It Works Video Injection ----------
+// ---------- POPUP VIDEO BUTTON INJECTION ----------
 function injectHowItWorksVideo() {
   const searchElement = document.getElementById("searchInput");
-  if (searchElement && !document.getElementById("howItWorksVideoContainer")) {
-    const videoContainer = document.createElement("div");
-    videoContainer.id = "howItWorksVideoContainer";
-    videoContainer.className = "video-container";
+  
+  // 1. INJECT BUTTON ABOVE SEARCH BAR
+  if (searchElement && !document.getElementById("howItWorksBtn")) {
+    const btnContainer = document.createElement("div");
+    btnContainer.style.cssText = "text-align: center; margin-bottom: 20px;";
     
-    // Aesthetic matching with site theme (dark background, gold border, 9:16 portrait ratio)
-    videoContainer.style.cssText = "margin: 0 auto 20px auto; border-radius: 12px; overflow: hidden; border: 1px solid #D4AF37; width: 100%; max-width: 350px; aspect-ratio: 9/16; background: #000; display: block;";
+    const playBtn = document.createElement("button");
+    playBtn.id = "howItWorksBtn";
+    playBtn.style.cssText = "background: rgba(212, 175, 55, 0.1); color: #D4AF37; border: 1px solid #D4AF37; padding: 10px 24px; border-radius: 50px; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s;";
+    playBtn.innerHTML = `<span>▶️</span> How it works?`;
+    
+    playBtn.addEventListener("click", () => {
+      openModal("videoModal");
+    });
+
+    btnContainer.appendChild(playBtn);
+    
+    const targetParent = searchElement.parentElement;
+    if (targetParent && targetParent.parentNode) {
+      targetParent.parentNode.insertBefore(btnContainer, targetParent);
+    }
+  }
+
+  // 2. INJECT HIDDEN MODAL (POPUP) FOR VIDEO
+  if (!document.getElementById("videoModal")) {
+    const modal = document.createElement("div");
+    modal.id = "videoModal";
+    modal.hidden = true;
+    
+    // Modal Overlay Styling
+    modal.style.cssText = "position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.85); z-index: 99999; display: flex; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(5px);";
+    
+    const videoContainer = document.createElement("div");
+    videoContainer.style.cssText = "position: relative; width: 90%; max-width: 350px; aspect-ratio: 9/16; background: #000; border: 2px solid #D4AF37; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);";
     
     videoContainer.innerHTML = `
       <iframe 
+        id="ytIframe"
         width="100%" 
         height="100%" 
         src="https://www.youtube.com/embed/3r9iPQ5KEok?modestbranding=1&rel=0" 
@@ -188,11 +216,30 @@ function injectHowItWorksVideo() {
       ></iframe>
     `;
 
-    // Insert just above the search wrapper
-    const targetParent = searchElement.parentElement;
-    if (targetParent && targetParent.parentNode) {
-      targetParent.parentNode.insertBefore(videoContainer, targetParent);
-    }
+    const closeBtn = document.createElement("button");
+    closeBtn.innerHTML = "✖ Close";
+    closeBtn.style.cssText = "margin-top: 20px; background: #D4AF37; color: #000; border: none; padding: 10px 24px; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 14px;";
+    
+    closeBtn.addEventListener("click", () => {
+      closeModal("videoModal");
+      // Stop video playback by resetting the iframe src
+      const iframe = document.getElementById("ytIframe");
+      if(iframe) {
+        const src = iframe.src;
+        iframe.src = src;
+      }
+    });
+
+    modal.appendChild(videoContainer);
+    modal.appendChild(closeBtn);
+    document.body.appendChild(modal);
+    
+    // Close on outside click
+    modal.addEventListener("click", (e) => {
+      if(e.target === modal) {
+        closeBtn.click();
+      }
+    });
   }
 }
 
