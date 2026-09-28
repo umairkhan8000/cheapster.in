@@ -31,6 +31,7 @@ const stores = [
   { name: "Tira", domain: "tirabeauty.com", category: "Mega Brands", description: "Premium beauty", link: "https://myntr.it/8rjwEfS", logo: "hd-logos/tirabeautycom.png" }, // Routed to Myntra
   { name: "Shopsy", domain: "shopsy.in", category: "Mega Brands", description: "Value shopping", link: "https://bitli.in/q3GTiTJ", logo: "hd-logos/shopsy.png" },
   { name: "JioMart", domain: "jiomart.com", category: "Mega Brands", description: "Groceries & more", link: "https://bitli.in/6jJqYGx", logo: "hd-logos/jiomart.png" },
+  { name: "Meesho", domain: "meesho.com", category: "Mega Brands", description: "Value shopping marketplace", link: "https://www.meesho.com", logo: "hd-logos/meesho.png" },
 
   // 2. FASHION & FOOTWEAR
   { name: "Snitch", domain: "", category: "Fashion", description: "Men's fashion", link: "https://myntr.it/4Z4putW", logo: "hd-logos/snitchcom.png" }, // Routed to Myntra
