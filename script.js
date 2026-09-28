@@ -180,7 +180,7 @@ function injectHowItWorksVideo() {
     // Exact styling matching the Festive Giveaway pill (Light Blue Text & Border)
     playBtn.style.cssText = "background: transparent; color: #7cb4fb; border: 1px solid #3a5c85; padding: 10px 24px; border-radius: 50px; font-size: 14px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s ease;";
     
-    playBtn.innerHTML = `<span style="font-size: 16px;">▶️</span> How it works?`;
+    playBtn.innerHTML = `<span style="font-size: 16px;">▶️</span> How to order?`;
     
     // Hover effect for better UX
     playBtn.onmouseover = () => { 
