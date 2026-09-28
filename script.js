@@ -155,7 +155,6 @@ function injectStylesAndNav() {
   if(!document.getElementById("categoryNavWrapper") && gridElement) {
     const navWrapper = document.createElement("div");
     navWrapper.id = "categoryNavWrapper";
-    navWrapper.className = "category-nav-wrapper";
     
     const navScroll = document.createElement("div");
     navScroll.className = "category-nav";
@@ -163,6 +162,37 @@ function injectStylesAndNav() {
     
     navWrapper.appendChild(navScroll);
     gridElement.parentNode.insertBefore(navWrapper, gridElement);
+  }
+}
+
+// ---------- How It Works Video Injection ----------
+function injectHowItWorksVideo() {
+  const searchElement = document.getElementById("searchInput");
+  if (searchElement && !document.getElementById("howItWorksVideoContainer")) {
+    const videoContainer = document.createElement("div");
+    videoContainer.id = "howItWorksVideoContainer";
+    videoContainer.className = "video-container";
+    
+    // Aesthetic matching with site theme (dark background, gold border, 9:16 portrait ratio)
+    videoContainer.style.cssText = "margin: 0 auto 20px auto; border-radius: 12px; overflow: hidden; border: 1px solid #D4AF37; width: 100%; max-width: 350px; aspect-ratio: 9/16; background: #000; display: block;";
+    
+    videoContainer.innerHTML = `
+      <iframe 
+        width="100%" 
+        height="100%" 
+        src="https://www.youtube.com/embed/3r9iPQ5KEok?modestbranding=1&rel=0" 
+        title="How Cheapster Works" 
+        style="border: none;"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        allowFullScreen
+      ></iframe>
+    `;
+
+    // Insert just above the search wrapper
+    const targetParent = searchElement.parentElement;
+    if (targetParent && targetParent.parentNode) {
+      targetParent.parentNode.insertBefore(videoContainer, targetParent);
+    }
   }
 }
 
@@ -766,6 +796,7 @@ if (brandSelect) {
 
 // ---------- Initialization ----------
 injectStylesAndNav();
+injectHowItWorksVideo();
 renderCategoryNav();
 renderUI();
 
