@@ -39,7 +39,7 @@ const stores = [
   { name: "Beyoung", domain: "beyoung.in", category: "Fashion", description: "Everyday fashion", link: "https://inr.deals/dg4LBQ", logo: "hd-logos/beyoungin.png" },
   { name: "Savana", domain: "savana.com", category: "Fashion", description: "Trendy fashion", link: "https://www.savana.com", logo: "hd-logos/savana.png" },
   { name: "Bewakoof", domain: "bewakoof.com", category: "Fashion", description: "Quirky fashion", link: "https://myntr.it/k5op88M", logo: "hd-logos/bewakoof.png" }, // Routed to Myntra
-  { name: "The Souled Store", domain: "thesouledstore.com", category: "Fashion", description: "Pop culture merch", link: "https://inr.deals/FK7yPZ", logo: "hd-logos/thesouledstore.png" },
+  { name: "The Souled Store", domain: "thesouledstore.com", category: "Fashion", description: "Pop culture merch", link: "https://myntr.it/DWA75BD", logo: "hd-logos/thesouledstore.png" }, // Routed to Myntra
   { name: "XYXX", domain: "xyxxcrew.com", category: "Fashion", description: "Men's innerwear", link: "https://bitli.in/3zj1f7A", logo: "hd-logos/xyxx.png" },
   { name: "Cahoot", domain: "cahoot.in", category: "Fashion", description: "Casual streetwear", link: "https://cahoot.in/collections/men-bestsellers", logo: "hd-logos/cahootin.png" },
   { name: "Bonkers Corner", domain: "bonkerscorner.com", category: "Fashion", description: "Gen-Z streetwear", link: "https://myntr.it/9dOkPqa", logo: "hd-logos/bonkerscorner.png" }, // Routed to Myntra
@@ -180,7 +180,7 @@ function injectHowItWorksVideo() {
     const playBtn = document.createElement("button");
     playBtn.id = "howItWorksBtn";
     playBtn.style.cssText = "background: transparent; color: #7cb4fb; border: 1px solid #3a5c85; padding: 10px 24px; border-radius: 50px; font-size: 14px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s ease;";
-    playBtn.innerHTML = `<span style="font-size: 16px;">▶️</span> How it works?`;
+    playBtn.innerHTML = `<span style="font-size: 16px;">▶️</span> How to order?`;
     
     playBtn.onmouseover = () => { 
       playBtn.style.background = "rgba(124, 180, 251, 0.1)"; 
