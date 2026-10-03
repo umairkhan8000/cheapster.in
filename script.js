@@ -837,35 +837,6 @@ if (searchInput) {
   );
 }
 
-// ---------- Populate Forms ----------
-const brandSelect =
-  document.getElementById(
-    "brandSelect"
-  );
-
-if (brandSelect) {
-
-  stores.forEach(
-    (store) => {
-
-      const option =
-        document.createElement(
-          "option"
-        );
-
-      option.value =
-        store.name;
-
-      option.textContent =
-        store.name;
-
-      brandSelect.appendChild(
-        option
-      );
-    }
-  );
-}
-
 // ---------- Initialization ----------
 injectStylesAndNav();
 injectHowItWorksVideo();
