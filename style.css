@@ -1,6 +1,6 @@
 /* =========================================================
    CHEAPSTER.IN — DARK PREMIUM THEME
-   Header Navy Blue + Champagne Gold + Sapphire.
+   Header Navy Blue + Champagne Gold + Sapphire (No Blur)
    ========================================================= */
 
 :root {
@@ -45,10 +45,7 @@ body {
   margin: 0;
   color: var(--platinum);
   background-color: var(--obsidian);
-  background-image:
-    radial-gradient(circle at 12% 8%, rgba(91, 158, 234, 0.12) 0%, transparent 42%),
-    radial-gradient(circle at 88% 78%, rgba(205, 161, 92, 0.10) 0%, transparent 46%);
-    /* Removed the black linear-gradient so the pure blue header color flows everywhere */
+  background-image: none; /* Removed all blurry gradients */
   font-family: "DM Sans", sans-serif;
   overflow-x: hidden;
   min-height: 100vh;
@@ -64,9 +61,10 @@ body::before {
 
 body > * { position: relative; z-index: 1; }
 
-.ambient { position: fixed; z-index: 0; pointer-events: none; border-radius: 50%; filter: blur(70px); opacity: 0.45; will-change: transform; }
-.ambient-left { top: -120px; left: -140px; width: 380px; height: 380px; background: radial-gradient(circle, rgba(91, 158, 234, 0.22), transparent 70%); }
-.ambient-right { top: 25%; right: -180px; width: 440px; height: 440px; background: radial-gradient(circle, rgba(205, 161, 92, 0.16), transparent 70%); }
+/* Hidden all blurry glowing orbs */
+.ambient { display: none !important; }
+.ambient-left { display: none !important; }
+.ambient-right { display: none !important; }
 
 body.modal-open { overflow: hidden; }
 button, input, select, textarea { font: inherit; outline: none; }
@@ -86,12 +84,12 @@ a { color: inherit; text-decoration: none; }
 @keyframes toastEnter { from { opacity: 0; transform: translateY(-20px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes toastExit { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-20px) scale(0.9); } }
 
-/* Top Live Banner - KEPT EXACTLY THE SAME */
+/* Top Live Banner */
 .live-contest-banner { background: linear-gradient(90deg, var(--sapphire), #142a44); color: var(--champagne-bright); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: center; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--line-gold); }
 .blinking-dot { width: 6px; height: 6px; background-color: #7fe3ab; border-radius: 50%; box-shadow: 0 0 10px #7fe3ab; animation: blink 1.5s infinite ease-in-out; }
 @keyframes blink { 0%, 100% { opacity: 0.35; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.15); } }
 
-/* Scrolling Date Bar - KEPT EXACTLY THE SAME */
+/* Scrolling Date Bar */
 .giveaway-date-bar { 
   background: linear-gradient(90deg, var(--sapphire), #142a44); 
   border-bottom: 1px solid var(--line-gold); 
