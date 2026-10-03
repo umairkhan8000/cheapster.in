@@ -168,106 +168,6 @@ function injectStylesAndNav() {
   }
 }
 
-// ---------- POPUP VIDEO BUTTON INJECTION ----------
-function injectHowItWorksVideo() {
-  const searchElement = document.getElementById("searchInput");
-  
-  // 1. INJECT BUTTON ABOVE SEARCH BAR
-  if (searchElement && !document.getElementById("howItWorksBtn")) {
-    const btnContainer = document.createElement("div");
-    btnContainer.style.cssText = "text-align: center; margin-bottom: 24px;";
-    
-    const playBtn = document.createElement("button");
-    playBtn.id = "howItWorksBtn";
-    playBtn.style.cssText = "background: transparent; color: #7cb4fb; border: 1px solid #3a5c85; padding: 10px 24px; border-radius: 50px; font-size: 14px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s ease;";
-    playBtn.innerHTML = `<span style="font-size: 16px;">▶️</span> How to order?`;
-    
-    playBtn.onmouseover = () => { 
-      playBtn.style.background = "rgba(124, 180, 251, 0.1)"; 
-      playBtn.style.borderColor = "#7cb4fb";
-    };
-    playBtn.onmouseout = () => { 
-      playBtn.style.background = "transparent"; 
-      playBtn.style.borderColor = "#3a5c85";
-    };
-
-    playBtn.addEventListener("click", () => {
-      openModal("videoModal");
-    });
-
-    btnContainer.appendChild(playBtn);
-    
-    const targetParent = searchElement.parentElement;
-    if (targetParent && targetParent.parentNode) {
-      targetParent.parentNode.insertBefore(btnContainer, targetParent);
-    }
-  }
-
-  // 2. INJECT HIDDEN MODAL (POPUP) FOR VIDEO WITH CUSTOM INFOGRAPHIC THUMBNAIL
-  if (!document.getElementById("videoModal")) {
-    const modal = document.createElement("div");
-    modal.id = "videoModal";
-    modal.hidden = true;
-    modal.style.cssText = "position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(13, 33, 56, 0.9); z-index: 99999; display: flex; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(8px);";
-    
-    const videoContainer = document.createElement("div");
-    videoContainer.style.cssText = "position: relative; width: 90%; max-width: 350px; aspect-ratio: 9/16; background: #000; border: 2px solid #D4AF37; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.6);";
-    
-    // YAHAN AAPKI NAYI INFOGRAPHIC IMAGE KA PATH HAI
-    // Dhyan rakhein ki ye file aapke server par isi naam se upload ho
-    const customThumbnail = "hd-logos/how-it-works.jpg"; 
-
-    videoContainer.innerHTML = `
-      <div id="videoCover" style="position: absolute; inset: 0; background: url('${customThumbnail}') center/cover no-repeat; z-index: 2; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: opacity 0.3s ease;">
-         <div style="width: 64px; height: 64px; background: rgba(212, 175, 55, 0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
-           <span style="color: #090d14; font-size: 26px; margin-left: 6px;">▶</span>
-         </div>
-      </div>
-      <iframe 
-        id="ytIframe"
-        width="100%" 
-        height="100%" 
-        src="" 
-        title="How Cheapster Works" 
-        style="border: none; position: absolute; inset: 0; z-index: 1;"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-        allowFullScreen
-      ></iframe>
-    `;
-
-    // Click to Play Logic
-    const videoCover = videoContainer.querySelector("#videoCover");
-    const ytIframe = videoContainer.querySelector("#ytIframe");
-    
-    videoCover.addEventListener("click", () => {
-      videoCover.style.opacity = "0";
-      setTimeout(() => { videoCover.style.display = "none"; }, 300);
-      ytIframe.src = "https://www.youtube.com/embed/3r9iPQ5KEok?autoplay=1&modestbranding=1&rel=0";
-    });
-
-    const closeBtn = document.createElement("button");
-    closeBtn.innerHTML = "✖ Close";
-    closeBtn.style.cssText = "margin-top: 24px; background: #D4AF37; color: #0d2138; border: none; padding: 10px 24px; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);";
-    
-    closeBtn.addEventListener("click", () => {
-      closeModal("videoModal");
-      ytIframe.src = "";
-      videoCover.style.display = "flex";
-      setTimeout(() => { videoCover.style.opacity = "1"; }, 10);
-    });
-
-    modal.appendChild(videoContainer);
-    modal.appendChild(closeBtn);
-    document.body.appendChild(modal);
-    
-    modal.addEventListener("click", (e) => {
-      if(e.target === modal) {
-        closeBtn.click();
-      }
-    });
-  }
-}
-
 // ---------- App State ----------
 let currentCategory = "All";
 let searchQuery = "";
@@ -868,7 +768,6 @@ if (brandSelect) {
 
 // ---------- Initialization ----------
 injectStylesAndNav();
-injectHowItWorksVideo();
 renderCategoryNav();
 renderUI();
 
@@ -1514,7 +1413,7 @@ if (rewardForm) {
           brand: brand,
           email: currentUser.email || "",
           uid: currentUser.uid || "",
-          submittedAt: new DatetoISOString()
+          submittedAt: new Date().toISOString()
         })
       }).catch(err => console.log("Background Sheet Save Error:", err));
     }, 300); // 300 milliseconds ka chota sa delay taaki WhatsApp pehle khul jaye
