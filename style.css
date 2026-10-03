@@ -42,11 +42,9 @@ html { scroll-behavior: smooth; }
 body {
   margin: 0;
   color: var(--platinum);
+  /* Flat solid colour, same as header (no gradients / blur glows) */
   background-color: var(--obsidian);
-  background-image:
-    radial-gradient(circle at 12% 8%, rgba(91, 158, 234, 0.10) 0%, transparent 42%),
-    radial-gradient(circle at 88% 78%, rgba(205, 161, 92, 0.08) 0%, transparent 46%),
-    linear-gradient(180deg, #0b1119 0%, #090d14 55%, #07090f 100%);
+  background-image: none;
   font-family: "DM Sans", sans-serif;
   overflow-x: hidden;
   min-height: 100vh;
@@ -62,7 +60,7 @@ body::before {
 
 body > * { position: relative; z-index: 1; }
 
-.ambient { position: fixed; z-index: 0; pointer-events: none; border-radius: 50%; filter: blur(70px); opacity: 0.45; will-change: transform; }
+.ambient { display: none !important; position: fixed; z-index: 0; pointer-events: none; border-radius: 50%; filter: blur(70px); opacity: 0.45; will-change: transform; }
 .ambient-left { top: -120px; left: -140px; width: 380px; height: 380px; background: radial-gradient(circle, rgba(91, 158, 234, 0.22), transparent 70%); }
 .ambient-right { top: 25%; right: -180px; width: 440px; height: 440px; background: radial-gradient(circle, rgba(205, 161, 92, 0.16), transparent 70%); }
 
