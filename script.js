@@ -1500,7 +1500,7 @@ if (rewardForm) {
       link: `https://wa.me/${GIVEAWAY_WHATSAPP_NUMBER}?text=${text}`
     });
 
-// 3. WHATSAPP KHULNE KE JUST BAAD BACKGROUND MEIN GOOGLE SHEET BHEJNA
+   // 3. WHATSAPP KHULNE KE JUST BAAD BACKGROUND MEIN GOOGLE SHEET BHEJNA
 setTimeout(() => {
   const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbziQvJq8kqk-CAHRekAHjkSVEJkQmbBp84girc4vjfTPbY20VJl2hz_I-OC-bWBcjQf/exec"; 
   
