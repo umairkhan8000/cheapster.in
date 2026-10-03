@@ -1500,24 +1500,24 @@ if (rewardForm) {
       link: `https://wa.me/${GIVEAWAY_WHATSAPP_NUMBER}?text=${text}`
     });
 
-    // 3. WHATSAPP KHULNE KE JUST BAAD BACKGROUND MEIN GOOGLE SHEET BHEJNA
-    setTimeout(() => {
-      const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbziQvJq8kqk-CAHRekAHjkSVEJkQmbBp84girc4vjfTPbY20VJl2hz_I-OC-bWBcjQf/exec"; 
-      
-      fetch(GOOGLE_SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors", 
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
-          fullName: fullName,
-          whatsapp: whatsapp,
-          brand: brand,
-          email: currentUser.email || "",
-          uid: currentUser.uid || "",
-          submittedAt: new DatetoISOString()
-        })
-      }).catch(err => console.log("Background Sheet Save Error:", err));
-    }, 300); // 300 milliseconds ka chota sa delay taaki WhatsApp pehle khul jaye
+// 3. WHATSAPP KHULNE KE JUST BAAD BACKGROUND MEIN GOOGLE SHEET BHEJNA
+setTimeout(() => {
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbziQvJq8kqk-CAHRekAHjkSVEJkQmbBp84girc4vjfTPbY20VJl2hz_I-OC-bWBcjQf/exec"; 
+  
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors", 
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      fullName: fullName,
+      whatsapp: whatsapp,
+      brand: brand,
+      email: currentUser.email || "",
+      uid: currentUser.uid || "",
+      submittedAt: new Date().toISOString() // <-- YE WALI LINE THEEK KI HAI
+    })
+  }).catch(err => console.log("Background Sheet Save Error:", err));
+}, 300);
 
     // 4. Success Screen & Reset
     setTimeout(() => {
