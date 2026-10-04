@@ -299,3 +299,104 @@ a { color: inherit; text-decoration: none; }
   .store-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .store-card { padding: 14px 8px; }
 }
+
+/* =========================================================
+   PROMO BANNERS CAROUSEL (Only Banners)
+   ========================================================= */
+.promo-carousel-wrapper {
+  position: relative;
+  width: min(1220px, calc(100% - 34px));
+  margin: 25px auto 0;
+  display: flex;
+  align-items: center;
+}
+
+.promo-carousel {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  padding-bottom: 12px; /* Space for shadow */
+}
+
+.promo-carousel::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+/* Banner Card Container */
+.promo-slide {
+  flex: 0 0 calc(33.333% - 11px); /* Desktop: 3 banners */
+  scroll-snap-align: start;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--panel-solid);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  display: block;
+  text-decoration: none;
+}
+
+.promo-slide img {
+  width: 100%;
+  aspect-ratio: 21 / 9; /* Banner ka landscape size maintain rakhega */
+  object-fit: cover;
+  display: block;
+}
+
+/* Hover Effects */
+.promo-slide:hover {
+  transform: translateY(-4px);
+  border-color: var(--line-gold);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(205, 161, 92, 0.2);
+}
+
+/* Left & Right Navigation Buttons */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(11, 26, 48, 0.95);
+  color: var(--champagne-bright);
+  border: 1px solid var(--line-gold);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 18px;
+  z-index: 10;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.carousel-btn:hover {
+  background: var(--panel-solid-hover);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.left-btn { left: -22px; }
+.right-btn { right: -22px; }
+
+/* Mobile View Adjustments */
+@media (max-width: 900px) {
+  .promo-slide { flex: 0 0 calc(50% - 8px); } /* Tablet: 2 banners */
+}
+
+@media (max-width: 600px) {
+  .promo-carousel-wrapper {
+    width: 100%;
+    margin: 15px auto 0;
+    padding: 0 15px;
+  }
+  .promo-slide { 
+    flex: 0 0 85%; /* Mobile: 1 banner peek ke sath */
+  }
+  .carousel-btn { display: none; } /* Mobile par buttons hide karenge kyunki swipe best hai */
+  .left-btn, .right-btn { left: 0; right: 0; }
+}
