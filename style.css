@@ -383,20 +383,32 @@ a { color: inherit; text-decoration: none; }
 .left-btn { left: -22px; }
 .right-btn { right: -22px; }
 
-/* Mobile View Adjustments */
-@media (max-width: 900px) {
-  .promo-slide { flex: 0 0 calc(50% - 8px); } /* Tablet: 2 banners */
+/* =========================================================
+   Mobile View Adjustments (UPDATED & FORCED)
+   ========================================================= */
+@media (max-width: 950px) {
+  .promo-slide { 
+    flex: 0 0 calc(50% - 8px) !important; /* Tablet par 2 banners */
+  } 
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .promo-carousel-wrapper {
-    width: 100%;
-    margin: 15px auto 0;
-    padding: 0 15px;
+    width: 100% !important;
+    margin: 15px auto 0 !important;
+    padding: 0 15px !important;
   }
+  
   .promo-slide { 
-    flex: 0 0 85%; /* Mobile: 1 banner peek ke sath */
+    flex: 0 0 88% !important; /* Mobile par 1 bada banner + next wale ka thoda sa part */
   }
-  .carousel-btn { display: none; } /* Mobile par buttons hide karenge kyunki swipe best hai */
-  .left-btn, .right-btn { left: 0; right: 0; }
+  
+  .carousel-btn { 
+    display: none !important; /* Mobile par arrows hide karenge taaki clean lage */
+  }
+  
+  .promo-carousel {
+    gap: 12px !important;
+    padding-bottom: 8px !important;
+  }
 }
