@@ -1739,3 +1739,22 @@ if (
     }
   );
 }
+
+// ---------- Promo Banners Carousel Scroll Logic ----------
+const promoCarousel = document.getElementById('promoCarousel');
+const scrollLeftBtn = document.getElementById('scrollLeftBtn');
+const scrollRightBtn = document.getElementById('scrollRightBtn');
+
+if (promoCarousel && scrollLeftBtn && scrollRightBtn) {
+  const scrollAmount = () => promoCarousel.clientWidth * 0.8; // Scrolls 80% of the visible width
+
+  scrollLeftBtn.addEventListener('click', () => {
+    promoCarousel.scrollBy({ left: -scrollAmount(), behavior: 'smooth' });
+    haptic();
+  });
+
+  scrollRightBtn.addEventListener('click', () => {
+    promoCarousel.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
+    haptic();
+  });
+}
