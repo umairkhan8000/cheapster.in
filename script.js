@@ -1740,21 +1740,56 @@ if (
   );
 }
 
-// ---------- Promo Banners Carousel Scroll Logic ----------
+// ---------- PROMO BANNERS INFINITE CAROUSEL ----------
 const promoCarousel = document.getElementById('promoCarousel');
 const scrollLeftBtn = document.getElementById('scrollLeftBtn');
 const scrollRightBtn = document.getElementById('scrollRightBtn');
 
-if (promoCarousel && scrollLeftBtn && scrollRightBtn) {
-  const scrollAmount = () => promoCarousel.clientWidth * 0.8; // Scrolls 80% of the visible width
+if (promoCarousel) {
+  // 1. Banners ko duplicate karke ek lamba 'never-ending' loop banana
+  const originalSlides = Array.from(promoCarousel.children);
+  
+  // Hum in banners ko 3 baar copy kar rahe hain taaki swipe karte waqt khatam na ho
+  for(let i = 0; i < 3; i++) {
+    originalSlides.forEach(slide => {
+      let clone = slide.cloneNode(true);
+      promoCarousel.appendChild(clone);
+    });
+  }
 
-  scrollLeftBtn.addEventListener('click', () => {
-    promoCarousel.scrollBy({ left: -scrollAmount(), behavior: 'smooth' });
-    haptic();
+  // 2. Buttons se Scroll karne ka logic
+  const getScrollAmount = () => promoCarousel.querySelector('.promo-slide').clientWidth + 16; 
+
+  if (scrollLeftBtn && scrollRightBtn) {
+    scrollLeftBtn.addEventListener('click', () => {
+      promoCarousel.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+    });
+    
+    scrollRightBtn.addEventListener('click', () => {
+      promoCarousel.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+    });
+  }
+
+  // 3. Infinite Reset Magic (Jab user end par pahuche, toh chupke se center mein wapas le aao)
+  promoCarousel.addEventListener('scroll', () => {
+    const maxScroll = promoCarousel.scrollWidth - promoCarousel.clientWidth;
+    
+    // Agar left end par pahuch gaya
+    if (promoCarousel.scrollLeft <= 0) {
+      promoCarousel.style.scrollBehavior = 'auto'; // Smooth scroll band karo
+      promoCarousel.scrollLeft = maxScroll / 2;    // Center mein jump karo
+      promoCarousel.style.scrollBehavior = 'smooth'; // Smooth scroll wapas on karo
+    } 
+    // Agar right end par pahuch gaya
+    else if (promoCarousel.scrollLeft >= maxScroll - 5) {
+      promoCarousel.style.scrollBehavior = 'auto'; 
+      promoCarousel.scrollLeft = maxScroll / 2;
+      promoCarousel.style.scrollBehavior = 'smooth';
+    }
   });
 
-  scrollRightBtn.addEventListener('click', () => {
-    promoCarousel.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
-    haptic();
-  });
+  // Load hote hi slider ko thoda aage set karna taaki user left bhi swipe kar sake
+  setTimeout(() => {
+    promoCarousel.scrollLeft = (promoCarousel.scrollWidth - promoCarousel.clientWidth) / 2;
+  }, 150);
 }
