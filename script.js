@@ -1805,21 +1805,38 @@ async function performProductSearch(query) {
   let allResults = [];
   let completedSites = 0;
   const totalSites = 5;
+  let hasTimeoutFired = false;
+
+  // Custom fetch function with a hard 15-second timeout on the frontend
+  const fetchWithTimeout = async (url, timeoutMs = 15000) => {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const response = await fetch(url, { signal: controller.signal });
+      clearTimeout(id);
+      return response;
+    } catch (error) {
+      clearTimeout(id);
+      throw error;
+    }
+  };
 
   const fetchHtmlViaScraper = async (url) => {
     try {
       const apiUrl = `${SEARCH_PROXY_URL}?url=${encodeURIComponent(url)}`;
-      const response = await fetch(apiUrl);
+      const response = await fetchWithTimeout(apiUrl, 16000); // 16 sec timeout
       const htmlText = await response.text();
       const parser = new DOMParser();
       return parser.parseFromString(htmlText, "text/html");
     } catch (error) {
-      console.error("Scraping failed for:", url, error);
+      console.error(`Scraping failed or timed out for: ${url}`);
       return null;
     }
   };
 
   const updateUI = () => {
+    if (hasTimeoutFired) return; // Prevent double rendering if timeout hit
+
     productResultsGrid.innerHTML = "";
     if (allResults.length > 0) {
       allResults.sort((a, b) => a.price - b.price); // Saste se mehenga sort
@@ -1846,7 +1863,7 @@ async function performProductSearch(query) {
       if (allResults.length === 0) {
         productResultsGrid.innerHTML = `
           <div style="text-align:center; padding:30px 0; color:var(--muted);">
-            <p>No product matches found across these stores right now.</p>
+            <p>No product matches found across these stores right now. (They might be blocking the search).</p>
           </div>`;
       }
     }
@@ -1881,7 +1898,6 @@ async function performProductSearch(query) {
   const scrapeFlipkart = async () => {
     const doc = await fetchHtmlViaScraper(`https://www.flipkart.com/search?q=${encodeURIComponent(query)}`);
     if (doc) {
-      // Updated robust Flipkart selectors
       const fkItem = doc.querySelector('a[target="_blank"][rel="noopener noreferrer"]') || doc.querySelector('div.slAVV4 a') || doc.querySelector('a.CGtC98');
       if (fkItem) {
         const parentBlock = fkItem.parentElement || fkItem;
@@ -1989,4 +2005,20 @@ async function performProductSearch(query) {
   scrapeMyntra();
   scrapeNykaa();
   scrapeAjio();
+
+  // GUARANTEED TIMEOUT: Stop loader after 18 seconds max, display whatever we have
+  setTimeout(() => {
+    if (!searchLoader.hidden) {
+      hasTimeoutFired = true;
+      searchLoader.hidden = true;
+      if (allResults.length === 0) {
+        productResultsGrid.innerHTML = `
+          <div style="text-align:center; padding:30px 0; color:var(--muted);">
+            <p>Timeout! No product matches found across these stores right now, or they are blocking the search.</p>
+          </div>`;
+      } else {
+        updateUI(); // Manually push whatever was gathered
+      }
+    }
+  }, 18000);
 }
