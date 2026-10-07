@@ -1795,7 +1795,7 @@ if (promoCarousel) {
 }
 
 // =========================================================
-// PRODUCT SEARCH & SCRAPER API INTEGRATION
+// PRODUCT SEARCH & 5-PLATFORM SCRAPER API INTEGRATION
 // =========================================================
 
 const SCRAPER_API_KEY = "3bdb797de7b416b7c0b3e07091fbcb5e";
@@ -1836,10 +1836,8 @@ async function performProductSearch(query) {
     }
   };
 
-  // 1. Fetching from Amazon
-  const amazonSearchUrl = `https://www.amazon.in/s?k=${encodeURIComponent(query)}`;
-  const amazonDoc = await fetchHtmlViaScraper(amazonSearchUrl);
-  
+  // 1. AMAZON SEARCH
+  const amazonDoc = await fetchHtmlViaScraper(`https://www.amazon.in/s?k=${encodeURIComponent(query)}`);
   if (amazonDoc) {
     const amzItem = amazonDoc.querySelector('[data-component-type="s-search-result"]');
     if (amzItem) {
@@ -1855,22 +1853,20 @@ async function performProductSearch(query) {
           title: title,
           price: priceClean,
           image: img || "logo_192x192.png",
-          logo: "hd-logos/amazon.png", // Yahan hd-logos folder se original logo link kiya hai
-          link: "https://www.amazon.in" + link
+          logo: "hd-logos/amazon.png",
+          link: link.startsWith("http") ? link : "https://www.amazon.in" + link
         });
       }
     }
   }
 
-  // 2. Fetching from Flipkart
-  const flipkartSearchUrl = `https://www.flipkart.com/search?q=${encodeURIComponent(query)}`;
-  const flipkartDoc = await fetchHtmlViaScraper(flipkartSearchUrl);
-  
+  // 2. FLIPKART SEARCH
+  const flipkartDoc = await fetchHtmlViaScraper(`https://www.flipkart.com/search?q=${encodeURIComponent(query)}`);
   if (flipkartDoc) {
-    const fkItem = flipkartDoc.querySelector('a[target="_blank"][rel="noopener noreferrer"]');
+    const fkItem = flipkartDoc.querySelector('a[target="_blank"][rel="noopener noreferrer"]') || flipkartDoc.querySelector('div.slAVV4 a');
     if (fkItem) {
-      const parentBlock = fkItem.parentElement;
-      const titleElement = fkItem.querySelector('div.KzDlHZ') || fkItem.querySelector('a.wjcEIp') || parentBlock.querySelector('a[title]');
+      const parentBlock = fkItem.parentElement || fkItem;
+      const titleElement = parentBlock.querySelector('div.KzDlHZ') || parentBlock.querySelector('a.wjcEIp') || parentBlock.querySelector('a[title]');
       const priceElement = parentBlock.querySelector('div.Nx9bqj');
       const imgElement = parentBlock.querySelector('img.DByuf4') || parentBlock.querySelector('img');
 
@@ -1885,36 +1881,109 @@ async function performProductSearch(query) {
           title: title,
           price: priceClean,
           image: imgElement?.src || "logo_192x192.png",
-          logo: "hd-logos/flipkart.png", // Yahan hd-logos folder se original logo link kiya hai
+          logo: "hd-logos/flipkart.png",
           link: fullLink
         });
       }
     }
   }
 
-  // Hide Loader and Display Sorted Results
+  // 3. MYNTRA SEARCH
+  const myntraDoc = await fetchHtmlViaScraper(`https://www.myntra.com/${encodeURIComponent(query)}`);
+  if (myntraDoc) {
+    const mItem = myntraDoc.querySelector('li.product-base');
+    if (mItem) {
+      const brandName = mItem.querySelector('.product-brand')?.innerText || "Myntra Product";
+      const title = mItem.querySelector('.product-product')?.innerText || query;
+      const priceElement = mItem.querySelector('.product-discountedPrice') || mItem.querySelector('.product-price');
+      const img = mItem.querySelector('img')?.getAttribute('src');
+      const link = mItem.querySelector('a')?.getAttribute('href');
+
+      if (priceElement) {
+        const priceClean = parseInt(priceElement.innerText.replace(/₹|,/g, ""));
+        allResults.push({
+          brand: "Myntra",
+          title: `${brandName} - ${title}`,
+          price: priceClean,
+          image: img || "logo_192x192.png",
+          logo: "hd-logos/myntra.png",
+          link: link ? (link.startsWith('http') ? link : "https://www.myntra.com/" + link) : "https://www.myntra.com"
+        });
+      }
+    }
+  }
+
+  // 4. NYKAA SEARCH
+  const nykaaDoc = await fetchHtmlViaScraper(`https://www.nykaa.com/search/result/?q=${encodeURIComponent(query)}`);
+  if (nykaaDoc) {
+    const nykItem = nykaaDoc.querySelector('.product-listing-item') || nykaaDoc.querySelector('.css-1rd3twv');
+    if (nykItem) {
+      const title = nykItem.querySelector('.css-xrpj44') || nykItem.querySelector('.title') || query;
+      const priceElement = nykItem.querySelector('.css-111z9ua') || nykItem.querySelector('.post-card__content-price');
+      const img = nykItem.querySelector('img')?.getAttribute('src');
+      const link = nykItem.querySelector('a')?.getAttribute('href');
+
+      if (priceElement) {
+        const priceClean = parseInt(priceElement.innerText.replace(/₹|MRP|:/g, "").trim().replace(/,/g, ""));
+        allResults.push({
+          brand: "Nykaa",
+          title: title.innerText || title,
+          price: priceClean,
+          image: img || "logo_192x192.png",
+          logo: "hd-logos/nykaa.png",
+          link: link ? (link.startsWith('http') ? link : "https://www.nykaa.com" + link) : "https://www.nykaa.com"
+        });
+      }
+    }
+  }
+
+  // 5. AJIO SEARCH
+  const ajioDoc = await fetchHtmlViaScraper(`https://www.ajio.com/search/?text=${encodeURIComponent(query)}`);
+  if (ajioDoc) {
+    const ajItem = ajioDoc.querySelector('.item') || ajioDoc.querySelector('.react-grid-item');
+    if (ajItem) {
+      const brandName = ajItem.querySelector('.brand')?.innerText || "";
+      const title = ajItem.querySelector('.nameCls')?.innerText || query;
+      const priceElement = ajItem.querySelector('.price');
+      const img = ajItem.querySelector('img')?.getAttribute('src');
+      const link = ajItem.querySelector('a')?.getAttribute('href');
+
+      if (priceElement) {
+        const priceClean = parseInt(priceElement.innerText.replace(/₹|,/g, ""));
+        allResults.push({
+          brand: "AJIO",
+          title: `${brandName} ${title}`,
+          price: priceClean,
+          image: img || "logo_192x192.png",
+          logo: "hd-logos/ajio.png",
+          link: link ? (link.startsWith('http') ? link : "https://www.ajio.com" + link) : "https://www.ajio.com"
+        });
+      }
+    }
+  }
+
+  // Hide Loader and Display Filtered & Sorted Results
   searchLoader.hidden = true;
 
   if (allResults.length === 0) {
     productResultsGrid.innerHTML = `
       <div style="text-align:center; padding:30px 0; color:var(--muted);">
-        <p>No exact product matches found right now.</p>
+        <p>No product matches found across these stores right now.</p>
       </div>`;
     return;
   }
 
-  // SORT: Low to High Price
+  // SORT: Low to High Price (Sabse sasta upar)
   allResults.sort((a, b) => a.price - b.price);
 
   allResults.forEach((product) => {
     const card = document.createElement("div");
     card.className = "product-result-card";
     
-    // UI Layout: Product Image, Platform Logo (hd-logos), Title, Price, and Buy Now Button
     card.innerHTML = `
       <img class="product-result-img" src="${product.image}" alt="Product" loading="lazy">
       <div class="product-result-info">
-        <img src="${product.logo}" alt="${product.brand}" style="height: 18px; width: auto; margin-bottom: 6px; border-radius: 4px;">
+        <img src="${product.logo}" alt="${product.brand}" style="height: 18px; width: auto; object-fit: contain; margin-bottom: 6px; border-radius: 4px;">
         <h3 class="product-result-title">${product.title}</h3>
         <p class="product-result-price">₹${product.price.toLocaleString("en-IN")}</p>
       </div>
