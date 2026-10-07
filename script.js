@@ -1819,14 +1819,10 @@ async function performProductSearch(query) {
     }
   };
 
-  // NAYA LOGIC: Jaise hi kisi ek site ka data aayega, ye UI update kar dega
   const updateUI = () => {
     productResultsGrid.innerHTML = "";
-    
     if (allResults.length > 0) {
-      // Saste se mehenge mein sort karega
-      allResults.sort((a, b) => a.price - b.price);
-      
+      allResults.sort((a, b) => a.price - b.price); // Saste se mehenga sort
       allResults.forEach((product) => {
         const card = document.createElement("div");
         card.className = "product-result-card";
@@ -1845,7 +1841,6 @@ async function performProductSearch(query) {
       });
     }
 
-    // Jab paancho sites check ho jayengi tab hi loader hategi
     if (completedSites === totalSites) {
       searchLoader.hidden = true;
       if (allResults.length === 0) {
@@ -1879,20 +1874,21 @@ async function performProductSearch(query) {
         }
       }
     }
-    completedSites++;
-    updateUI(); // Result milte hi dikha do
+    completedSites++; updateUI();
   };
 
   // --- 2. FLIPKART ---
   const scrapeFlipkart = async () => {
     const doc = await fetchHtmlViaScraper(`https://www.flipkart.com/search?q=${encodeURIComponent(query)}`);
     if (doc) {
-      const fkItem = doc.querySelector('a[target="_blank"][rel="noopener noreferrer"]') || doc.querySelector('div.slAVV4 a');
+      // Updated robust Flipkart selectors
+      const fkItem = doc.querySelector('a[target="_blank"][rel="noopener noreferrer"]') || doc.querySelector('div.slAVV4 a') || doc.querySelector('a.CGtC98');
       if (fkItem) {
         const parentBlock = fkItem.parentElement || fkItem;
-        const titleElement = parentBlock.querySelector('div.KzDlHZ') || parentBlock.querySelector('a.wjcEIp') || parentBlock.querySelector('a[title]');
-        const priceElement = parentBlock.querySelector('div.Nx9bqj');
-        const imgElement = parentBlock.querySelector('img.DByuf4') || parentBlock.querySelector('img');
+        const titleElement = parentBlock.querySelector('div.KzDlHZ') || parentBlock.querySelector('a.wjcEIp') || parentBlock.querySelector('div.syl9yP');
+        const priceElement = parentBlock.querySelector('div.Nx9bqj') || parentBlock.querySelector('div._30jeq3');
+        const imgElement = parentBlock.querySelector('img.DByuf4') || parentBlock.querySelector('img.CXW8mj') || parentBlock.querySelector('img');
+        
         if (priceElement && fkItem.href) {
           const title = titleElement ? (titleElement.innerText || titleElement.title) : query;
           const priceClean = parseInt(priceElement.innerText.replace(/[^\d]/g, ""), 10);
@@ -1907,8 +1903,7 @@ async function performProductSearch(query) {
         }
       }
     }
-    completedSites++;
-    updateUI();
+    completedSites++; updateUI();
   };
 
   // --- 3. MYNTRA ---
@@ -1934,8 +1929,7 @@ async function performProductSearch(query) {
         }
       }
     }
-    completedSites++;
-    updateUI();
+    completedSites++; updateUI();
   };
 
   // --- 4. NYKAA ---
@@ -1960,8 +1954,7 @@ async function performProductSearch(query) {
         }
       }
     }
-    completedSites++;
-    updateUI();
+    completedSites++; updateUI();
   };
 
   // --- 5. AJIO ---
@@ -1987,11 +1980,10 @@ async function performProductSearch(query) {
         }
       }
     }
-    completedSites++;
-    updateUI();
+    completedSites++; updateUI();
   };
 
-  // Paancho sites ek sath chalengi, jiska result pehle aayega wo screen pe dikh jayega
+  // Run all scrapers concurrently
   scrapeAmazon();
   scrapeFlipkart();
   scrapeMyntra();
