@@ -1803,6 +1803,8 @@ async function performProductSearch(query) {
   searchLoader.hidden = false;
 
   let allResults = [];
+  let completedSites = 0;
+  const totalSites = 5;
 
   const fetchHtmlViaScraper = async (url) => {
     try {
@@ -1817,181 +1819,182 @@ async function performProductSearch(query) {
     }
   };
 
-  try {
-    // 🚀 FAST LOADING: 5 sites ek sath check hongi (Takes only 20-30 seconds total)
-    const [amazonDoc, flipkartDoc, myntraDoc, nykaaDoc, ajioDoc] = await Promise.all([
-      fetchHtmlViaScraper(`https://www.amazon.in/s?k=${encodeURIComponent(query)}`),
-      fetchHtmlViaScraper(`https://www.flipkart.com/search?q=${encodeURIComponent(query)}`),
-      fetchHtmlViaScraper(`https://www.myntra.com/${encodeURIComponent(query)}`),
-      fetchHtmlViaScraper(`https://www.nykaa.com/search/result/?q=${encodeURIComponent(query)}`),
-      fetchHtmlViaScraper(`https://www.ajio.com/search/?text=${encodeURIComponent(query)}`)
-    ]);
+  // NAYA LOGIC: Jaise hi kisi ek site ka data aayega, ye UI update kar dega
+  const updateUI = () => {
+    productResultsGrid.innerHTML = "";
+    
+    if (allResults.length > 0) {
+      // Saste se mehenge mein sort karega
+      allResults.sort((a, b) => a.price - b.price);
+      
+      allResults.forEach((product) => {
+        const card = document.createElement("div");
+        card.className = "product-result-card";
+        card.innerHTML = `
+          <img class="product-result-img" src="${escapeHtml(safeUrl(product.image))}" alt="Product" loading="lazy">
+          <div class="product-result-info">
+            <img src="${escapeHtml(safeUrl(product.logo))}" alt="${escapeHtml(product.brand)}" style="height: 18px; width: auto; object-fit: contain; margin-bottom: 6px; border-radius: 4px;">
+            <h3 class="product-result-title">${escapeHtml(product.title)}</h3>
+            <p class="product-result-price">₹${product.price.toLocaleString("en-IN")}</p>
+          </div>
+          <div class="product-result-action">
+            <a href="${escapeHtml(safeUrl(product.link))}" target="_blank" rel="noopener" class="btn btn-buy">Buy Now</a>
+          </div>
+        `;
+        productResultsGrid.appendChild(card);
+      });
+    }
 
-    // 1. AMAZON SEARCH
-    if (amazonDoc) {
-      const amzItem = amazonDoc.querySelector('[data-component-type="s-search-result"]');
+    // Jab paancho sites check ho jayengi tab hi loader hategi
+    if (completedSites === totalSites) {
+      searchLoader.hidden = true;
+      if (allResults.length === 0) {
+        productResultsGrid.innerHTML = `
+          <div style="text-align:center; padding:30px 0; color:var(--muted);">
+            <p>No product matches found across these stores right now.</p>
+          </div>`;
+      }
+    }
+  };
+
+  // --- 1. AMAZON ---
+  const scrapeAmazon = async () => {
+    const doc = await fetchHtmlViaScraper(`https://www.amazon.in/s?k=${encodeURIComponent(query)}`);
+    if (doc) {
+      const amzItem = doc.querySelector('[data-component-type="s-search-result"]');
       if (amzItem) {
         const title = amzItem.querySelector("h2 a span")?.innerText;
         const priceElement = amzItem.querySelector(".a-price-whole");
         const link = amzItem.querySelector("h2 a")?.getAttribute("href");
         const img = amzItem.querySelector(".s-image")?.getAttribute("src");
-
         if (title && priceElement && link) {
-          // FIX: Strong Regex to extract only numbers
           const priceClean = parseInt(priceElement.innerText.replace(/[^\d]/g, ""), 10);
           if (!isNaN(priceClean) && priceClean > 0) {
             allResults.push({
-              brand: "Amazon",
-              title: title,
-              price: priceClean,
-              image: img || "logo_192x192.png",
-              logo: "hd-logos/amazon.png",
+              brand: "Amazon", title: title, price: priceClean,
+              image: img || "logo_192x192.png", logo: "hd-logos/amazon.png",
               link: link.startsWith("http") ? link : "https://www.amazon.in" + link
             });
           }
         }
       }
     }
+    completedSites++;
+    updateUI(); // Result milte hi dikha do
+  };
 
-    // 2. FLIPKART SEARCH
-    if (flipkartDoc) {
-      const fkItem = flipkartDoc.querySelector('a[target="_blank"][rel="noopener noreferrer"]') || flipkartDoc.querySelector('div.slAVV4 a');
+  // --- 2. FLIPKART ---
+  const scrapeFlipkart = async () => {
+    const doc = await fetchHtmlViaScraper(`https://www.flipkart.com/search?q=${encodeURIComponent(query)}`);
+    if (doc) {
+      const fkItem = doc.querySelector('a[target="_blank"][rel="noopener noreferrer"]') || doc.querySelector('div.slAVV4 a');
       if (fkItem) {
         const parentBlock = fkItem.parentElement || fkItem;
         const titleElement = parentBlock.querySelector('div.KzDlHZ') || parentBlock.querySelector('a.wjcEIp') || parentBlock.querySelector('a[title]');
         const priceElement = parentBlock.querySelector('div.Nx9bqj');
         const imgElement = parentBlock.querySelector('img.DByuf4') || parentBlock.querySelector('img');
-
         if (priceElement && fkItem.href) {
           const title = titleElement ? (titleElement.innerText || titleElement.title) : query;
           const priceClean = parseInt(priceElement.innerText.replace(/[^\d]/g, ""), 10);
           if (!isNaN(priceClean) && priceClean > 0) {
             let href = fkItem.getAttribute('href');
-            let fullLink = href.startsWith('http') ? href : "https://www.flipkart.com" + href;
-            
             allResults.push({
-              brand: "Flipkart",
-              title: title,
-              price: priceClean,
-              image: imgElement?.src || "logo_192x192.png",
-              logo: "hd-logos/flipkart.png",
-              link: fullLink
+              brand: "Flipkart", title: title, price: priceClean,
+              image: imgElement?.src || "logo_192x192.png", logo: "hd-logos/flipkart.png",
+              link: href.startsWith('http') ? href : "https://www.flipkart.com" + href
             });
           }
         }
       }
     }
+    completedSites++;
+    updateUI();
+  };
 
-    // 3. MYNTRA SEARCH
-    if (myntraDoc) {
-      const mItem = myntraDoc.querySelector('li.product-base');
+  // --- 3. MYNTRA ---
+  const scrapeMyntra = async () => {
+    const doc = await fetchHtmlViaScraper(`https://www.myntra.com/${encodeURIComponent(query)}`);
+    if (doc) {
+      const mItem = doc.querySelector('li.product-base');
       if (mItem) {
         const brandName = mItem.querySelector('.product-brand')?.innerText || "Myntra";
         const title = mItem.querySelector('.product-product')?.innerText || query;
         const priceElement = mItem.querySelector('.product-discountedPrice') || mItem.querySelector('.product-price');
         const img = mItem.querySelector('img')?.getAttribute('src');
         const link = mItem.querySelector('a')?.getAttribute('href');
-
         if (priceElement) {
           const priceClean = parseInt(priceElement.innerText.replace(/[^\d]/g, ""), 10);
           if (!isNaN(priceClean) && priceClean > 0) {
             allResults.push({
-              brand: "Myntra",
-              title: `${brandName} - ${title}`,
-              price: priceClean,
-              image: img || "logo_192x192.png",
-              logo: "hd-logos/myntra.png",
+              brand: "Myntra", title: `${brandName} - ${title}`, price: priceClean,
+              image: img || "logo_192x192.png", logo: "hd-logos/myntra.png",
               link: link ? (link.startsWith('http') ? link : "https://www.myntra.com/" + link) : "https://www.myntra.com"
             });
           }
         }
       }
     }
+    completedSites++;
+    updateUI();
+  };
 
-    // 4. NYKAA SEARCH
-    if (nykaaDoc) {
-      const nykItem = nykaaDoc.querySelector('.product-listing-item') || nykaaDoc.querySelector('.css-1rd3twv');
+  // --- 4. NYKAA ---
+  const scrapeNykaa = async () => {
+    const doc = await fetchHtmlViaScraper(`https://www.nykaa.com/search/result/?q=${encodeURIComponent(query)}`);
+    if (doc) {
+      const nykItem = doc.querySelector('.product-listing-item') || doc.querySelector('.css-1rd3twv');
       if (nykItem) {
         const title = nykItem.querySelector('.css-xrpj44') || nykItem.querySelector('.title') || query;
         const priceElement = nykItem.querySelector('.css-111z9ua') || nykItem.querySelector('.post-card__content-price');
         const img = nykItem.querySelector('img')?.getAttribute('src');
         const link = nykItem.querySelector('a')?.getAttribute('href');
-
         if (priceElement) {
           const priceClean = parseInt(priceElement.innerText.replace(/[^\d]/g, ""), 10);
           if (!isNaN(priceClean) && priceClean > 0) {
             allResults.push({
-              brand: "Nykaa",
-              title: title.innerText || title,
-              price: priceClean,
-              image: img || "logo_192x192.png",
-              logo: "hd-logos/nykaa.png",
+              brand: "Nykaa", title: title.innerText || title, price: priceClean,
+              image: img || "logo_192x192.png", logo: "hd-logos/nykaa.png",
               link: link ? (link.startsWith('http') ? link : "https://www.nykaa.com" + link) : "https://www.nykaa.com"
             });
           }
         }
       }
     }
+    completedSites++;
+    updateUI();
+  };
 
-    // 5. AJIO SEARCH
-    if (ajioDoc) {
-      const ajItem = ajioDoc.querySelector('.item') || ajioDoc.querySelector('.react-grid-item');
+  // --- 5. AJIO ---
+  const scrapeAjio = async () => {
+    const doc = await fetchHtmlViaScraper(`https://www.ajio.com/search/?text=${encodeURIComponent(query)}`);
+    if (doc) {
+      const ajItem = doc.querySelector('.item') || doc.querySelector('.react-grid-item');
       if (ajItem) {
         const brandName = ajItem.querySelector('.brand')?.innerText || "";
         const title = ajItem.querySelector('.nameCls')?.innerText || query;
         const priceElement = ajItem.querySelector('.price');
         const img = ajItem.querySelector('img')?.getAttribute('src');
         const link = ajItem.querySelector('a')?.getAttribute('href');
-
         if (priceElement) {
           const priceClean = parseInt(priceElement.innerText.replace(/[^\d]/g, ""), 10);
           if (!isNaN(priceClean) && priceClean > 0) {
             allResults.push({
-              brand: "AJIO",
-              title: `${brandName} ${title}`,
-              price: priceClean,
-              image: img || "logo_192x192.png",
-              logo: "hd-logos/ajio.png",
+              brand: "AJIO", title: `${brandName} ${title}`, price: priceClean,
+              image: img || "logo_192x192.png", logo: "hd-logos/ajio.png",
               link: link ? (link.startsWith('http') ? link : "https://www.ajio.com" + link) : "https://www.ajio.com"
             });
           }
         }
       }
     }
+    completedSites++;
+    updateUI();
+  };
 
-  } catch (err) {
-    console.error("Parallel Fetch Error:", err);
-  }
-
-  // Hide Loader
-  searchLoader.hidden = true;
-
-  if (allResults.length === 0) {
-    productResultsGrid.innerHTML = `
-      <div style="text-align:center; padding:30px 0; color:var(--muted);">
-        <p>No product matches found across these stores right now.</p>
-      </div>`;
-    return;
-  }
-
-  // SORT: Low to High Price
-  allResults.sort((a, b) => a.price - b.price);
-
-  allResults.forEach((product) => {
-    const card = document.createElement("div");
-    card.className = "product-result-card";
-    
-    card.innerHTML = `
-      <img class="product-result-img" src="${escapeHtml(safeUrl(product.image))}" alt="Product" loading="lazy">
-      <div class="product-result-info">
-        <img src="${escapeHtml(safeUrl(product.logo))}" alt="${escapeHtml(product.brand)}" style="height: 18px; width: auto; object-fit: contain; margin-bottom: 6px; border-radius: 4px;">
-        <h3 class="product-result-title">${escapeHtml(product.title)}</h3>
-        <p class="product-result-price">₹${product.price.toLocaleString("en-IN")}</p>
-      </div>
-      <div class="product-result-action">
-        <a href="${escapeHtml(safeUrl(product.link))}" target="_blank" rel="noopener" class="btn btn-buy">Buy Now</a>
-      </div>
-    `;
-    productResultsGrid.appendChild(card);
-  });
+  // Paancho sites ek sath chalengi, jiska result pehle aayega wo screen pe dikh jayega
+  scrapeAmazon();
+  scrapeFlipkart();
+  scrapeMyntra();
+  scrapeNykaa();
+  scrapeAjio();
 }
