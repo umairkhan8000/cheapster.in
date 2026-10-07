@@ -737,35 +737,6 @@ if (searchInput) {
   );
 }
 
-// ---------- Populate Forms ----------
-const brandSelect =
-  document.getElementById(
-    "brandSelect"
-  );
-
-if (brandSelect) {
-
-  stores.forEach(
-    (store) => {
-
-      const option =
-        document.createElement(
-          "option"
-        );
-
-      option.value =
-        store.name;
-
-      option.textContent =
-        store.name;
-
-      brandSelect.appendChild(
-        option
-      );
-    }
-  );
-}
-
 // ---------- Initialization ----------
 injectStylesAndNav();
 renderCategoryNav();
@@ -1798,7 +1769,13 @@ if (promoCarousel) {
 // PRODUCT SEARCH & 5-PLATFORM SCRAPER API INTEGRATION
 // =========================================================
 
-const SCRAPER_API_KEY = "3bdb797de7b416b7c0b3e07091fbcb5e";
+// Scraper key ab browser mein nahi hai. Apps Script proxy (search-proxy.gs) use hota hai.
+// Proxy deploy karke uska /exec URL yahan paste karo:
+const SEARCH_PROXY_URL = "PASTE_YOUR_PROXY_EXEC_URL_HERE";
+
+// Scraped text ko innerHTML mein daalne se pehle escape karna zaroori hai
+const escapeHtml = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const safeUrl = (u) => (/^https?:\/\//i.test(u) || u.startsWith("logo_") || u.startsWith("hd-logos/")) ? u : "#";
 const globalProductSearch = document.getElementById("globalProductSearch");
 const productSearchModal = document.getElementById("productSearchModal");
 const productResultsGrid = document.getElementById("productResultsGrid");
@@ -1817,6 +1794,10 @@ if (globalProductSearch) {
 }
 
 async function performProductSearch(query) {
+  if (!SEARCH_PROXY_URL || SEARCH_PROXY_URL.startsWith("PASTE_")) {
+    showToast("Search is not configured yet.", "⚠️");
+    return;
+  }
   openModal("productSearchModal");
   productResultsGrid.innerHTML = "";
   searchLoader.hidden = false;
@@ -1825,7 +1806,7 @@ async function performProductSearch(query) {
 
   const fetchHtmlViaScraper = async (url) => {
     try {
-      const apiUrl = `https://api.scraperapi.com?api_key=${SCRAPER_API_KEY}&url=${encodeURIComponent(url)}&country_code=in`;
+      const apiUrl = `${SEARCH_PROXY_URL}?url=${encodeURIComponent(url)}`;
       const response = await fetch(apiUrl);
       const htmlText = await response.text();
       const parser = new DOMParser();
@@ -1981,14 +1962,14 @@ async function performProductSearch(query) {
     card.className = "product-result-card";
     
     card.innerHTML = `
-      <img class="product-result-img" src="${product.image}" alt="Product" loading="lazy">
+      <img class="product-result-img" src="${escapeHtml(safeUrl(product.image))}" alt="Product" loading="lazy">
       <div class="product-result-info">
-        <img src="${product.logo}" alt="${product.brand}" style="height: 18px; width: auto; object-fit: contain; margin-bottom: 6px; border-radius: 4px;">
-        <h3 class="product-result-title">${product.title}</h3>
+        <img src="${escapeHtml(safeUrl(product.logo))}" alt="${escapeHtml(product.brand)}" style="height: 18px; width: auto; object-fit: contain; margin-bottom: 6px; border-radius: 4px;">
+        <h3 class="product-result-title">${escapeHtml(product.title)}</h3>
         <p class="product-result-price">₹${product.price.toLocaleString("en-IN")}</p>
       </div>
       <div class="product-result-action">
-        <a href="${product.link}" target="_blank" class="btn btn-buy">Buy Now</a>
+        <a href="${escapeHtml(safeUrl(product.link))}" target="_blank" rel="noopener" class="btn btn-buy">Buy Now</a>
       </div>
     `;
     productResultsGrid.appendChild(card);
