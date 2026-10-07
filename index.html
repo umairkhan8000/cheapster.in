@@ -198,7 +198,9 @@
           <span class="section-label">THE DIRECTORY</span>
           <h2>Top Deals & Platforms</h2>
         </div>
-        <div class="result-pill" id="resultPill">0 brands</div>
+        <div class="product-search-wrapper">
+          <input id="globalProductSearch" class="compact-product-search" type="search" autocomplete="off" placeholder="Search product or paste link...">
+        </div>
       </div>
 
       <div class="store-grid" id="storeGrid"></div>
@@ -386,6 +388,24 @@
           Send Message
         </button>
       </form>
+    </div>
+  </div>
+
+  <!-- PRODUCT SEARCH RESULTS MODAL -->
+  <div class="modal-overlay" id="productSearchModal" hidden>
+    <div class="modal premium-modal scrollable-modal" style="max-width: 650px;" role="dialog" aria-modal="true">
+      <button class="modal-close" type="button" data-close-modal="productSearchModal" aria-label="Close">×</button>
+      <span class="modal-label">PRICE COMPARISON</span>
+      <h2>Best Deals Across Brands</h2>
+      
+      <div id="searchLoader" style="text-align: center; padding: 40px 0;" hidden>
+        <div class="pulse-dot" style="display:inline-block; margin-bottom: 10px; width: 12px; height: 12px;"></div>
+        <p style="color: var(--champagne); font-size: 14px; font-weight: 600;">Searching best prices...</p>
+      </div>
+
+      <div id="productResultsGrid" class="product-results-grid">
+        <!-- Results yahan JS ke through aayenge -->
+      </div>
     </div>
   </div>
 
