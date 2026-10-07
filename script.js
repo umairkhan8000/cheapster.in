@@ -1855,6 +1855,7 @@ async function performProductSearch(query) {
           title: title,
           price: priceClean,
           image: img || "logo_192x192.png",
+          logo: "hd-logos/amazon.png", // Yahan hd-logos folder se original logo link kiya hai
           link: "https://www.amazon.in" + link
         });
       }
@@ -1884,6 +1885,7 @@ async function performProductSearch(query) {
           title: title,
           price: priceClean,
           image: imgElement?.src || "logo_192x192.png",
+          logo: "hd-logos/flipkart.png", // Yahan hd-logos folder se original logo link kiya hai
           link: fullLink
         });
       }
@@ -1908,11 +1910,11 @@ async function performProductSearch(query) {
     const card = document.createElement("div");
     card.className = "product-result-card";
     
-    // Yahan Buy link normal href se jaega taaki Cuelinks use automatic track kare
+    // UI Layout: Product Image, Platform Logo (hd-logos), Title, Price, and Buy Now Button
     card.innerHTML = `
-      <img class="product-result-img" src="${product.image}" alt="${product.brand}" loading="lazy">
+      <img class="product-result-img" src="${product.image}" alt="Product" loading="lazy">
       <div class="product-result-info">
-        <div class="product-result-brand">${product.brand}</div>
+        <img src="${product.logo}" alt="${product.brand}" style="height: 18px; width: auto; margin-bottom: 6px; border-radius: 4px;">
         <h3 class="product-result-title">${product.title}</h3>
         <p class="product-result-price">₹${product.price.toLocaleString("en-IN")}</p>
       </div>
