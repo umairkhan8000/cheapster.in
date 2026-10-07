@@ -1804,11 +1804,15 @@ async function performProductSearch(query) {
 
   let allResults = [];
 
-  const fetchHtmlViaScraper = async (url) => {
+const fetchHtmlViaScraper = async (url) => {
     try {
       const apiUrl = `${SEARCH_PROXY_URL}?url=${encodeURIComponent(url)}`;
       const response = await fetch(apiUrl);
       const htmlText = await response.text();
+      
+      // YEH NAYI LINE ASLI ERROR BATA DEGI
+      console.log(`Scraping Response for ${url}:`, htmlText.substring(0, 300));
+      
       const parser = new DOMParser();
       return parser.parseFromString(htmlText, "text/html");
     } catch (error) {
