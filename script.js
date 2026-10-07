@@ -1793,3 +1793,133 @@ if (promoCarousel) {
     promoCarousel.scrollLeft = (promoCarousel.scrollWidth - promoCarousel.clientWidth) / 2;
   }, 150);
 }
+
+// =========================================================
+// PRODUCT SEARCH & SCRAPER API INTEGRATION
+// =========================================================
+
+const SCRAPER_API_KEY = "3bdb797de7b416b7c0b3e07091fbcb5e";
+const globalProductSearch = document.getElementById("globalProductSearch");
+const productSearchModal = document.getElementById("productSearchModal");
+const productResultsGrid = document.getElementById("productResultsGrid");
+const searchLoader = document.getElementById("searchLoader");
+
+if (globalProductSearch) {
+  globalProductSearch.addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+      const query = e.target.value.trim();
+      if (query.length > 2) {
+        haptic();
+        performProductSearch(query);
+      }
+    }
+  });
+}
+
+async function performProductSearch(query) {
+  openModal("productSearchModal");
+  productResultsGrid.innerHTML = "";
+  searchLoader.hidden = false;
+
+  let allResults = [];
+
+  const fetchHtmlViaScraper = async (url) => {
+    try {
+      const apiUrl = `https://api.scraperapi.com?api_key=${SCRAPER_API_KEY}&url=${encodeURIComponent(url)}&country_code=in`;
+      const response = await fetch(apiUrl);
+      const htmlText = await response.text();
+      const parser = new DOMParser();
+      return parser.parseFromString(htmlText, "text/html");
+    } catch (error) {
+      console.error("Scraping failed for:", url, error);
+      return null;
+    }
+  };
+
+  // 1. Fetching from Amazon
+  const amazonSearchUrl = `https://www.amazon.in/s?k=${encodeURIComponent(query)}`;
+  const amazonDoc = await fetchHtmlViaScraper(amazonSearchUrl);
+  
+  if (amazonDoc) {
+    const amzItem = amazonDoc.querySelector('[data-component-type="s-search-result"]');
+    if (amzItem) {
+      const title = amzItem.querySelector("h2 a span")?.innerText;
+      const priceElement = amzItem.querySelector(".a-price-whole");
+      const link = amzItem.querySelector("h2 a")?.getAttribute("href");
+      const img = amzItem.querySelector(".s-image")?.getAttribute("src");
+
+      if (title && priceElement && link) {
+        const priceClean = parseInt(priceElement.innerText.replace(/,/g, ""));
+        allResults.push({
+          brand: "Amazon",
+          title: title,
+          price: priceClean,
+          image: img || "logo_192x192.png",
+          link: "https://www.amazon.in" + link
+        });
+      }
+    }
+  }
+
+  // 2. Fetching from Flipkart
+  const flipkartSearchUrl = `https://www.flipkart.com/search?q=${encodeURIComponent(query)}`;
+  const flipkartDoc = await fetchHtmlViaScraper(flipkartSearchUrl);
+  
+  if (flipkartDoc) {
+    const fkItem = flipkartDoc.querySelector('a[target="_blank"][rel="noopener noreferrer"]');
+    if (fkItem) {
+      const parentBlock = fkItem.parentElement;
+      const titleElement = fkItem.querySelector('div.KzDlHZ') || fkItem.querySelector('a.wjcEIp') || parentBlock.querySelector('a[title]');
+      const priceElement = parentBlock.querySelector('div.Nx9bqj');
+      const imgElement = parentBlock.querySelector('img.DByuf4') || parentBlock.querySelector('img');
+
+      if (priceElement && fkItem.href) {
+        const title = titleElement ? (titleElement.innerText || titleElement.title) : query;
+        const priceClean = parseInt(priceElement.innerText.replace(/₹|,/g, ""));
+        let href = fkItem.getAttribute('href');
+        let fullLink = href.startsWith('http') ? href : "https://www.flipkart.com" + href;
+        
+        allResults.push({
+          brand: "Flipkart",
+          title: title,
+          price: priceClean,
+          image: imgElement?.src || "logo_192x192.png",
+          link: fullLink
+        });
+      }
+    }
+  }
+
+  // Hide Loader and Display Sorted Results
+  searchLoader.hidden = true;
+
+  if (allResults.length === 0) {
+    productResultsGrid.innerHTML = `
+      <div style="text-align:center; padding:30px 0; color:var(--muted);">
+        <p>No exact product matches found right now.</p>
+      </div>`;
+    return;
+  }
+
+  // SORT: Low to High Price
+  allResults.sort((a, b) => a.price - b.price);
+
+  allResults.forEach((product) => {
+    const card = document.createElement("div");
+    card.className = "product-result-card";
+    
+    // Yahan Buy link normal href se jaega taaki Cuelinks use automatic track kare
+    card.innerHTML = `
+      <img class="product-result-img" src="${product.image}" alt="${product.brand}" loading="lazy">
+      <div class="product-result-info">
+        <div class="product-result-brand">${product.brand}</div>
+        <h3 class="product-result-title">${product.title}</h3>
+        <p class="product-result-price">₹${product.price.toLocaleString("en-IN")}</p>
+      </div>
+      <div class="product-result-action">
+        <a href="${product.link}" target="_blank" class="btn btn-buy">Buy Now</a>
+      </div>
+    `;
+    productResultsGrid.appendChild(card);
+  });
+}
