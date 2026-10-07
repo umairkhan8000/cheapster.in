@@ -1771,7 +1771,7 @@ if (promoCarousel) {
 
 // Scraper key ab browser mein nahi hai. Apps Script proxy (search-proxy.gs) use hota hai.
 // Proxy deploy karke uska /exec URL yahan paste karo:
-const SEARCH_PROXY_URL = "PASTE_YOUR_PROXY_EXEC_URL_HERE";
+const SEARCH_PROXY_URL = "https://script.google.com/macros/s/AKfycby49a5rlBcPnXGDw-R0f07uounR_glBHc6QsspCkYnDSRA0SSa7y4kPGvR7_hSpKVUQ/exec";
 
 // Scraped text ko innerHTML mein daalne se pehle escape karna zaroori hai
 const escapeHtml = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
