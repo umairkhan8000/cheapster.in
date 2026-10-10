@@ -286,14 +286,14 @@ function buildCard(store, index) {
   card.target =
     "_blank";
 
-  // CUELINKS BYPASS LOGIC START
-  if (url.includes("amazon.in")) {
+  // CUELINKS OFFICIAL EXCLUSION LOGIC
+  // 'noskim' class Cuelinks ko batati hai ki is link ko track na kare
+  if (url.includes("amazon.in") || url.includes("amzn.to")) {
       card.rel = "noopener noskim";
       card.classList.add("noskim");
   } else {
       card.rel = "noopener";
   }
-  // CUELINKS BYPASS LOGIC END
 
   card.setAttribute(
     "aria-label",
@@ -455,11 +455,8 @@ function buildCard(store, index) {
 
 card.addEventListener(
     "click",
-    (e) => {
-      // Cuelinks Ninja Bypass
-      if (url.includes("amazon.in")) {
-        e.stopPropagation();
-      }
+    () => {
+      // Bas haptic feedback chalega, Cuelinks automatically isko ignore kar dega (noskim ki wajah se)
       haptic();
     }
   );
@@ -1394,38 +1391,35 @@ if (rewardForm) {
       `Email: ${currentUser.email || ""}`
     );
 
-    // 2. PEHLE TURANT WHATSAPP KHOLNA (Bina kisi wait ke)
+    // 2. BACKGROUND FETCH FIRE KARNA (Bina await, keepalive: true ke sath)
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbziQvJq8kqk-CAHRekAHjkSVEJkQmbBp84girc4vjfTPbY20VJl2hz_I-OC-bWBcjQf/exec"; 
+    
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors", 
+      keepalive: true, // <-- MAIN FIX: Ye ensure karega ki app switch hone par request fail na ho
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        fullName: fullName,
+        whatsapp: whatsapp,
+        brand: brand,
+        email: currentUser.email || "",
+        uid: currentUser.uid || "",
+        submittedAt: new Date().toISOString()
+      })
+    }).catch(err => console.log("Background Sheet Save Error:", err));
+
+    // 3. TURANT WHATSAPP KHOLNA (Bina kisi setTimeout ke)
     openStoreLink({
       link: `https://wa.me/${GIVEAWAY_WHATSAPP_NUMBER}?text=${text}`
     });
 
-    // 3. WHATSAPP KHULNE KE JUST BAAD BACKGROUND MEIN GOOGLE SHEET BHEJNA
-    setTimeout(() => {
-      const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbziQvJq8kqk-CAHRekAHjkSVEJkQmbBp84girc4vjfTPbY20VJl2hz_I-OC-bWBcjQf/exec"; 
-      
-      fetch(GOOGLE_SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors", 
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
-          fullName: fullName,
-          whatsapp: whatsapp,
-          brand: brand,
-          email: currentUser.email || "",
-          uid: currentUser.uid || "",
-          submittedAt: new Date().toISOString()
-        })
-      }).catch(err => console.log("Background Sheet Save Error:", err));
-    }, 300); // 300 milliseconds ka chota sa delay taaki WhatsApp pehle khul jaye
-
     // 4. Success Screen & Reset
-    setTimeout(() => {
-      document.getElementById("rewardForm").hidden = true;
-      document.getElementById("successView").hidden = false;
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Submit Entry";
-      haptic();
-    }, 600);
+    document.getElementById("rewardForm").hidden = true;
+    document.getElementById("successView").hidden = false;
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit Entry";
+    haptic();
   });
 }
 
