@@ -247,7 +247,7 @@ function buildCard(store, index) {
   card.href = url;
   card.target = "_blank";
 
-  // CUELINKS OFFICIAL EXCLUSION LOGIC for grid only (not AI modal)
+  // CUELINKS EXCLUSION LOGIC for grid only (not AI modal)
   if (url.includes("amazon.in") || url.includes("amzn.to")) {
       card.rel = "noopener noskim";
       card.classList.add("noskim");
