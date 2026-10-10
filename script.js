@@ -1,4 +1,4 @@
-// build: 2026-10-11-AI-Coupons-Final-Script
+// build: 2026-10-11-AI-Coupons-Final-Script-V3
 // =========================================================
 // CHEapSTER.IN — PREMIUM BRAND DIRECTORY 
 // =========================================================
@@ -749,10 +749,10 @@ if (promoCarousel) {
 
 
 // =========================================================
-// GEMINI 3.8 FLASH - SECURE AI COUPON HUNTER (Backend Call)
+// GEMINI AI COUPON HUNTER (Upgraded with Live Search & Smart Errors)
 // =========================================================
 
-const SYSTEM_PROMPT = `You are my LIVE INDIAN COUPON CODE HUNTER. Whenever I send a product photo, product name or product link, identify its category and find coupon codes and discounts that I can try — only from the brands/sites listed below. 
+const SYSTEM_PROMPT = `You are my LIVE INDIAN COUPON CODE HUNTER. Whenever I send a product photo, product name or product link, identify its category and perform a live web search to find active coupon codes and discounts that I can try — only from the brands/sites listed below. 
 
 ALLOWED BRANDS / SITES (STRICT FILTER) Only use these:
 Marketplace & Fashion: Amazon, Flipkart, Myntra, Nykaa, AJIO, Tata CLiQ, Croma, Tira, Shopsy, JioMart, Meesho, Snitch, Urbanic, Beyoung, Savana, Bewakoof, The Souled Store, XYXX, Cahoot, Bonkers Corner, Levi's, Shoppers Stop, Crocs
@@ -767,12 +767,11 @@ Digital: Hostinger, GoDaddy, Microsoft, upGrad, Physics Wallah
 Kids: FirstCry, Hopscotch, Hamleys, Smartivity, LEGO
 
 RULES
-1. Search only on the brands/sites listed above.
+1. Search only on the brands/sites listed above using your live search tool.
 2. If a brand is not in the list → completely ignore it.
-3. Main focus = actual coupon codes. Prefer codes that are currently live.
+3. If you absolutely cannot find specific codes, provide at least 3 general sitewide deals (like Flat 10% off, Free Shipping, Bank Offers) for top allowed brands (Amazon, Myntra, etc) relevant to the product.
 4. Prioritize: % off, Instant discount, Cashback, Flat ₹XX off.
-5. Include product-specific + category coupons from allowed sites.
-6. Never invent any code.
+5. Do NOT use any Markdown formatting like bold (**), italics (*), or code blocks (\`\`\`). Keep plain text.
 
 EXACT OUTPUT FORMAT Only list in this style (one per line):
 Brand - CODE Description
@@ -889,13 +888,14 @@ async function triggerSecureAIHunt() {
       if (imgPart) parts.push(imgPart);
     }
 
+    // NAYA PAYLOAD WITH LIVE SEARCH TOOL ENABLED
     const geminiPayload = {
       systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
       contents: [{ parts: parts }],
+      tools: [{ googleSearch: {} }], 
       generationConfig: { temperature: 0.2 }
     };
 
-    // Sending to Apps Script using simple text/plain to avoid CORS
     const response = await fetch(GOOGLE_SCRIPT_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain" },
@@ -908,8 +908,17 @@ async function triggerSecureAIHunt() {
     if (!response.ok) throw new Error(`Backend Error: ${response.status}`);
 
     const data = await response.json();
-    const rawOutput = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    
+    // Exact Error Handling Display
+    if (data.error) {
+       console.error("Gemini API Error:", data.error);
+       if (container) {
+         container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--champagne-bright); background:rgba(205,161,92,0.1); border-radius:12px; font-size:13px;"><p>⚠️ API Error: ${data.error.message || "Invalid Model/Key configuration."}</p></div>`;
+       }
+       return;
+    }
 
+    const rawOutput = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
     renderAICards(rawOutput);
 
     // Free memory
@@ -920,7 +929,7 @@ async function triggerSecureAIHunt() {
   } catch (err) {
     console.error("AI Hunter Error:", err);
     if (container) {
-      container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--muted);"><p>⚠️ AI search request failed. Please check network connection.</p></div>`;
+      container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--muted);"><p>⚠️ AI search request failed. Check network or API limits.</p></div>`;
     }
   } finally {
     if (loader) loader.hidden = true;
@@ -928,12 +937,14 @@ async function triggerSecureAIHunt() {
   }
 }
 
-// --- Render AI Results (100% Cuelinks Enabled) ---
+// --- Render AI Results ---
 function renderAICards(rawText) {
   const container = document.getElementById("couponCardsList");
   if (!container) return;
 
-  const lines = rawText.split("\n").map(l => l.trim()).filter(l => l.length > 0);
+  // Clean Markdown formatting aur extra spaces
+  const cleanText = rawText.replace(/\*/g, '').replace(/`/g, '');
+  const lines = cleanText.split("\n").map(l => l.trim()).filter(l => l.length > 0);
 
   if (lines.length === 0) {
     container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--muted);"><p>No live promo codes found right now. Check back soon!</p></div>`;
@@ -943,18 +954,20 @@ function renderAICards(rawText) {
   container.innerHTML = "";
 
   lines.forEach((line) => {
-    const match = line.match(/^([^-]+)\s*-\s*(\S+)\s+(.+)$/);
+    // Agar Gemini galti se bina format bhej de, toh strict filtering nikal di hai
+    const match = line.match(/^([^-:]+)[-:]\s*(\S+)\s+(.+)$/);
     let brandName = "Promo Deal", code = "CLICK2APPLY", desc = line;
 
     if (match) {
       brandName = match[1].trim();
       code = match[2].trim();
       desc = match[3].trim();
+    } else {
+      // Agar dash (-) na mile toh fallback format
+      desc = line;
     }
 
     const matchedStore = stores.find(s => s.name.toLowerCase().includes(brandName.toLowerCase()));
-    
-    // AI CARDS HAVE NO 'NOSKIM' - Cuelinks intercepts it perfectly
     const storeUrl = matchedStore ? matchedStore.link : `https://www.google.com/search?q=${encodeURIComponent(brandName+ ' store')}`;
     const logoSrc = matchedStore && matchedStore.logo ? matchedStore.logo : null;
 
