@@ -26,7 +26,6 @@
   --shadow-lift: 0 20px 45px rgba(0, 0, 0, 0.55);
 }
 
-/* --- PREMIUM NATIVE APP TWEAKS ADDED HERE --- */
 *, *::before, *::after { 
   box-sizing: border-box; 
   -webkit-tap-highlight-color: transparent; 
@@ -137,23 +136,30 @@ a { color: inherit; text-decoration: none; }
 .festive-sparkle { font-size: 14px; }
 .hero-copy { max-width: 560px; margin: 0 auto 30px; color: var(--muted); font-size: 14px; line-height: 1.6; }
 
-.trust-strip { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin: 22px auto 26px; max-width: 780px; padding: 12px 22px; background: rgba(205, 161, 92, 0.08); border: 1px solid var(--line-gold); border-radius: 20px; }
+/* Trust Strip (Original Placement & Look) */
+.trust-strip { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin: 0 auto 26px; max-width: 780px; padding: 12px 22px; background: rgba(205, 161, 92, 0.08); border: 1px solid var(--line-gold); border-radius: 20px; }
 .trust-item { font-size: 12px; font-weight: 600; color: var(--champagne-bright); white-space: nowrap; }
 .trust-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--line-gold); flex-shrink: 0; }
 
-/* AI Coupon Search Bar */
-.ai-search-shell { display: flex; align-items: center; position: relative; background: var(--panel-solid); border: 1px solid var(--line); border-radius: 100px; padding: 5px 8px 5px 50px; box-shadow: var(--shadow-soft); transition: border-color .2s ease, box-shadow .2s ease; }
-.ai-search-shell:focus-within { border-color: var(--champagne); box-shadow: 0 0 0 3px rgba(205, 161, 92, 0.2), var(--shadow-soft); }
-.ai-search-shell .search-input { border: none; background: transparent; box-shadow: none; padding: 0 10px; height: 48px; flex: 1; color: var(--ink); font-size: 14px;}
+/* AI Coupon Search Bar (Matching Original Sleek Look) */
+.ai-search-shell { display: flex; align-items: center; position: relative; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--line); border-radius: 100px; padding: 5px 8px 5px 45px; margin-bottom: 25px; transition: border-color .2s ease, box-shadow .2s ease; }
+.ai-search-shell:focus-within { border-color: var(--champagne); box-shadow: 0 0 0 3px rgba(205, 161, 92, 0.15); background: rgba(255, 255, 255, 0.05); }
+.ai-search-shell .search-input { border: none; background: transparent; box-shadow: none; padding: 0 10px; height: 46px; flex: 1; color: var(--ink); font-size: 14px; }
+.ai-search-shell .search-input::placeholder { color: var(--faint); font-weight: 500; }
 .ai-search-shell .search-input:focus { box-shadow: none; outline: none; }
-.ai-search-shell .search-leading { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 20px; color: var(--muted); pointer-events: none;}
-.ai-search-shell .search-leading svg { fill: none; stroke: currentColor; stroke-width: 2; }
+.ai-search-shell .search-leading { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; display: flex; align-items: center; }
+
 .search-actions-group { display: flex; align-items: center; gap: 8px; }
 .upload-img-label { cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, 0.05); color: var(--champagne-bright); border: 1px solid var(--line); transition: all 0.2s ease; }
 .upload-img-label:hover { background: rgba(205, 161, 92, 0.15); border-color: var(--champagne); }
 .btn-hunt-coupons { min-height: 40px; padding: 0 18px; font-size: 13px; white-space: nowrap; border-radius: 100px;}
 .img-preview-badge { display: flex; align-items: center; gap: 6px; background: rgba(91, 158, 234, 0.15); border: 1px solid rgba(91, 158, 234, 0.35); padding: 4px 10px; border-radius: 50px; font-size: 11px; color: var(--sapphire-glow); margin-right: 6px; }
 .img-preview-badge button { background: none; border: none; color: #fff; font-size: 14px; line-height: 1; padding: 0; cursor: pointer; }
+
+/* Restored Meta Line Styling */
+.hero-meta { display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--muted); font-size: 12px; }
+.hero-meta strong { color: var(--platinum); font-weight: 700; }
+.meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--line-gold); }
 
 /* Directory Grid */
 .directory-section { width: min(1220px, calc(100% - 34px)); margin: 0 auto; padding-bottom: 80px; }
@@ -163,61 +169,15 @@ a { color: inherit; text-decoration: none; }
 .store-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
 
 /* Sleek Brand Filter Search */
-.brand-filter-shell {
-  display: flex;
-  align-items: center;
-  background: var(--panel-solid);
-  border: 1px solid var(--line);
-  border-radius: 100px;
-  padding: 0 14px;
-  height: 34px; 
-  width: 240px; 
-  max-width: 100%;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-.brand-filter-shell:focus-within {
-  border-color: var(--champagne);
-  box-shadow: 0 0 0 2px rgba(205, 161, 92, 0.15);
-}
-.brand-filter-shell svg {
-  color: var(--muted);
-  margin-right: 8px;
-  flex-shrink: 0;
-}
-.brand-filter-shell input {
-  border: none;
-  background: transparent;
-  color: var(--ink);
-  font-size: 12px;
-  width: 100%;
-  outline: none;
-}
-.brand-filter-shell input::placeholder {
-  color: var(--faint);
-}
+.brand-filter-shell { display: flex; align-items: center; background: var(--panel-solid); border: 1px solid var(--line); border-radius: 100px; padding: 0 14px; height: 34px; width: 240px; max-width: 100%; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+.brand-filter-shell:focus-within { border-color: var(--champagne); box-shadow: 0 0 0 2px rgba(205, 161, 92, 0.15); }
+.brand-filter-shell svg { color: var(--muted); margin-right: 8px; flex-shrink: 0; }
+.brand-filter-shell input { border: none; background: transparent; color: var(--ink); font-size: 12px; width: 100%; outline: none; }
+.brand-filter-shell input::placeholder { color: var(--faint); }
 
 /* Store Cards */
-.store-card {
-  background: var(--panel-solid);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-card);
-  padding: 16px 12px;
-  text-align: center;
-  box-shadow: var(--shadow-soft);
-  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease, background-color .22s ease;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-  contain: content;
-}
-.store-card::before {
-  content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 100%;
-  background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(205, 161, 92, 0.12), transparent 40%);
-  z-index: 0; pointer-events: none; opacity: 0; transition: opacity 0.4s ease;
-}
+.store-card { background: var(--panel-solid); border: 1px solid var(--line); border-radius: var(--radius-card); padding: 16px 12px; text-align: center; box-shadow: var(--shadow-soft); transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease, background-color .22s ease; cursor: pointer; display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden; contain: content; }
+.store-card::before { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(205, 161, 92, 0.12), transparent 40%); z-index: 0; pointer-events: none; opacity: 0; transition: opacity 0.4s ease; }
 .store-card:hover::before { opacity: 1; }
 .store-card:hover { transform: translateY(-5px); border-color: var(--line-gold); background: var(--panel-solid-hover); box-shadow: 0 16px 34px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(91, 158, 234, 0.15); }
 .store-card > * { position: relative; z-index: 1; } 
@@ -319,8 +279,8 @@ a { color: inherit; text-decoration: none; }
 
 @media (max-width: 600px) {
   .ai-search-shell { flex-wrap: wrap; border-radius: 16px; padding: 10px 14px; }
-  .ai-search-shell .search-input { width: 100%; margin-bottom: 10px; height: 40px; padding-left: 32px; }
-  .ai-search-shell .search-leading { top: 22px; left: 14px; }
+  .ai-search-shell .search-input { width: 100%; margin-bottom: 10px; height: 40px; padding-left: 28px; }
+  .ai-search-shell .search-leading { top: 20px; left: 14px; }
   .search-actions-group { width: 100%; justify-content: space-between; }
   .btn-hunt-coupons { flex: 1; justify-content: center;}
   
