@@ -1,4 +1,4 @@
-<!-- build: 2026-10-11-AI-Coupons-Final -->
+<!-- build: 2026-10-11-AI-Coupons-Final-V2 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -149,39 +149,7 @@
           Shop your favorite fashion, quick-commerce, and tech brands. Participate in exclusive rewards backed by a premium directory.
         </p>
 
-        <!-- HERO AI SEARCH BAR (UPGRADED) -->
-        <div class="search-shell ai-search-shell" style="max-width: 680px; margin: 0 auto;">
-          <span class="search-leading" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <circle cx="10.8" cy="10.8" r="6.8"></circle>
-              <path d="M16 16L21 21"></path>
-            </svg>
-          </span>
-
-          <input id="searchInput" class="search-input" type="text" autocomplete="off" placeholder="Type product name/category or upload image for coupon codes" aria-label="Search product coupons">
-
-          <div id="imagePreviewBadge" class="img-preview-badge" hidden>
-            <span class="preview-text">📷</span>
-            <button type="button" id="removeImgBtn" aria-label="Remove image">×</button>
-          </div>
-
-          <div class="search-actions-group">
-            <label for="productImageInput" class="upload-img-label" title="Upload Product Image">
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="18" height="18" rx="4" ry="4"></rect>
-                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                <polyline points="21 15 16 10 5 21"></polyline>
-              </svg>
-            </label>
-            <input type="file" id="productImageInput" accept="image/*" style="display: none;">
-
-            <button type="button" id="searchCouponBtn" class="btn btn-gold btn-hunt-coupons">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#14100a" stroke-width="2" style="margin-right: 4px;"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="M16 16L21 21"></path></svg>
-              <span>Search for coupons</span>
-            </button>
-          </div>
-        </div>
-
+        <!-- TRUST STRIP (Restored to original placement) -->
         <div class="trust-strip">
           <span class="trust-item">🔒 100% Free — No Purchase Necessary</span>
           <span class="trust-dot"></span>
@@ -191,6 +159,47 @@
           <span class="trust-dot"></span>
           <span class="trust-item">🔐 Secure Google Sign-in</span>
         </div>
+
+        <!-- AI SEARCH BAR (Professional text & Sleek original layout) -->
+        <div class="search-shell ai-search-shell" style="max-width: 650px; margin: 0 auto;">
+          <span class="search-leading" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2">
+              <circle cx="10.8" cy="10.8" r="6.8"></circle>
+              <path d="M16 16L21 21"></path>
+            </svg>
+          </span>
+
+          <input id="searchInput" class="search-input" type="text" autocomplete="off" placeholder="Search brands, products, or upload image..." aria-label="Search product coupons">
+
+          <div id="imagePreviewBadge" class="img-preview-badge" hidden>
+            <span class="preview-text">📷</span>
+            <button type="button" id="removeImgBtn" aria-label="Remove image">×</button>
+          </div>
+
+          <div class="search-actions-group">
+            <label for="productImageInput" class="upload-img-label" title="Upload Product Image">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="4" ry="4"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+              </svg>
+            </label>
+            <input type="file" id="productImageInput" accept="image/*" style="display: none;">
+
+            <button type="button" id="searchCouponBtn" class="btn btn-gold btn-hunt-coupons">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#14100a" stroke-width="2" style="margin-right: 4px;"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="M16 16L21 21"></path></svg>
+              <span>Find Deals</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- RESTORED META TEXT (Exactly as it was originally) -->
+        <div class="hero-meta">
+          <span><strong id="heroStoreCount">0</strong> trending brands</span>
+          <span class="meta-dot"></span>
+          <span>One secure portal</span>
+        </div>
+
       </div>
     </section>
 
@@ -203,7 +212,7 @@
           <h2>Top Deals & Platforms</h2>
         </div>
         
-        <!-- NEW SLEEK BRAND SEARCH BAR (Replaced the 107 brands pill) -->
+        <!-- SLEEK BRAND FILTER BAR -->
         <div class="brand-filter-shell">
           <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2">
             <circle cx="10.8" cy="10.8" r="6.8"></circle>
