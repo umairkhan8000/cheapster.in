@@ -1,4 +1,4 @@
-// build: 2026-10-11-AI-Coupons-Final
+// build: 2026-10-11-AI-Coupons-Final-Script
 // =========================================================
 // CHEapSTER.IN — PREMIUM BRAND DIRECTORY 
 // =========================================================
@@ -346,11 +346,11 @@ function renderUI() {
 
   let filtered = stores.filter((store) => {
         const matchesCat = currentCategory === "All" || store.category === currentCategory;
-        // Search filter logic removed for main grid as user requested search bar only for AI now
-        return matchesCat;
+        const matchesSearch = store.name.toLowerCase().includes(searchQuery) || store.description.toLowerCase().includes(searchQuery);
+        return matchesCat && matchesSearch;
   });
 
-  if (currentCategory === "All") {
+  if (currentCategory === "All" && searchQuery === "") {
     const mega = filtered.filter(s => s.category === "Mega Brands");
     const others = shuffleArray(filtered.filter(s => s.category !== "Mega Brands"));
     filtered = [...mega, ...others];
@@ -367,6 +367,9 @@ function renderUI() {
 
   const heroStoreCount = document.getElementById("heroStoreCount");
   if (heroStoreCount) heroStoreCount.textContent = stores.length;
+
+  const emptyState = document.getElementById("emptyState");
+  if (emptyState) emptyState.hidden = filtered.length !== 0;
 }
 
 function renderCategoryNav() {
@@ -388,6 +391,16 @@ function renderCategoryNav() {
       });
       navScroll.appendChild(pill);
   });
+}
+
+// ---------- Brand Filter Logic ----------
+const brandSearchInput = document.getElementById("brandSearchInput");
+
+if (brandSearchInput) {
+  brandSearchInput.addEventListener("input", debounce((e) => {
+    searchQuery = e.target.value.toLowerCase().trim();
+    renderUI();
+  }));
 }
 
 // ---------- Initialization ----------
@@ -562,7 +575,6 @@ if (authBtn && window.auth) {
 }
 
 // ---------- GOOGLE APPS SCRIPT MASTER URL ----------
-// Yahi URL form submit aur AI fetch dono ke liye use hoga
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbziQvJq8kqk-CAHRekAHjkSVEJkQmbBp84girc4vjfTPbY20VJl2hz_I-OC-bWBcjQf/exec"; 
 
 // ---------- Reward Form ----------
@@ -588,7 +600,6 @@ if (rewardForm) {
       `🏆 Cheapster Giveaway Entry\n\nName: ${fullName}\nWhatsApp: ${whatsapp}\nBrand: ${brand}\nEmail: ${currentUser.email || ""}`
     );
 
-    // Form data save to backend
     fetch(GOOGLE_SCRIPT_URL, {
       method: "POST",
       mode: "no-cors", 
@@ -790,7 +801,7 @@ const loadingNotes = [
   "Almost there! Sorting the best deals right now..."
 ];
 
-// --- 1. Image Upload Handler ---
+// --- Image Upload Handler ---
 if (productImageInput) {
   productImageInput.addEventListener("change", (e) => {
     const file = e.target.files[0];
@@ -807,7 +818,7 @@ if (productImageInput) {
   });
 }
 
-// --- 2. Remove Image ---
+// --- Remove Image ---
 if (removeImgBtn) {
   removeImgBtn.addEventListener("click", () => {
     selectedProductBase64 = null;
@@ -817,7 +828,7 @@ if (removeImgBtn) {
   });
 }
 
-// --- 3. Enter Key & Click Triggers ---
+// --- Enter Key & Click Triggers ---
 if (aiSearchInput) {
   aiSearchInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") { e.preventDefault(); triggerSecureAIHunt(); }
@@ -835,7 +846,7 @@ function formatGeminiImagePart(dataUrl) {
   return { inlineData: { mimeType: matches[1], data: matches[2] } };
 }
 
-// --- 4. Trigger Secure Call to Google Apps Script ---
+// --- Trigger Secure Call to Google Apps Script ---
 async function triggerSecureAIHunt() {
   const query = aiSearchInput ? aiSearchInput.value.trim() : "";
 
@@ -878,14 +889,13 @@ async function triggerSecureAIHunt() {
       if (imgPart) parts.push(imgPart);
     }
 
-    // Payload structured exactly as Gemini API needs it
     const geminiPayload = {
       systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
       contents: [{ parts: parts }],
       generationConfig: { temperature: 0.2 }
     };
 
-    // SECURE CALL: Sending to Apps Script using simple text/plain to avoid CORS
+    // Sending to Apps Script using simple text/plain to avoid CORS
     const response = await fetch(GOOGLE_SCRIPT_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain" },
@@ -902,7 +912,7 @@ async function triggerSecureAIHunt() {
 
     renderAICards(rawOutput);
 
-    // Free memory after use
+    // Free memory
     selectedProductBase64 = null;
     productImageInput.value = "";
     imagePreviewBadge.hidden = true;
@@ -918,7 +928,7 @@ async function triggerSecureAIHunt() {
   }
 }
 
-// --- 5. Clean Rendering logic & HD Logos Map ---
+// --- Render AI Results (100% Cuelinks Enabled) ---
 function renderAICards(rawText) {
   const container = document.getElementById("couponCardsList");
   if (!container) return;
@@ -933,7 +943,6 @@ function renderAICards(rawText) {
   container.innerHTML = "";
 
   lines.forEach((line) => {
-    // Format: Brand - CODE Description
     const match = line.match(/^([^-]+)\s*-\s*(\S+)\s+(.+)$/);
     let brandName = "Promo Deal", code = "CLICK2APPLY", desc = line;
 
@@ -943,10 +952,9 @@ function renderAICards(rawText) {
       desc = match[3].trim();
     }
 
-    // Auto Link & Logo Matching from master array
     const matchedStore = stores.find(s => s.name.toLowerCase().includes(brandName.toLowerCase()));
     
-    // Yahan kisi me bhi 'noskim' nahi joda jayega = 100% CUELINKS ENABLED
+    // AI CARDS HAVE NO 'NOSKIM' - Cuelinks intercepts it perfectly
     const storeUrl = matchedStore ? matchedStore.link : `https://www.google.com/search?q=${encodeURIComponent(brandName+ ' store')}`;
     const logoSrc = matchedStore && matchedStore.logo ? matchedStore.logo : null;
 
@@ -968,7 +976,6 @@ function renderAICards(rawText) {
       </a>
     `;
 
-    // Copy to clipboard effect
     const badge = card.querySelector(".coupon-code-badge");
     badge.addEventListener("click", () => {
       navigator.clipboard.writeText(code);
