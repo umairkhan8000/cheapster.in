@@ -173,7 +173,7 @@ a { color: inherit; text-decoration: none; }
 .brand-filter-shell { display: flex; align-items: center; background: var(--panel-solid); border: 1px solid var(--line); border-radius: 100px; padding: 0 14px; height: 38px; width: 100%; max-width: 100%; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
 .brand-filter-shell:focus-within { border-color: var(--champagne); box-shadow: 0 0 0 2px rgba(205, 161, 92, 0.15); }
 .brand-filter-shell svg { color: var(--muted); margin-right: 8px; flex-shrink: 0; }
-.brand-filter-shell input { border: none; background: transparent; color: var(--ink); font-size: 12px; width: 100%; outline: none; }
+.brand-filter-shell input { border: none; background: transparent; color: var(--ink); font-size: 12px; width: 100%; outline: none; text-overflow: ellipsis; }
 .brand-filter-shell input::placeholder { color: var(--faint); }
 
 /* Store Cards */
