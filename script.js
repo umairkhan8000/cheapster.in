@@ -1,6 +1,6 @@
 // build: 2026-10-11-AI-Coupons-Final-Script-V3
 // =========================================================
-// CHEAPSTER.IN — PREMIUM BRAND DIRECTORY 
+// CHEapSTER.IN — PREMIUM BRAND DIRECTORY 
 // =========================================================
 
 const CATEGORY_ORDER = [
@@ -763,11 +763,11 @@ const searchCouponBtn = document.getElementById("searchCouponBtn");
 const aiSearchInput = document.getElementById("searchInput");
 
 const loadingNotes = [
-  "Fetching promo codes might take a minute, please wait...",
-  "Scanning 100+ top Indian brands for active codes...",
-  "Applying Gemini AI magic to find the best discounts...",
-  "Verifying coupons for your product category...",
-  "Almost there! Sorting the best deals right now..."
+  "Fetching offers for you… this might take a minute.",
+  "Please hold on while we check the latest deals…",
+  "Scanning top brands for the best discounts…",
+  "Matching offers to your product…",
+  "Almost there — sorting the best deals for you…"
 ];
 
 // --- Image Upload Handler ---
@@ -888,7 +888,7 @@ async function triggerSecureAIHunt() {
   } catch (err) {
     console.error("AI Hunter Error:", err);
     if (container) {
-      container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--muted);"><p>⚠️ AI search request failed. Check network or API limits.</p></div>`;
+      container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--muted);"><p>⚠️ We couldn't fetch offers right now. Please try again in a moment.</p></div>`;
     }
   } finally {
     if (loader) loader.hidden = true;
