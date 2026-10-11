@@ -163,7 +163,8 @@ function injectStylesAndNav() {
     navScroll.id = "categoryNav";
     
     navWrapper.appendChild(navScroll);
-    gridElement.parentNode.insertBefore(navWrapper, gridElement);
+    const anchor = document.querySelector(".brand-filter-row") || gridElement;
+    anchor.parentNode.insertBefore(navWrapper, anchor);
   }
 }
 
@@ -413,7 +414,7 @@ renderUI();
 // =========================================================
 (function loadCuelinks() {
   if (window.__cheapsterCuelinksLoaded || window.__cheapsterCuelinksLoading) return;
-  window.cId = "322092";
+  window.cId = "322091";
   window.__cheapsterCuelinksLoading = true;
 
   const script = document.createElement("script");
