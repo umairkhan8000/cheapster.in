@@ -413,7 +413,7 @@ renderUI();
 // =========================================================
 (function loadCuelinks() {
   if (window.__cheapsterCuelinksLoaded || window.__cheapsterCuelinksLoading) return;
-  window.cId = "322092";
+  window.cId = "322091";
   window.__cheapsterCuelinksLoading = true;
 
   const script = document.createElement("script");
@@ -918,7 +918,7 @@ async function triggerSecureAIHunt() {
        return;
     }
 
-    const rawOutput = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    const rawOutput = (data.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("\n");
     renderAICards(rawOutput);
 
     // Free memory
