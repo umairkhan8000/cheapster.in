@@ -413,7 +413,7 @@ renderUI();
 // =========================================================
 (function loadCuelinks() {
   if (window.__cheapsterCuelinksLoaded || window.__cheapsterCuelinksLoading) return;
-  window.cId = "322091";
+  window.cId = "322092";
   window.__cheapsterCuelinksLoading = true;
 
   const script = document.createElement("script");
@@ -752,37 +752,6 @@ if (promoCarousel) {
 // GEMINI AI COUPON HUNTER (Upgraded with Live Search & Smart Errors)
 // =========================================================
 
-const SYSTEM_PROMPT = `You are my LIVE INDIAN COUPON CODE HUNTER. Whenever I send a product photo, product name or product link, identify its category and perform a live web search to find active coupon codes and discounts that I can try — only from the brands/sites listed below. 
-
-ALLOWED BRANDS / SITES (STRICT FILTER) Only use these:
-Marketplace & Fashion: Amazon, Flipkart, Myntra, Nykaa, AJIO, Tata CLiQ, Croma, Tira, Shopsy, JioMart, Meesho, Snitch, Urbanic, Beyoung, Savana, Bewakoof, The Souled Store, XYXX, Cahoot, Bonkers Corner, Levi's, Shoppers Stop, Crocs
-Beauty & Grooming: Minimalist, Plum, Dot & Key, Mamaearth, MCaffeine, Foxtale, Pilgrim, WOW Skin Science, Purplle, Sugar Cosmetics, MyGlamm, Bella Vita, Skinn by Titan, Swiss Beauty, MAC Cosmetics, Bare Anatomy, BBlunt, Beardo, Bombay Shaving Co, The Man Company, Ghar Soaps, Lakme, Maybelline, L'Oréal
-Tech: Dell, Lenovo, Realme, boAt, Noise, JBL, Reliance Digital, HP, Vijay Sales, Cashify, Spinny
-Wellness & Health: Tata 1mg, Apollo 24|7, Netmeds, MuscleBlaze, Myprotein, Plix, Kapiva, HealthKart, Traya, Man Matters, Perfora, Optimum Nutrition
-Jewellery & Gifting: Lenskart, Titan, Tanishq, Giva, Palmonas, Melorra, BlueStone, FNP
-Travel: MakeMyTrip, Agoda, Booking.com, Goibibo, Ixigo, Oyo Rooms, Skyscanner
-Home: Pepperfry, WoodenStreet, Urban Ladder, Wakefit, SleepyCat, Rentomojo, Moglix, Bosch Tools
-Pets: Supertails, Heads Up For Tails, Drools, Pedigree, Royal Canin
-Digital: Hostinger, GoDaddy, Microsoft, upGrad, Physics Wallah
-Kids: FirstCry, Hopscotch, Hamleys, Smartivity, LEGO
-
-RULES
-1. Search only on the brands/sites listed above using your live search tool.
-2. If a brand is not in the list → completely ignore it.
-3. If you absolutely cannot find specific codes, provide at least 3 general sitewide deals (like Flat 10% off, Free Shipping, Bank Offers) for top allowed brands (Amazon, Myntra, etc) relevant to the product.
-4. Prioritize: % off, Instant discount, Cashback, Flat ₹XX off.
-5. Do NOT use any Markdown formatting like bold (**), italics (*), or code blocks (\`\`\`). Keep plain text.
-
-EXACT OUTPUT FORMAT Only list in this style (one per line):
-Brand - CODE Description
-
-Examples:
-Supertails - SAVE100 Flat ₹100 off above ₹1200
-Myntra - MYNTRA300 Flat ₹300 off
-Flipkart - FKEMPNIKE20 Extra 20% off
-
-No extra text, no introduction, no explanation.`;
-
 let selectedProductBase64 = null;
 let loaderInterval;
 
@@ -880,46 +849,35 @@ async function triggerSecureAIHunt() {
   }
 
   try {
-    let parts = [];
-    if (query) parts.push({ text: `Find working coupons for: ${query}` });
-    
+    // Server ko sirf query + optional image bhejte hain (prompt/payload server par hai)
+    const requestBody = { action: "huntCoupons", query: query };
+
     if (selectedProductBase64) {
       const imgPart = formatGeminiImagePart(selectedProductBase64);
-      if (imgPart) parts.push(imgPart);
+      if (imgPart) requestBody.image = imgPart.inlineData;
     }
-
-    // NAYA PAYLOAD WITH LIVE SEARCH TOOL ENABLED
-    const geminiPayload = {
-      systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-      contents: [{ parts: parts }],
-      tools: [{ googleSearch: {} }], 
-      generationConfig: { temperature: 0.2 }
-    };
 
     const response = await fetch(GOOGLE_SCRIPT_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain" },
-      body: JSON.stringify({
-        action: "huntCoupons",
-        payload: geminiPayload
-      })
+      body: JSON.stringify(requestBody)
     });
 
     if (!response.ok) throw new Error(`Backend Error: ${response.status}`);
 
     const data = await response.json();
-    
-    // Exact Error Handling Display
+
     if (data.error) {
-       console.error("Gemini API Error:", data.error);
-       if (container) {
-         container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--champagne-bright); background:rgba(205,161,92,0.1); border-radius:12px; font-size:13px;"><p>⚠️ API Error: ${data.error.message || "Invalid Model/Key configuration."}</p></div>`;
-       }
-       return;
+      console.error("AI Hunter Error:", data.error);
+      if (container) {
+        const msg = String(data.error.message || "Something went wrong.")
+          .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--champagne-bright); background:rgba(205,161,92,0.1); border-radius:12px; font-size:13px;"><p>⚠️ ${msg}</p></div>`;
+      }
+      return;
     }
 
-    const rawOutput = (data.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("\n");
-    renderAICards(rawOutput);
+    renderAICards(data.text || "");
 
     // Free memory
     selectedProductBase64 = null;
