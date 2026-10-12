@@ -185,7 +185,7 @@ function showToast(message, icon = "✨") {
 
   const toast = document.createElement("div");
   toast.className = "toast-msg";
-  toast.innerHTML = `<span style="font-size:16px;">${icon}</span> ${message}`;
+  toast.innerHTML = `<span style="font-size:16px;">${icon}</span>${message}`;
   container.appendChild(toast);
 
   setTimeout(() => {
@@ -598,7 +598,7 @@ if (rewardForm) {
     haptic();
 
     const text = encodeURIComponent(
-      `🏆 Cheapster Giveaway Entry\n\nName: ${fullName}\nWhatsApp: ${whatsapp}\nBrand: ${brand}\nEmail: ${currentUser.email || ""}`
+      `🏆 Cheapster Giveaway Entry\n\nName: ${fullName}\nWhatsApp:${whatsapp}\nBrand: ${brand}\nEmail:${currentUser.email || ""}`
     );
 
     fetch(GOOGLE_SCRIPT_URL, {
@@ -974,4 +974,59 @@ function renderAICards(rawText) {
 
     container.appendChild(card);
   });
+}
+// =========================================================
+// LONG-TERM CACHE (hidden Sheet tab, CACHE_HOURS tak)
+// =========================================================
+function getCacheSheet_() {
+  const ss = SpreadsheetApp.openByUrl(SHEET_URL);
+  let sh = ss.getSheetByName(CACHE_SHEET_NAME);
+  if (!sh) {
+    sh = ss.insertSheet(CACHE_SHEET_NAME);
+    sh.appendRow(["key", "savedAtMs", "text"]);
+    try { sh.hideSheet(); } catch (err) {}
+  }
+  return sh;
+}
+
+function sheetCacheGet_(key) {
+  try {
+    const sh = getCacheSheet_();
+    const last = sh.getLastRow();
+    if (last < 2) return null;
+    
+    // Corrected: Added missing subtraction and addition operators
+    const start = Math.max(2, last - CACHE_SHEET_MAX_ROWS + 1);
+    const rows = sh.getRange(start, 1, last - start + 1, 3).getValues();
+    // Corrected: Added missing multiplication operators
+    const maxAgeMs = CACHE_HOURS * 3600 * 1000;
+    const now = Date.now();
+    
+    // Corrected: Added missing subtraction operator
+    for (let i = rows.length - 1; i >= 0; i--) {
+      if (rows[i][0] === key) {
+        // Corrected: Added missing subtraction operator
+        if (now - Number(rows[i][1]) > maxAgeMs) return null;
+        return JSON.parse(String(rows[i][2]));
+      }
+    }
+  } catch (err) {
+    console.error("sheetCacheGet_: " + err);
+  }
+  return null;
+}
+
+function sheetCachePut_(key, text) {
+  try {
+    const sh = getCacheSheet_();
+    // JSON.stringify: text kabhi "=" se shuru hokar formula nahi banega
+    sh.appendRow([key, Date.now(), JSON.stringify(text)]);
+    const last = sh.getLastRow();
+    if (last > CACHE_SHEET_MAX_ROWS + 200) {
+      // Corrected: Added missing subtraction operators
+      sh.deleteRows(2, last - CACHE_SHEET_MAX_ROWS - 1); // sabse purani rows hatao
+    }
+  } catch (err) {
+    console.error("sheetCachePut_: " + err);
+  }
 }
