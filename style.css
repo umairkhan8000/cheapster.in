@@ -176,6 +176,11 @@ a { color: inherit; text-decoration: none; }
 
 /* Sleek Brand Filter Search (sits between category pills and brand cards) */
 .brand-filter-row { margin-bottom: 20px; }
+/* Laptop/desktop: brand search chhota aur center mein (phone par full width hi rehta hai) */
+@media (min-width: 769px) {
+  .brand-filter-row { display: flex; justify-content: center; }
+  .brand-filter-row .brand-filter-shell { width: 25%; min-width: 340px; }
+}
 .brand-filter-shell { display: flex; align-items: center; background: var(--panel-solid); border: 1px solid var(--line); border-radius: 100px; padding: 0 14px; height: 38px; width: 100%; max-width: 100%; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
 .brand-filter-shell:focus-within { border-color: var(--champagne); box-shadow: 0 0 0 2px rgba(205, 161, 92, 0.15); }
 .brand-filter-shell svg { color: var(--muted); margin-right: 8px; flex-shrink: 0; }
