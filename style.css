@@ -144,10 +144,6 @@ a { color: inherit; text-decoration: none; }
 .deal-card-title { margin: 10px 0 6px; color: #fff; font-family: 'Manrope', 'DM Sans', sans-serif; font-size: clamp(21px, 3.6vw, 28px); font-weight: 800; line-height: 1.22; letter-spacing: -0.3px; }
 .deal-card-sub { margin: 0 auto; max-width: 480px; color: var(--muted); font-size: 14px; font-weight: 600; line-height: 1.55; }
 .deal-card .ai-search-shell { margin: 20px 0 0; border-color: rgba(205, 161, 92, 0.38); }
-.deal-suggest { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; }
-.deal-suggest-label { color: var(--muted); font-size: 12.5px; font-weight: 700; margin-right: 4px; }
-.deal-chip { padding: 7px 14px; border-radius: 100px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.05); color: var(--platinum); font-size: 12.5px; font-weight: 700; transition: border-color .2s ease, background-color .2s ease, color .2s ease; }
-.deal-chip:hover, .deal-chip:focus-visible { border-color: var(--champagne); background: rgba(205, 161, 92, 0.14); color: var(--champagne-bright); }
 .deal-foot { display: flex; align-items: center; justify-content: center; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12.5px; font-weight: 700; }
 .deal-foot span { padding: 0 14px; }
 .deal-foot span + span { border-left: 1px solid var(--line-gold); }
