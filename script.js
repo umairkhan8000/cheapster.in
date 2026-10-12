@@ -1,6 +1,6 @@
 // build: 2026-10-11-AI-Coupons-Final-Script-V5
 // =========================================================
-// CHEAPSTER.IN — PREMIUM BRAND DIRECTORY 
+// CHEapSTER.IN — PREMIUM BRAND DIRECTORY 
 // =========================================================
 
 const CATEGORY_ORDER = [
