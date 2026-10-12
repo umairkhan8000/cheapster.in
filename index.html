@@ -114,6 +114,87 @@
           INDIA'S INDEPENDENT AFFILIATE DIRECTORY
         </div>
 
+        <h1>
+          Explore 100+ brands<br>
+          <span>you already love.</span>
+        </h1>
+
+        <p class="hero-copy">
+          Shop your favorite fashion, quick-commerce, and tech brands. Participate in exclusive rewards backed by a premium directory.
+        </p>
+
+        <div class="festive-pill">
+          <span class="festive-sparkle">✨</span>
+          <span>Festive Rewards: 1000+ Lucky Winners! 100% Free Entry — No Purchase Required.</span>
+          <span class="festive-sparkle">✨</span>
+        </div>
+
+        <!-- DEAL HUNTER CARD -->
+        <div class="deal-card">
+          <div class="deal-card-brand">
+            <span class="deal-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"></path><circle cx="7.5" cy="7.5" r="1.2" fill="currentColor"></circle></svg>
+            </span>
+            Deal Hunter
+          </div>
+          <h2 class="deal-card-title">Find coupons and offers for any product</h2>
+          <p class="deal-card-sub">Type a product, brand or category, or upload a photo.</p>
+
+          <div class="search-shell ai-search-shell">
+            <span class="search-leading" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2">
+                <circle cx="10.8" cy="10.8" r="6.8"></circle>
+                <path d="M16 16L21 21"></path>
+              </svg>
+            </span>
+
+            <input id="searchInput" class="search-input" type="text" autocomplete="off" placeholder="Search products, category or upload image..." aria-label="Search product coupons">
+
+            <div id="imagePreviewBadge" class="img-preview-badge" hidden>
+              <span class="preview-text">📷</span>
+              <button type="button" id="removeImgBtn" aria-label="Remove image">×</button>
+            </div>
+
+            <div class="search-actions-group">
+              <label for="productImageInput" class="upload-img-label" title="Upload Product Image">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="4" ry="4"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+              </label>
+              <input type="file" id="productImageInput" accept="image/*" style="display: none;">
+
+              <button type="button" id="searchCouponBtn" class="btn btn-gold btn-hunt-coupons">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#14100a" stroke-width="2" style="margin-right: 4px;"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="M16 16L21 21"></path></svg>
+                <span>Find Deals</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="deal-suggest">
+            <span class="deal-suggest-label">Popular searches</span>
+            <button type="button" class="deal-chip" data-q="Sunglasses">Sunglasses</button>
+            <button type="button" class="deal-chip" data-q="Bluetooth speaker">Bluetooth speaker</button>
+            <button type="button" class="deal-chip" data-q="Running shoes">Running shoes</button>
+            <button type="button" class="deal-chip" data-q="Flight tickets">Flight tickets</button>
+            <button type="button" class="deal-chip" data-q="Perfume">Perfume</button>
+          </div>
+
+          <div class="deal-foot">
+            <span><strong id="heroStoreCount">0</strong> trending brands</span>
+            <span>One secure portal</span>
+          </div>
+        </div>
+
+        <!-- TRUST POINTS -->
+        <ul class="trust-grid">
+          <li class="trust-item"><span class="trust-icon" aria-hidden="true">🔒</span><span>100% Free — No Purchase Necessary</span></li>
+          <li class="trust-item"><span class="trust-icon" aria-hidden="true">🔗</span><span>Direct Links to Official Brand Sites</span></li>
+          <li class="trust-item"><span class="trust-icon" aria-hidden="true">🙅</span><span>We Never Ask for Bank/OTP Details</span></li>
+          <li class="trust-item"><span class="trust-icon" aria-hidden="true">🔐</span><span>Secure Google Sign&#8209;in</span></li>
+        </ul>
+
         <!-- PROMO BANNERS CAROUSEL -->
         <div class="promo-carousel-wrapper">
           <button class="carousel-btn left-btn" id="scrollLeftBtn" aria-label="Scroll Left">❮</button>
@@ -132,81 +213,7 @@
             </a>
           </div>
           <button class="carousel-btn right-btn" id="scrollRightBtn" aria-label="Scroll Right">❯</button>
-        </div>  
-
-        <h1>
-          Explore 100+ brands<br>
-          <span>you already love.</span>
-        </h1>
-
-        <div class="festive-pill">
-          <span class="festive-sparkle">✨</span>
-          <span>Festive Rewards: 1000+ Lucky Winners! 100% Free Entry — No Purchase Required.</span>
-          <span class="festive-sparkle">✨</span>
         </div>
-
-        <p class="hero-copy">
-          Shop your favorite fashion, quick-commerce, and tech brands. Participate in exclusive rewards backed by a premium directory.
-        </p>
-
-        <!-- TRUST STRIP (Restored to original placement) -->
-        <div class="trust-strip">
-          <span class="trust-item">🔒 100% Free — No Purchase Necessary</span>
-          <span class="trust-dot"></span>
-          <span class="trust-item">🔗 Direct Links to Official Brand Sites</span>
-          <span class="trust-dot"></span>
-          <span class="trust-item">🙅 We Never Ask for Bank/OTP Details</span>
-          <span class="trust-dot"></span>
-          <span class="trust-item">🔐 Secure Google Sign-in</span>
-        </div>
-
-        <!-- DEAL HUNTER INTRO -->
-        <div class="deal-intro">
-          <span class="deal-intro-label">DEAL HUNTER</span>
-          <h2 class="deal-intro-title">Find the best offers for any product</h2>
-          <p class="deal-intro-copy">Search a product, category or brand — or upload a photo — and we'll look up coupon codes and offers for you.</p>
-        </div>
-
-        <!-- SEARCH BAR -->
-        <div class="search-shell ai-search-shell" style="max-width: 650px; margin: 0 auto 22px;">
-          <span class="search-leading" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2">
-              <circle cx="10.8" cy="10.8" r="6.8"></circle>
-              <path d="M16 16L21 21"></path>
-            </svg>
-          </span>
-
-          <input id="searchInput" class="search-input" type="text" autocomplete="off" placeholder="Search products, category or upload image..." aria-label="Search product coupons">
-
-          <div id="imagePreviewBadge" class="img-preview-badge" hidden>
-            <span class="preview-text">📷</span>
-            <button type="button" id="removeImgBtn" aria-label="Remove image">×</button>
-          </div>
-
-          <div class="search-actions-group">
-            <label for="productImageInput" class="upload-img-label" title="Upload Product Image">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="18" height="18" rx="4" ry="4"></rect>
-                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                <polyline points="21 15 16 10 5 21"></polyline>
-              </svg>
-            </label>
-            <input type="file" id="productImageInput" accept="image/*" style="display: none;">
-
-            <button type="button" id="searchCouponBtn" class="btn btn-gold btn-hunt-coupons">
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#14100a" stroke-width="2" style="margin-right: 4px;"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="M16 16L21 21"></path></svg>
-              <span>Find Deals</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- RESTORED META TEXT (Exactly as it was originally) -->
-        <div class="hero-meta">
-          <span><strong id="heroStoreCount">0</strong> trending brands</span>
-          <span class="meta-dot"></span>
-          <span>One secure portal</span>
-        </div>
-
       </div>
     </section>
 
@@ -340,7 +347,7 @@
       <div class="modal-icon" style="background: transparent; border: none; font-size: 32px; padding: 0;">✨</div>
       <span class="modal-label">DEAL HUNTER</span>
       <h2 id="couponModalTitle">Live Deals & Promo Codes</h2>
-      <p class="modal-intro" id="couponModalSubtitle">Latest offers & coupon codes from top brands.</p>
+      <p class="modal-intro" id="couponModalSubtitle">Real-time discount codes from 100+ verified brands.</p>
 
       <div id="couponLoader" class="coupon-loader-box" hidden>
         <div class="loader-spinner"></div>
