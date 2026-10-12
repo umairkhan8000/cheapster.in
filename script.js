@@ -1,4 +1,4 @@
-// build: 2026-10-11-AI-Coupons-Final-Script-V3
+// build: 2026-10-11-AI-Coupons-Final-Script-V4
 // =========================================================
 // CHEapSTER.IN — PREMIUM BRAND DIRECTORY 
 // =========================================================
@@ -720,34 +720,13 @@ const scrollLeftBtn = document.getElementById('scrollLeftBtn');
 const scrollRightBtn = document.getElementById('scrollRightBtn');
 
 if (promoCarousel) {
-  const originalSlides = Array.from(promoCarousel.children);
-  for(let i = 0; i < 3; i++) {
-    originalSlides.forEach(slide => { let clone = slide.cloneNode(true); promoCarousel.appendChild(clone); });
-  }
-
   const getScrollAmount = () => promoCarousel.querySelector('.promo-slide').clientWidth + 16; 
 
   if (scrollLeftBtn && scrollRightBtn) {
     scrollLeftBtn.addEventListener('click', () => { promoCarousel.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' }); });
     scrollRightBtn.addEventListener('click', () => { promoCarousel.scrollBy({ left: getScrollAmount(), behavior: 'smooth' }); });
   }
-
-  promoCarousel.addEventListener('scroll', () => {
-    const maxScroll = promoCarousel.scrollWidth - promoCarousel.clientWidth;
-    if (promoCarousel.scrollLeft <= 0) {
-      promoCarousel.style.scrollBehavior = 'auto'; 
-      promoCarousel.scrollLeft = maxScroll / 2;    
-      promoCarousel.style.scrollBehavior = 'smooth'; 
-    } else if (promoCarousel.scrollLeft >= maxScroll - 5) {
-      promoCarousel.style.scrollBehavior = 'auto'; 
-      promoCarousel.scrollLeft = maxScroll / 2;
-      promoCarousel.style.scrollBehavior = 'smooth';
-    }
-  });
-
-  setTimeout(() => { promoCarousel.scrollLeft = (promoCarousel.scrollWidth - promoCarousel.clientWidth) / 2; }, 150);
 }
-
 
 // =========================================================
 // GEMINI AI COUPON HUNTER (Upgraded with Live Search & Smart Errors)
@@ -974,59 +953,4 @@ function renderAICards(rawText) {
 
     container.appendChild(card);
   });
-}
-// =========================================================
-// LONG-TERM CACHE (hidden Sheet tab, CACHE_HOURS tak)
-// =========================================================
-function getCacheSheet_() {
-  const ss = SpreadsheetApp.openByUrl(SHEET_URL);
-  let sh = ss.getSheetByName(CACHE_SHEET_NAME);
-  if (!sh) {
-    sh = ss.insertSheet(CACHE_SHEET_NAME);
-    sh.appendRow(["key", "savedAtMs", "text"]);
-    try { sh.hideSheet(); } catch (err) {}
-  }
-  return sh;
-}
-
-function sheetCacheGet_(key) {
-  try {
-    const sh = getCacheSheet_();
-    const last = sh.getLastRow();
-    if (last < 2) return null;
-    
-    // Corrected: Added missing subtraction and addition operators
-    const start = Math.max(2, last - CACHE_SHEET_MAX_ROWS + 1);
-    const rows = sh.getRange(start, 1, last - start + 1, 3).getValues();
-    // Corrected: Added missing multiplication operators
-    const maxAgeMs = CACHE_HOURS * 3600 * 1000;
-    const now = Date.now();
-    
-    // Corrected: Added missing subtraction operator
-    for (let i = rows.length - 1; i >= 0; i--) {
-      if (rows[i][0] === key) {
-        // Corrected: Added missing subtraction operator
-        if (now - Number(rows[i][1]) > maxAgeMs) return null;
-        return JSON.parse(String(rows[i][2]));
-      }
-    }
-  } catch (err) {
-    console.error("sheetCacheGet_: " + err);
-  }
-  return null;
-}
-
-function sheetCachePut_(key, text) {
-  try {
-    const sh = getCacheSheet_();
-    // JSON.stringify: text kabhi "=" se shuru hokar formula nahi banega
-    sh.appendRow([key, Date.now(), JSON.stringify(text)]);
-    const last = sh.getLastRow();
-    if (last > CACHE_SHEET_MAX_ROWS + 200) {
-      // Corrected: Added missing subtraction operators
-      sh.deleteRows(2, last - CACHE_SHEET_MAX_ROWS - 1); // sabse purani rows hatao
-    }
-  } catch (err) {
-    console.error("sheetCachePut_: " + err);
-  }
 }
