@@ -1,4 +1,4 @@
-// build: 2026-10-11-AI-Coupons-Final-Script-V4
+// build: 2026-10-11-AI-Coupons-Final-Script-V5
 // =========================================================
 // CHEAPSTER.IN — PREMIUM BRAND DIRECTORY 
 // =========================================================
@@ -714,18 +714,76 @@ if (installBtn && isAndroid) {
   });
 }
 
-// ---------- Promo Banners Carousel ----------
+// ---------- Promo Banners Carousel (Smooth Infinite Left/Right Loop) ----------
 const promoCarousel = document.getElementById('promoCarousel');
 const scrollLeftBtn = document.getElementById('scrollLeftBtn');
 const scrollRightBtn = document.getElementById('scrollRightBtn');
 
 if (promoCarousel) {
-  const getScrollAmount = () => promoCarousel.querySelector('.promo-slide').clientWidth + 16; 
+  const originalSlides = Array.from(promoCarousel.children);
+  const originalCount = originalSlides.length;
 
+  // Peeking UI ke liye dono taraf multiple clones add karte hain taaki seamlessly loop ho sake
+  originalSlides.forEach(slide => {
+      promoCarousel.appendChild(slide.cloneNode(true));
+  });
+  originalSlides.slice().reverse().forEach(slide => {
+      promoCarousel.insertBefore(slide.cloneNode(true), promoCarousel.firstChild);
+  });
+
+  const getSetWidth = () => {
+      const slide = promoCarousel.querySelector('.promo-slide');
+      const gap = parseInt(window.getComputedStyle(promoCarousel).gap) || 16;
+      return (slide.clientWidth + gap) * originalCount;
+  };
+
+  // Center wale original set par scroll set karna on load
+  setTimeout(() => {
+      promoCarousel.style.scrollBehavior = 'auto';
+      promoCarousel.scrollLeft = getSetWidth();
+      setTimeout(() => { promoCarousel.style.scrollBehavior = 'smooth'; }, 50);
+  }, 100);
+
+  // Left & Right Buttons
   if (scrollLeftBtn && scrollRightBtn) {
-    scrollLeftBtn.addEventListener('click', () => { promoCarousel.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' }); });
-    scrollRightBtn.addEventListener('click', () => { promoCarousel.scrollBy({ left: getScrollAmount(), behavior: 'smooth' }); });
+      scrollLeftBtn.addEventListener('click', () => { 
+          const jump = promoCarousel.querySelector('.promo-slide').clientWidth + (parseInt(window.getComputedStyle(promoCarousel).gap) || 16);
+          promoCarousel.scrollBy({ left: -jump, behavior: 'smooth' }); 
+      });
+      scrollRightBtn.addEventListener('click', () => { 
+          const jump = promoCarousel.querySelector('.promo-slide').clientWidth + (parseInt(window.getComputedStyle(promoCarousel).gap) || 16);
+          promoCarousel.scrollBy({ left: jump, behavior: 'smooth' }); 
+      });
   }
+
+  // Infinite Scroll Detection (Bina Jitter Ke)
+  let isResetting = false;
+  promoCarousel.addEventListener('scroll', () => {
+      if (isResetting) return;
+      
+      const setWidth = getSetWidth();
+      
+      // Agar user extreme left clone set mein enter kar gaya
+      if (promoCarousel.scrollLeft <= 50) {
+          isResetting = true;
+          promoCarousel.style.scrollBehavior = 'auto';
+          promoCarousel.scrollLeft += setWidth;
+          setTimeout(() => { 
+              promoCarousel.style.scrollBehavior = 'smooth'; 
+              isResetting = false; 
+          }, 50);
+      } 
+      // Agar user extreme right clone set mein enter kar gaya
+      else if (promoCarousel.scrollLeft >= (promoCarousel.scrollWidth - promoCarousel.clientWidth) - 50) {
+          isResetting = true;
+          promoCarousel.style.scrollBehavior = 'auto';
+          promoCarousel.scrollLeft -= setWidth;
+          setTimeout(() => { 
+              promoCarousel.style.scrollBehavior = 'smooth'; 
+              isResetting = false; 
+          }, 50);
+      }
+  }, { passive: true });
 }
 
 // =========================================================
