@@ -819,15 +819,14 @@ function formatGeminiImagePart(dataUrl) {
 async function triggerSecureAIHunt() {
   const query = aiSearchInput ? aiSearchInput.value.trim() : "";
 
-  // Deal Hunter sirf logged-in users ke liye
-  if (!currentUser) {
-    showToast("Please login with Google to find deals.", "🔒");
-    if (authBtn) authBtn.click();   // login popup kholta hai
+  if (!query && !selectedProductBase64) {
+    showToast("Please enter a brand, product name, or upload an image.", "⚠️");
     return;
   }
 
-  if (!query && !selectedProductBase64) {
-    showToast("Please enter a brand, product name, or upload an image.", "⚠️");
+  // Deal Hunter sirf logged-in users ke liye (reward form jaisa hi simple toast)
+  if (!currentUser) {
+    showToast("Please login with Google first.", "🔒");
     return;
   }
 
