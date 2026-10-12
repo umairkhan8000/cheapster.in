@@ -808,15 +808,6 @@ if (searchCouponBtn) {
   searchCouponBtn.addEventListener("click", triggerSecureAIHunt);
 }
 
-// --- Popular search chips: sirf search box bharte hain, search khud nahi chalate ---
-document.querySelectorAll(".deal-chip").forEach((chip) => {
-  chip.addEventListener("click", () => {
-    if (!aiSearchInput) return;
-    aiSearchInput.value = chip.dataset.q || chip.textContent.trim();
-    aiSearchInput.focus();
-  });
-});
-
 // Helper to format Base64 for Gemini
 function formatGeminiImagePart(dataUrl) {
   const matches = dataUrl.match(/^data:(.+);base64,(.+)$/);
