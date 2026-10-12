@@ -819,6 +819,13 @@ function formatGeminiImagePart(dataUrl) {
 async function triggerSecureAIHunt() {
   const query = aiSearchInput ? aiSearchInput.value.trim() : "";
 
+  // Deal Hunter sirf logged-in users ke liye
+  if (!currentUser) {
+    showToast("Please login with Google to find deals.", "🔒");
+    if (authBtn) authBtn.click();   // login popup kholta hai
+    return;
+  }
+
   if (!query && !selectedProductBase64) {
     showToast("Please enter a brand, product name, or upload an image.", "⚠️");
     return;
@@ -851,7 +858,8 @@ async function triggerSecureAIHunt() {
 
   try {
     // Server ko sirf query + optional image bhejte hain (prompt/payload server par hai)
-    const requestBody = { action: "huntCoupons", query: query };
+    const idToken = await currentUser.getIdToken();   // server isse verify karta hai
+    const requestBody = { action: "huntCoupons", query: query, idToken: idToken };
 
     if (selectedProductBase64) {
       const imgPart = formatGeminiImagePart(selectedProductBase64);
