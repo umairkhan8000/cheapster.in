@@ -252,10 +252,22 @@ a { color: inherit; text-decoration: none; }
 
 /* Promo Banners */
 .promo-carousel-wrapper { position: relative; width: min(1220px, calc(100% - 34px)); margin: 25px auto 0; display: flex; align-items: center; }
-.promo-carousel { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 12px; }
+
+/* YEH CODE BOX KO LAMBA HONE SE ROKEGA */
+.promo-carousel { 
+  display: flex; 
+  gap: 16px; 
+  overflow-x: auto; 
+  scroll-snap-type: x mandatory; 
+  scroll-behavior: smooth; 
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+  padding-bottom: 12px; 
+  align-items: center; 
+}
 .promo-carousel::-webkit-scrollbar { display: none; }
 
-/* PERMANENT EDGE-TO-EDGE BANNER FIX */
+/* NATURAL IMAGE SIZE FIX */
 .promo-slide { 
   flex: 0 0 calc(33.333% - 11px); 
   scroll-snap-align: start; 
@@ -265,13 +277,13 @@ a { color: inherit; text-decoration: none; }
   background: var(--panel-solid); 
   box-shadow: 0 6px 16px rgba(0,0,0,0.3); 
   transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; 
-  display: flex; 
+  display: block; 
   text-decoration: none; 
+  height: max-content; /* BOX ZABARDASTI KISI AUR KE HISAB SE BADA NAHI HOGA */
 }
 .promo-slide img { 
   width: 100%; 
-  height: 100%; 
-  object-fit: cover; 
+  height: auto; /* IMAGE APNA ORIGINAL NATURAL SIZE HI RAKHEGI */
   display: block; 
 }
 
