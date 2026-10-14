@@ -136,7 +136,7 @@ a { color: inherit; text-decoration: none; }
 .festive-sparkle { font-size: 14px; }
 .hero-copy { max-width: 600px; margin: 0 auto 20px; color: var(--muted); font-size: 15px; font-weight: 600; line-height: 1.6; }
 
-/* Deal Hunter card (main hero element) */
+/* Deal Hunter card */
 .deal-card { position: relative; max-width: 760px; margin: 30px auto 0; padding: 28px 30px 20px; text-align: center; border: 1px solid var(--line-gold); border-radius: 24px; background: linear-gradient(180deg, rgba(28, 63, 102, 0.50) 0%, rgba(17, 24, 38, 0.96) 62%), var(--obsidian-raised); box-shadow: 0 28px 64px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(236, 205, 143, 0.14); }
 .deal-card::before { content: ""; position: absolute; top: -1px; left: 14%; right: 14%; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne-bright), transparent); }
 .deal-card-brand { display: inline-flex; align-items: center; gap: 8px; color: var(--champagne-bright); font-size: 14px; font-weight: 800; }
@@ -148,12 +148,12 @@ a { color: inherit; text-decoration: none; }
 .deal-foot span + span { border-left: 1px solid var(--line-gold); }
 .deal-foot strong { color: #fff; font-weight: 800; }
 
-/* Trust points (below the Deal Hunter card) */
+/* Trust points */
 .trust-grid { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; max-width: 980px; margin: 24px auto 0; padding: 0; }
 .trust-item { display: flex; align-items: center; gap: 10px; padding: 12px 14px; text-align: left; border: 1px solid var(--line); border-radius: 14px; background: rgba(255, 255, 255, 0.03); color: var(--platinum); font-size: 12.5px; font-weight: 700; line-height: 1.35; }
 .trust-icon { flex-shrink: 0; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: rgba(205, 161, 92, 0.12); font-size: 14px; }
 
-/* AI Coupon Search Bar (Matching Original Sleek Look) */
+/* AI Coupon Search Bar */
 .ai-search-shell { display: flex; align-items: center; position: relative; background: var(--panel-solid); border: 1px solid var(--line); border-radius: 100px; padding: 5px 8px 5px 45px; margin-bottom: 25px; transition: border-color .2s ease, box-shadow .2s ease; }
 .ai-search-shell:focus-within { border-color: var(--champagne); box-shadow: 0 0 0 3px rgba(205, 161, 92, 0.15); background: var(--panel-solid); }
 .ai-search-shell .search-input { border: none; background: transparent; box-shadow: none; padding: 0 10px; height: 46px; flex: 1; color: var(--ink); font-size: 14px; }
@@ -175,9 +175,8 @@ a { color: inherit; text-decoration: none; }
 .section-top h2 { margin: 5px 0 0; color: var(--ink); font-size: 26px; font-weight: 800; }
 .store-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
 
-/* Sleek Brand Filter Search (sits between category pills and brand cards) */
+/* Sleek Brand Filter Search */
 .brand-filter-row { margin-bottom: 20px; }
-/* Laptop/desktop: brand search chhota aur center mein (phone par full width hi rehta hai) */
 @media (min-width: 769px) {
   .brand-filter-row { display: flex; justify-content: center; }
   .brand-filter-row .brand-filter-shell { width: 25%; min-width: 340px; }
@@ -256,7 +255,7 @@ a { color: inherit; text-decoration: none; }
 .promo-carousel { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 12px; }
 .promo-carousel::-webkit-scrollbar { display: none; }
 
-/* Custom Promo Banners Area Fill Fix */
+/* PERMANENT EDGE-TO-EDGE BANNER FIX */
 .promo-slide { 
   flex: 0 0 calc(33.333% - 11px); 
   scroll-snap-align: start; 
@@ -266,15 +265,18 @@ a { color: inherit; text-decoration: none; }
   background: var(--panel-solid); 
   box-shadow: 0 6px 16px rgba(0,0,0,0.3); 
   transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
+  display: block; 
+  position: relative; 
+  aspect-ratio: 2.1 / 1; 
   text-decoration: none; 
 }
 .promo-slide img { 
-  width: 100% !important; 
-  height: 100% !important; 
-  object-fit: cover !important; 
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
   display: block; 
 }
 
