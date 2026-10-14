@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cheapster-cache-v52';
+const CACHE_NAME = 'cheapster-cache-v53';
 
 const ASSETS_TO_CACHE = [
   '/',
