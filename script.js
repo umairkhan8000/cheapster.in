@@ -413,6 +413,35 @@ injectStylesAndNav();
 renderCategoryNav();
 renderUI();
 
+// ---------- Mobile: brand search ko "See all" button ke saath same row mein shift ----------
+(function placeBrandSearch() {
+  const row = document.querySelector(".brand-filter-row");
+  const top = document.querySelector(".directory-section .section-top");
+  const input = document.getElementById("brandSearchInput");
+  if (!row || !top || !input || !row.parentNode) return;
+
+  const homeMarker = document.createComment("brand-filter-home");
+  row.parentNode.insertBefore(homeMarker, row);
+
+  const desktopPlaceholder = input.placeholder;
+  const mq = window.matchMedia("(max-width: 768px)");
+
+  const place = () => {
+    if (mq.matches) {
+      top.appendChild(row);                 // button ke right mein
+      input.placeholder = "Search";
+    } else {
+      homeMarker.parentNode.insertBefore(row, homeMarker.nextSibling); // original jagah
+      input.placeholder = desktopPlaceholder;
+    }
+  };
+
+  input.setAttribute("aria-label", "Search shopping sites");
+  place();
+  if (mq.addEventListener) mq.addEventListener("change", place);
+  else if (mq.addListener) mq.addListener(place);
+})();
+
 // =========================================================
 // CUELINKS LOADER
 // =========================================================
