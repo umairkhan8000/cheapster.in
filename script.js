@@ -4,7 +4,6 @@
 // =========================================================
 
 const CATEGORY_ORDER = [
-  "All", 
   "Mega Brands", 
   "Fashion", 
   "Beauty & Grooming", 
@@ -17,6 +16,13 @@ const CATEGORY_ORDER = [
   "Digital", 
   "Kids"
 ];
+
+// Mega Brands ka order: best-selling pehle, baaki uske baad
+const MEGA_PRIORITY = ["Amazon", "Flipkart", "Myntra", "Nykaa", "AJIO", "Croma", "JioMart", "Tata CLiQ", "Meesho", "Shopsy", "Tira"];
+const megaRank = (store) => {
+  const i = MEGA_PRIORITY.indexOf(store.name);
+  return i === -1 ? 999 : i;
+};
 
 // --- BRAND MASTER LIST WITH EXACT ZIP LOGO FILENAMES ---
 const stores = [
@@ -168,7 +174,7 @@ function injectStylesAndNav() {
   }
 }
 
-let currentCategory = "All";
+let currentCategory = "Mega Brands";
 let searchQuery = "";
 
 const haptic = () => { if (navigator.vibrate) navigator.vibrate(40); };
@@ -346,15 +352,13 @@ function renderUI() {
   ensureStoreAnchors();
 
   let filtered = stores.filter((store) => {
-        const matchesCat = currentCategory === "All" || store.category === currentCategory;
+        const matchesCat = searchQuery !== "" || store.category === currentCategory;
         const matchesSearch = store.name.toLowerCase().includes(searchQuery) || store.description.toLowerCase().includes(searchQuery);
         return matchesCat && matchesSearch;
   });
 
-  if (currentCategory === "All" && searchQuery === "") {
-    const mega = filtered.filter(s => s.category === "Mega Brands");
-    const others = shuffleArray(filtered.filter(s => s.category !== "Mega Brands"));
-    filtered = [...mega, ...others];
+  if (currentCategory === "Mega Brands" && searchQuery === "") {
+    filtered.sort((a, b) => megaRank(a) - megaRank(b));
   } else {
     filtered.sort((a, b) => a.name.localeCompare(b.name));
   }
@@ -477,6 +481,68 @@ if (bannerClaimBtn) bannerClaimBtn.addEventListener("click", () => openModal("fo
 
 document.querySelectorAll("[data-info-modal]").forEach((btn) => {
     btn.addEventListener("click", () => openModal(btn.dataset.infoModal));
+});
+
+// ---------- All brands popup ----------
+const allBrandsList = document.getElementById("allBrandsList");
+const allBrandsEmpty = document.getElementById("allBrandsEmpty");
+const allBrandsSearch = document.getElementById("allBrandsSearch");
+const allBrandsModal = document.getElementById("allBrandsModal");
+let allBrandsBuilt = false;
+
+document.querySelectorAll("#allBrandsCount, .all-brands-count").forEach((el) => { el.textContent = stores.length; });
+const tc = document.getElementById("allBrandsTitleCount"); if (tc) tc.textContent = stores.length;
+
+function buildAllBrandsList() {
+  if (allBrandsBuilt || !allBrandsList) return;
+
+  // Pehle Mega Brands (best-selling order), phir baaki sab
+  const mega = stores.filter((s) => s.category === "Mega Brands").sort((a, b) => megaRank(a) - megaRank(b));
+  const rest = stores.filter((s) => s.category !== "Mega Brands");
+  for (let i = rest.length - 1; i > 0; i--) {
+    const k = Math.floor(Math.random() * (i + 1));
+    [rest[i], rest[k]] = [rest[k], rest[i]];
+  }
+
+  const gridEl = document.createElement("div");
+  gridEl.className = "store-grid";
+  [...mega, ...rest].forEach((store, i) => {
+    const card = buildCard(store, i);
+    if (!card) return;
+    card.dataset.search = (store.name + " " + store.description).toLowerCase();
+    gridEl.appendChild(card);
+  });
+  allBrandsList.appendChild(gridEl);
+  allBrandsBuilt = true;
+}
+
+document.querySelectorAll("[data-open-all-brands]").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    buildAllBrandsList();
+    openModal("allBrandsModal");
+  });
+});
+
+if (allBrandsSearch) {
+  allBrandsSearch.addEventListener("input", debounce((e) => {
+    const q = e.target.value.toLowerCase().trim();
+    let shown = 0;
+    allBrandsList.querySelectorAll(".store-card").forEach((card) => {
+      const ok = !q || card.dataset.search.includes(q);
+      card.hidden = !ok;
+      if (ok) shown++;
+    });
+    if (allBrandsEmpty) allBrandsEmpty.hidden = shown > 0;
+  }));
+}
+
+if (allBrandsModal) {
+  allBrandsModal.addEventListener("click", (e) => {
+    if (e.target === allBrandsModal) closeModal("allBrandsModal");
+  });
+}
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && allBrandsModal && !allBrandsModal.hidden) closeModal("allBrandsModal");
 });
 
 // ---------- Hamburger menu ----------
@@ -805,7 +871,7 @@ const aiSearchInput = document.getElementById("searchInput");
 const loadingNotes = [
   "Fetching offers for you… this might take a minute.",
   "Please hold on while we check the latest deals…",
-  "Scanning top brands for the best discounts…",
+  "Scanning top shopping sites for the best discounts…",
   "Matching offers to your product…",
   "Almost there — sorting the best deals for you…"
 ];
