@@ -136,37 +136,10 @@ a { color: inherit; text-decoration: none; }
 .festive-sparkle { font-size: 14px; }
 .hero-copy { max-width: 600px; margin: 0 auto 20px; color: var(--muted); font-size: 15px; font-weight: 600; line-height: 1.6; }
 
-/* Deal Hunter card */
-.deal-card { position: relative; max-width: 760px; margin: 0 auto; padding: 28px 30px 20px; text-align: center; border: 1px solid var(--line-gold); border-radius: 24px; background: linear-gradient(180deg, rgba(28, 63, 102, 0.50) 0%, rgba(17, 24, 38, 0.96) 62%), var(--obsidian-raised); box-shadow: 0 28px 64px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(236, 205, 143, 0.14); }
-.deal-card::before { content: ""; position: absolute; top: -1px; left: 14%; right: 14%; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne-bright), transparent); }
-.deal-card-brand { display: inline-flex; align-items: center; gap: 8px; color: var(--champagne-bright); font-size: 14px; font-weight: 800; }
-.deal-card-icon { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 9px; color: var(--champagne-bright); background: rgba(205, 161, 92, 0.14); border: 1px solid var(--line-gold); }
-.deal-card-title { margin: 10px 0 0; color: #fff; font-family: 'Manrope', 'DM Sans', sans-serif; font-size: clamp(21px, 3.6vw, 28px); font-weight: 800; line-height: 1.22; letter-spacing: -0.3px; }
-.deal-card .ai-search-shell { margin: 20px 0 0; border-color: rgba(205, 161, 92, 0.38); }
-.deal-foot { display: flex; align-items: center; justify-content: center; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12.5px; font-weight: 700; }
-.deal-foot span { padding: 0 14px; }
-.deal-foot span + span { border-left: 1px solid var(--line-gold); }
-.deal-foot strong { color: #fff; font-weight: 800; }
-
 /* Trust points */
 .trust-grid { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; max-width: 980px; margin: 24px auto 0; padding: 0; }
 .trust-item { display: flex; align-items: center; gap: 10px; padding: 12px 14px; text-align: left; border: 1px solid var(--line); border-radius: 14px; background: rgba(255, 255, 255, 0.03); color: var(--platinum); font-size: 12.5px; font-weight: 700; line-height: 1.35; }
 .trust-icon { flex-shrink: 0; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: rgba(205, 161, 92, 0.12); font-size: 14px; }
-
-/* AI Coupon Search Bar */
-.ai-search-shell { display: flex; align-items: center; position: relative; background: var(--panel-solid); border: 1px solid var(--line); border-radius: 100px; padding: 5px 8px 5px 45px; margin-bottom: 25px; transition: border-color .2s ease, box-shadow .2s ease; }
-.ai-search-shell:focus-within { border-color: var(--champagne); box-shadow: 0 0 0 3px rgba(205, 161, 92, 0.15); background: var(--panel-solid); }
-.ai-search-shell .search-input { border: none; background: transparent; box-shadow: none; padding: 0 10px; height: 46px; flex: 1; color: var(--ink); font-size: 14px; }
-.ai-search-shell .search-input::placeholder { color: #b9c5d3; font-weight: 600; }
-.ai-search-shell .search-input:focus { box-shadow: none; outline: none; }
-.ai-search-shell .search-leading { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; display: flex; align-items: center; }
-
-.search-actions-group { display: flex; align-items: center; gap: 8px; }
-.upload-img-label { cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, 0.05); color: var(--champagne-bright); border: 1px solid var(--line); transition: all 0.2s ease; }
-.upload-img-label:hover { background: rgba(205, 161, 92, 0.15); border-color: var(--champagne); }
-.btn-hunt-coupons { min-height: 40px; padding: 0 18px; font-size: 13px; white-space: nowrap; border-radius: 100px;}
-.img-preview-badge { display: flex; align-items: center; gap: 6px; background: rgba(91, 158, 234, 0.15); border: 1px solid rgba(91, 158, 234, 0.35); padding: 4px 10px; border-radius: 50px; font-size: 11px; color: var(--sapphire-glow); margin-right: 6px; }
-.img-preview-badge button { background: none; border: none; color: #fff; font-size: 14px; line-height: 1; padding: 0; cursor: pointer; }
 
 /* Directory Grid */
 .directory-section { width: min(1220px, calc(100% - 34px)); margin: 0 auto; padding-bottom: 24px; }
@@ -239,16 +212,6 @@ a { color: inherit; text-decoration: none; }
 .success-view h3 { margin: 0 0 7px; color: var(--ink); font-size: 18px; }
 .success-view p { margin: 0 auto 22px; color: var(--muted); font-size: 13px; font-weight: 600; line-height: 1.65; }
 
-/* Trust strip under banner */
-.trust-wrap { width: min(1220px, calc(100% - 34px)); margin: 0 auto 24px auto; }
-.trust-wrap .trust-grid { margin-top: 0; max-width: none; }
-
-/* Welcome popup = festive banner */
-.premium-modal.welcome-modal { width: min(940px, 100%); padding: 0; background: transparent; border: none; box-shadow: none; overflow: visible; }
-.welcome-modal .modal-close { top: 14px; right: 18px; z-index: 5; width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; background: rgba(9, 13, 20, 0.7); border: 1px solid var(--line-gold); color: var(--champagne-bright); font-size: 22px; }
-.welcome-modal .welcome-banner { box-shadow: 0 30px 70px rgba(0, 0, 0, 0.65); }
-.welcome-modal .reward-title { margin-top: 12px; }
-
 /* See all shopping sites */
 .store-card[hidden] { display: none; }
 .see-all-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 20px; border: 1px solid var(--line-gold); border-radius: 100px; background: rgba(205, 161, 92, 0.08); color: var(--champagne-bright); font-size: 13px; font-weight: 700; cursor: pointer; transition: transform .2s ease, background-color .2s ease, border-color .2s ease; }
@@ -282,8 +245,97 @@ a { color: inherit; text-decoration: none; }
 .rl-4 { --r: 7deg; top: 168px; left: 236px; animation-delay: -4.5s; }
 @keyframes rewardFloat { 0%, 100% { transform: rotate(var(--r)) translateY(0); } 50% { transform: rotate(var(--r)) translateY(-9px); } }
 
+/* Footer */
+.site-footer { border-top: 1px solid var(--line); background: rgba(9, 13, 20, 0.7); padding: 40px 20px 20px; margin-top: 40px; }
+.footer-main { width: min(1220px, 100%); margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px; }
+.footer-brand-block { max-width: 520px; }
+.footer-brand-block p { font-size: 14px; font-weight: 600; color: var(--muted); margin-top: 15px; line-height: 1.65; }
+.footer-legal-note { font-size: 12px !important; font-weight: 600; line-height: 1.65 !important; color: var(--faint) !important; margin-top: 15px !important; border-top: 1px solid var(--line); padding-top: 15px; }
+.footer-nav { display: flex; flex-wrap: wrap; align-content: flex-start; justify-content: flex-end; gap: 8px 26px; }
+.footer-nav button { background: none; border: none; color: var(--muted); font-size: 13.5px; font-weight: 700; padding: 4px 0; cursor: pointer; }
+.footer-nav button:hover { color: var(--champagne-bright); }
+.footer-bottom { width: min(1220px, 100%); margin: 20px auto 0; padding-top: 20px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; font-weight: 600; color: var(--faint); }
+
+/* Promo Banners */
+.promo-carousel-wrapper { position: relative; width: min(1220px, calc(100% - 34px)); margin: 25px auto 0; display: flex; align-items: center; }
+.promo-carousel { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 12px; align-items: center; }
+.promo-carousel::-webkit-scrollbar { display: none; }
+.promo-slide { flex: 0 0 calc(33.333% - 11px); scroll-snap-align: start; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--panel-solid); box-shadow: 0 6px 16px rgba(0,0,0,0.3); transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; display: block; text-decoration: none; height: max-content; }
+.promo-slide img { width: 100%; height: auto; display: block; }
+.promo-slide:hover { transform: translateY(-4px); border-color: var(--line-gold); box-shadow: 0 12px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(205, 161, 92, 0.2); }
+.carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(11, 26, 48, 0.95); color: var(--champagne-bright); border: 1px solid var(--line-gold); width: 44px; height: 44px; border-radius: 50%; font-size: 18px; z-index: 10; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.6); transition: background 0.2s, transform 0.2s; }
+.carousel-btn:hover { background: var(--panel-solid-hover); transform: translateY(-50%) scale(1.05); }
+.left-btn { left: -22px; }
+.right-btn { right: -22px; }
+
+/* AI Coupon Modal & Results Styling */
+.coupon-cards-container { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
+.coupon-card-item { display: flex; justify-content: space-between; align-items: center; gap: 14px; background: var(--obsidian); border: 1px solid var(--line-gold); border-radius: 16px; padding: 14px 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: transform 0.2s ease, border-color 0.2s ease; }
+.coupon-card-item:hover { transform: translateY(-2px); border-color: var(--champagne); }
+.coupon-logo-box { width: 48px; height: 48px; flex-shrink: 0; background: #fff; border-radius: 10px; padding: 4px; display: grid; place-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+.coupon-logo-box img { width: 100%; height: 100%; object-fit: contain; }
+.coupon-card-info { text-align: left; flex: 1; overflow: hidden; }
+.coupon-brand-tag { font-size: 11.5px; font-weight: 800; color: var(--champagne-bright); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 2px;}
+.coupon-code-badge { display: inline-flex; align-items: center; background: rgba(205, 161, 92, 0.12); border: 1px dashed var(--champagne); color: var(--ink); font-size: 14px; font-weight: 800; padding: 5px 12px; border-radius: 6px; margin: 2px 0 6px; cursor: pointer; letter-spacing: 1px; transition: all 0.2s ease;}
+.coupon-code-badge:hover { background: var(--champagne); color: #090d14; border-style: solid; }
+.coupon-desc { font-size: 13px; font-weight: 600; color: var(--platinum); margin: 0; line-height: 1.4; }
+.coupon-action-btn { padding: 10px 16px; font-size: 12px; font-weight: 700; border-radius: 10px; background: linear-gradient(135deg, var(--champagne-bright), var(--champagne)); color: #14100a; border: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; box-shadow: 0 4px 12px rgba(205, 161, 92, 0.25); transition: transform 0.2s ease; flex-shrink: 0;}
+.coupon-action-btn:hover { transform: scale(1.03); }
+.coupon-loader-box { text-align: center; padding: 30px 10px; color: var(--platinum); font-size: 13px; }
+.loader-spinner { width: 36px; height: 36px; border: 3px solid rgba(205, 161, 92, 0.2); border-top-color: var(--champagne-bright); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+#loadingTextAnim { transition: opacity 0.3s ease; }
+
+/* ===== Premium Deal Hunter + golden outlines (Wide Split Layout) ===== */
+.deal-wrap { width: min(1220px, calc(100% - 34px)); margin: 0 auto; padding: 0 0 20px; }
+.deal-card { 
+  max-width: 100%; 
+  padding: 44px 56px; 
+  border-radius: 28px; 
+  background: radial-gradient(circle at 85% 0%, rgba(205, 161, 92, 0.20) 0%, transparent 50%), radial-gradient(circle at 8% 100%, rgba(28, 63, 102, 0.55) 0%, transparent 55%), linear-gradient(135deg, rgba(28, 63, 102, 0.78) 0%, rgba(17, 24, 38, 0.98) 62%), var(--obsidian-raised);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  text-align: left;
+  border: 1px solid var(--line-gold); 
+  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(236, 205, 143, 0.14);
+}
+.deal-card::before { content: ""; position: absolute; top: -1px; left: 12%; right: 12%; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne-bright), transparent); }
+.deal-card-left { flex: 1; max-width: 520px; }
+.deal-card-right { flex: 1; max-width: 560px; width: 100%; }
+
+.deal-chip { margin: 0; }
+.deal-card-title { margin: 18px 0 0; font-family: 'Manrope', 'DM Sans', sans-serif; font-size: clamp(30px, 4.4vw, 46px); font-weight: 800; line-height: 1.1; letter-spacing: -0.8px; color: #fff; }
+.deal-card-title span { display: block; margin-top: 6px; background: linear-gradient(135deg, var(--champagne-bright) 0%, var(--champagne) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.deal-card-sub { max-width: 100%; margin: 14px 0 0; color: var(--muted); font-size: 15px; font-weight: 600; line-height: 1.6; }
+
+.deal-foot { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line-gold); display: flex; justify-content: flex-start; color: var(--muted); font-size: 12.5px; font-weight: 700; }
+.deal-foot span { padding: 0 14px; }
+.deal-foot span:first-child { padding-left: 0; }
+.deal-foot span + span { border-left: 1px solid var(--line-gold); }
+.deal-foot strong { color: #fff; font-weight: 800; }
+
+.deal-card .ai-search-shell { margin: 0; padding: 8px 10px 8px 24px; background: rgba(9, 13, 20, 0.72); border: 1px solid var(--champagne); box-shadow: 0 10px 28px rgba(205, 161, 92, 0.16), inset 0 1px 0 rgba(236, 205, 143, 0.14); border-radius: 100px; display: flex; align-items: center; position: relative; transition: border-color .2s ease, box-shadow .2s ease; }
+.deal-card .ai-search-shell:focus-within { box-shadow: 0 0 0 3px rgba(205, 161, 92, 0.20), 0 10px 28px rgba(205, 161, 92, 0.22); }
+.deal-card .ai-search-shell .search-leading { position: absolute; top: 50%; transform: translateY(-50%); color: var(--champagne-bright); left: 24px; display: flex; align-items: center; pointer-events: none; }
+.deal-card .ai-search-shell .search-input { border: none; background: transparent; box-shadow: none; flex: 1; color: var(--ink); outline: none; height: 48px; font-size: 15px; padding-left: 36px; }
+.deal-card .ai-search-shell .search-input::placeholder { color: #b9c5d3; font-weight: 600; }
+.deal-card .btn-hunt-coupons { min-height: 48px; padding: 0 28px; font-size: 15px; font-weight: 800; border-radius: 100px; }
+
+/* ===== Ultra-smooth scrolling inside popups ===== */
+.modal-overlay { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(4, 6, 10, 0.88); overscroll-behavior: contain; }
+.premium-modal { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; scroll-behavior: auto; transform: translateZ(0); will-change: scroll-position; backface-visibility: hidden; }
+.all-brands-modal .store-card,
+.coupon-card-item { content-visibility: auto; contain-intrinsic-size: 150px 168px; transition: none; box-shadow: none; }
+.coupon-card-item { contain-intrinsic-size: auto 96px; }
+.all-brands-modal .store-card:hover,
+.coupon-card-item:hover { transform: none; }
+.all-brands-modal .store-grid { gap: 12px; }
+.all-brands-modal .store-logo-frame, .all-brands-modal .store-logo { transition: none; }
+
+
 /* =========================================================
-   Mobile Hero Spacing Tightened & Miniaturized Reward Banner
+   Mobile Handling
    ========================================================= */
 @media (max-width: 768px) {
   /* TIGHTENED HERO SPACING FOR MOBILE */
@@ -313,6 +365,52 @@ a { color: inherit; text-decoration: none; }
   .rl-2 { top: 16px; left: 64px; }
   .rl-3 { top: 54px; left: 0px; }
   .rl-4 { top: 68px; left: 56px; }
+
+  /* DEAL HUNTER MOBILE OVERRIDE */
+  .deal-card { flex-direction: column; text-align: center; padding: 28px 16px 20px; border-radius: 22px; gap: 20px; }
+  .deal-chip { margin: 0 auto; }
+  .deal-card-left { max-width: 100%; }
+  .deal-card-right { max-width: 100%; }
+  .deal-card-sub { margin: 12px auto 0; font-size: 13.5px; }
+  .deal-card-title { font-size: clamp(24px, 5vw, 32px); margin-top: 12px; }
+  .deal-foot { justify-content: center; margin-top: 18px; padding-top: 14px; }
+  .deal-foot span:first-child { padding-left: 14px; }
+  
+  .deal-card .ai-search-shell { padding: 8px; border-radius: 20px; }
+  .deal-card .ai-search-shell .search-input { height: 42px; font-size: 13px; padding-left: 30px; text-overflow: ellipsis; }
+  .deal-card .ai-search-shell .search-leading { left: 14px; }
+  .deal-card .btn-hunt-coupons { min-height: 42px; font-size: 13px; padding: 0 20px; }
+
+  /* Welcome Modal Revert */
+  .welcome-modal .reward-banner { flex-direction: column; align-items: stretch; gap: 26px; padding: 40px 22px 28px; border-radius: 22px; }
+  .welcome-modal .reward-copy { max-width: 100%; }
+  .welcome-modal .reward-title { font-size: clamp(28px, 6vw, 36px); margin-top: 12px; }
+  .welcome-modal .reward-sub { font-size: 14px; margin: 12px 0 22px; }
+  .welcome-modal .reward-btn { width: 100%; min-height: 50px; font-size: 14px; padding: 0; }
+  .welcome-modal .reward-logos { flex: none; height: auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; position: static; }
+  .welcome-modal .reward-logo { position: static; width: 78px; height: 78px; padding: 6px; border-radius: 20px; box-shadow: 0 18px 38px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(205, 161, 92, 0.25); }
+  .welcome-modal .reward-logo img { border-radius: 14px; }
+}
+
+@media (max-width: 600px) {
+  .ai-search-shell { flex-wrap: wrap; border-radius: 16px; padding: 10px 14px; }
+  .ai-search-shell .search-input { width: 100%; margin-bottom: 10px; height: 40px; padding-left: 28px; }
+  .ai-search-shell .search-leading { top: 30px; left: 14px; }
+  .search-actions-group { width: 100%; justify-content: space-between; }
+  .btn-hunt-coupons { flex: 1; justify-content: center;}
+  
+  .coupon-card-item { flex-direction: column; text-align: center; gap: 10px; padding: 16px; }
+  .coupon-card-info { text-align: center; }
+  .coupon-action-btn { width: 100%; justify-content: center; }
+  
+  .trust-grid { gap: 10px; }
+  .trust-item { gap: 8px; padding: 10px; font-size: 12px; line-height: 1.35; }
+  .trust-icon { width: 26px; height: 26px; font-size: 13px; }
+  .festive-sparkle { display: none; }
+  .festive-pill { border-radius: 16px; padding: 10px 16px; line-height: 1.45; }
+  .footer-nav { justify-content: flex-start; }
+  .site-footer .brand-wordmark { display: inline; }
+  .all-brands-modal .store-card { contain-intrinsic-size: 130px 150px; }
 }
 
 @media (max-width: 400px) {
@@ -330,89 +428,9 @@ a { color: inherit; text-decoration: none; }
   
   .reward-btn { min-height: 36px; padding: 0 12px; font-size: 11.5px; }
 }
-/* ========================================================= */
 
-/* Footer */
-.site-footer { border-top: 1px solid var(--line); background: rgba(9, 13, 20, 0.7); padding: 40px 20px 20px; margin-top: 40px; }
-.footer-main { width: min(1220px, 100%); margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px; }
-.footer-brand-block { max-width: 520px; }
-.footer-brand-block p { font-size: 14px; font-weight: 600; color: var(--muted); margin-top: 15px; line-height: 1.65; }
-.footer-legal-note { font-size: 12px !important; font-weight: 600; line-height: 1.65 !important; color: var(--faint) !important; margin-top: 15px !important; border-top: 1px solid var(--line); padding-top: 15px; }
-.footer-nav { display: flex; flex-wrap: wrap; align-content: flex-start; justify-content: flex-end; gap: 8px 26px; }
-.footer-nav button { background: none; border: none; color: var(--muted); font-size: 13.5px; font-weight: 700; padding: 4px 0; cursor: pointer; }
-.footer-nav button:hover { color: var(--champagne-bright); }
-.footer-bottom { width: min(1220px, 100%); margin: 20px auto 0; padding-top: 20px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; font-weight: 600; color: var(--faint); }
-
-/* Promo Banners */
-.promo-carousel-wrapper { position: relative; width: min(1220px, calc(100% - 34px)); margin: 25px auto 0; display: flex; align-items: center; }
-
-/* YEH CODE BOX KO LAMBA HONE SE ROKEGA */
-.promo-carousel { 
-  display: flex; 
-  gap: 16px; 
-  overflow-x: auto; 
-  scroll-snap-type: x mandatory; 
-  scroll-behavior: smooth; 
-  scrollbar-width: none; 
-  -ms-overflow-style: none; 
-  padding-bottom: 12px; 
-  align-items: center; 
-}
-.promo-carousel::-webkit-scrollbar { display: none; }
-
-/* NATURAL IMAGE SIZE FIX */
-.promo-slide { 
-  flex: 0 0 calc(33.333% - 11px); 
-  scroll-snap-align: start; 
-  border-radius: 14px; 
-  overflow: hidden; 
-  border: 1px solid var(--line); 
-  background: var(--panel-solid); 
-  box-shadow: 0 6px 16px rgba(0,0,0,0.3); 
-  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; 
-  display: block; 
-  text-decoration: none; 
-  height: max-content; /* BOX ZABARDASTI KISI AUR KE HISAB SE BADA NAHI HOGA */
-}
-.promo-slide img { 
-  width: 100%; 
-  height: auto; /* IMAGE APNA ORIGINAL NATURAL SIZE HI RAKHEGI */
-  display: block; 
-}
-
-.promo-slide:hover { transform: translateY(-4px); border-color: var(--line-gold); box-shadow: 0 12px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(205, 161, 92, 0.2); }
-.carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(11, 26, 48, 0.95); color: var(--champagne-bright); border: 1px solid var(--line-gold); width: 44px; height: 44px; border-radius: 50%; font-size: 18px; z-index: 10; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.6); transition: background 0.2s, transform 0.2s; }
-.carousel-btn:hover { background: var(--panel-solid-hover); transform: translateY(-50%) scale(1.05); }
-.left-btn { left: -22px; }
-.right-btn { right: -22px; }
-
-/* AI Coupon Modal & Results Styling */
-.coupon-cards-container { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
-.coupon-card-item { display: flex; justify-content: space-between; align-items: center; gap: 14px; background: var(--obsidian); border: 1px solid var(--line-gold); border-radius: 16px; padding: 14px 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: transform 0.2s ease, border-color 0.2s ease; }
-.coupon-card-item:hover { transform: translateY(-2px); border-color: var(--champagne); }
-.coupon-logo-box { width: 48px; height: 48px; flex-shrink: 0; background: #fff; border-radius: 10px; padding: 4px; display: grid; place-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-.coupon-logo-box img { width: 100%; height: 100%; object-fit: contain; }
-.coupon-card-info { text-align: left; flex: 1; overflow: hidden; }
-.coupon-brand-tag { font-size: 11.5px; font-weight: 800; color: var(--champagne-bright); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 2px;}
-.coupon-code-badge { display: inline-flex; align-items: center; background: rgba(205, 161, 92, 0.12); border: 1px dashed var(--champagne); color: var(--ink); font-size: 14px; font-weight: 800; padding: 5px 12px; border-radius: 6px; margin: 2px 0 6px; cursor: pointer; letter-spacing: 1px; transition: all 0.2s ease;}
-.coupon-code-badge:hover { background: var(--champagne); color: #090d14; border-style: solid; }
-.coupon-desc { font-size: 13px; font-weight: 600; color: var(--platinum); margin: 0; line-height: 1.4; }
-.coupon-action-btn { padding: 10px 16px; font-size: 12px; font-weight: 700; border-radius: 10px; background: linear-gradient(135deg, var(--champagne-bright), var(--champagne)); color: #14100a; border: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; box-shadow: 0 4px 12px rgba(205, 161, 92, 0.25); transition: transform 0.2s ease; flex-shrink: 0;}
-.coupon-action-btn:hover { transform: scale(1.03); }
-.coupon-loader-box { text-align: center; padding: 30px 10px; color: var(--platinum); font-size: 13px; }
-.loader-spinner { width: 36px; height: 36px; border: 3px solid rgba(205, 161, 92, 0.2); border-top-color: var(--champagne-bright); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
-#loadingTextAnim { transition: opacity 0.3s ease; }
-
-@media (max-width: 600px) {
-  .ai-search-shell { flex-wrap: wrap; border-radius: 16px; padding: 10px 14px; }
-  .ai-search-shell .search-input { width: 100%; margin-bottom: 10px; height: 40px; padding-left: 28px; }
-  .ai-search-shell .search-leading { top: 30px; left: 14px; }
-  .search-actions-group { width: 100%; justify-content: space-between; }
-  .btn-hunt-coupons { flex: 1; justify-content: center;}
-  
-  .coupon-card-item { flex-direction: column; text-align: center; gap: 10px; padding: 16px; }
-  .coupon-card-info { text-align: center; }
-  .coupon-action-btn { width: 100%; justify-content: center; }
+@media (max-width: 380px) {
+  .deal-card .ai-search-shell .search-input { font-size: 12px; }
 }
 
 @media (max-width: 360px) {
@@ -420,82 +438,8 @@ a { color: inherit; text-decoration: none; }
   .store-card { padding: 14px 8px; }
 }
 
-/* Hero responsive */
 @media (max-width: 900px) {
   .trust-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 640px; }
 }
-@media (max-width: 768px) {
-  .deal-card { margin-top: 0; padding: 22px 12px 16px; border-radius: 20px; }
-  .deal-foot span { padding: 0 10px; }
-}
-@media (max-width: 600px) {
-  .trust-grid { gap: 10px; }
-  .trust-item { gap: 8px; padding: 10px; font-size: 12px; line-height: 1.35; }
-  .trust-icon { width: 26px; height: 26px; font-size: 13px; }
-  .festive-sparkle { display: none; }
-  .festive-pill { border-radius: 16px; padding: 10px 16px; line-height: 1.45; }
-  .deal-card .ai-search-shell { padding: 10px 12px; }
-  .deal-card .ai-search-shell .search-input { font-size: 13px; padding-left: 26px; text-overflow: ellipsis; }
-  .deal-card .ai-search-shell .search-leading { left: 12px; }
-  .footer-nav { justify-content: flex-start; }
-  .site-footer .brand-wordmark { display: inline; }
-}
 
 .hero-copy, .deal-card-title, .festive-pill { text-wrap: balance; }
-
-@media (max-width: 380px) {
-  .deal-card .ai-search-shell .search-input { font-size: 12px; }
-}
-
-
-/* ===== Premium Deal Hunter + golden outlines (matches Festive Rewards banner) ===== */
-.deal-card { max-width: 820px; padding: 40px 44px 26px; border-radius: 28px; background: radial-gradient(circle at 85% 0%, rgba(205, 161, 92, 0.20) 0%, transparent 50%), radial-gradient(circle at 8% 100%, rgba(28, 63, 102, 0.55) 0%, transparent 55%), linear-gradient(135deg, rgba(28, 63, 102, 0.78) 0%, rgba(17, 24, 38, 0.98) 62%), var(--obsidian-raised); }
-.deal-card::before { left: 12%; right: 12%; }
-.deal-chip { margin: 0 auto; }
-.deal-card-title { margin: 18px 0 0; font-size: clamp(26px, 4.6vw, 42px); font-weight: 800; line-height: 1.12; letter-spacing: -0.8px; }
-.deal-card-title span { display: block; margin-top: 4px; background: linear-gradient(135deg, var(--champagne-bright) 0%, var(--champagne) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.deal-card-sub { max-width: 520px; margin: 14px auto 0; color: var(--muted); font-size: 14.5px; font-weight: 600; line-height: 1.6; }
-.deal-card .ai-search-shell { margin: 26px 0 0; padding-top: 6px; padding-bottom: 6px; background: rgba(9, 13, 20, 0.72); border: 1px solid var(--champagne); box-shadow: 0 10px 28px rgba(205, 161, 92, 0.16), inset 0 1px 0 rgba(236, 205, 143, 0.14); }
-.deal-card .ai-search-shell:focus-within { box-shadow: 0 0 0 3px rgba(205, 161, 92, 0.20), 0 10px 28px rgba(205, 161, 92, 0.22); }
-.deal-card .ai-search-shell .search-leading { color: var(--champagne-bright); }
-.deal-card .btn-hunt-coupons { min-height: 44px; padding: 0 24px; font-size: 14px; font-weight: 800; }
-.deal-foot { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--line-gold); }
-
-/* golden outline: store cards, search shopping sites, category bar */
-.store-card { border: 1px solid var(--line-gold); box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(236, 205, 143, 0.12); }
-.store-card:hover { border-color: var(--champagne); box-shadow: 0 16px 34px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(205, 161, 92, 0.35), inset 0 1px 0 rgba(236, 205, 143, 0.2); }
-.brand-filter-shell { border: 1px solid var(--line-gold); box-shadow: inset 0 1px 0 rgba(236, 205, 143, 0.12); }
-.category-nav-wrapper { border: 1px solid var(--line-gold); box-shadow: 0 14px 34px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(236, 205, 143, 0.14); }
-
-@media (max-width: 768px) {
-  .deal-card-sub { font-size: 13.5px; }
-}
-
-/* ===== Ultra-smooth scrolling inside popups ===== */
-.modal-overlay { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(4, 6, 10, 0.88); overscroll-behavior: contain; }
-.premium-modal { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; scroll-behavior: auto; transform: translateZ(0); will-change: scroll-position; backface-visibility: hidden; }
-.all-brands-modal .store-card,
-.coupon-card-item { content-visibility: auto; contain-intrinsic-size: 150px 168px; transition: none; box-shadow: none; }
-.coupon-card-item { contain-intrinsic-size: auto 96px; }
-.all-brands-modal .store-card:hover,
-.coupon-card-item:hover { transform: none; }
-.all-brands-modal .store-grid { gap: 12px; }
-.all-brands-modal .store-logo-frame, .all-brands-modal .store-logo { transition: none; }
-@media (max-width: 600px) { .all-brands-modal .store-card { contain-intrinsic-size: 130px 150px; } }
-
-
-/* Spacing & alignment of sections */
-.deal-wrap { width: min(1220px, calc(100% - 34px)); margin: 0 auto; padding: 0 0 20px; }
-
-/* Revert Welcome Popup to original Stacked layout on Mobile */
-@media (max-width: 768px) {
-  .welcome-modal .reward-banner { flex-direction: column; align-items: stretch; gap: 26px; padding: 40px 22px 28px; border-radius: 22px; }
-  .welcome-modal .reward-copy { max-width: 100%; }
-  .welcome-modal .reward-title { font-size: clamp(28px, 6vw, 36px); margin-top: 12px; }
-  .welcome-modal .reward-sub { font-size: 14px; margin: 12px 0 22px; }
-  .welcome-modal .reward-btn { width: 100%; min-height: 50px; font-size: 14px; padding: 0; }
-  
-  .welcome-modal .reward-logos { flex: none; height: auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; position: static; }
-  .welcome-modal .reward-logo { position: static; width: 78px; height: 78px; padding: 6px; border-radius: 20px; box-shadow: 0 18px 38px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(205, 161, 92, 0.25); }
-  .welcome-modal .reward-logo img { border-radius: 14px; }
-}
