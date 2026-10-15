@@ -412,12 +412,22 @@ a { color: inherit; text-decoration: none; }
   .deal-foot { order: 5; width: 100%; justify-content: center; margin-top: 14px; padding-top: 18px; border-top: 1px solid var(--line-gold); }
   .deal-foot span:first-child { padding-left: 14px; }
 
-  .deal-card .ai-search-shell { padding: 8px; border-radius: 20px; height: auto; flex-direction: column; gap: 10px; position: relative; }
-  .deal-card .ai-search-shell .search-input { height: 54px; font-size: 14px; padding-left: 42px; text-overflow: ellipsis; width: 100%; }
-  .deal-card .ai-search-shell .search-leading { top: 35px !important; left: 18px !important; transform: translateY(-50%) !important; position: absolute; margin: 0; }
-  .search-actions-group { width: 100%; justify-content: flex-end; }
-  .upload-img-label { width: 42px !important; height: 42px !important; border-radius: 10px; }
-  .deal-card .btn-hunt-coupons { height: 42px !important; font-size: 13px !important; padding: 0 20px !important; flex: 1; }
+  /* SEARCH BOX MAIN CONTAINER */
+  .deal-card .ai-search-shell { padding: 12px; border-radius: 20px; height: auto; flex-direction: column; gap: 12px; position: relative; }
+  
+  /* 1. TEXT AREA - Height strictly equal to buttons (48px) */
+  .deal-card .ai-search-shell .search-input { height: 48px; font-size: 14px; padding-left: 42px; width: 100%; margin: 0; }
+  
+  /* 2. MAGNIFYING GLASS ICON - Locked inside the text area perfectly */
+  /* Top padding (12px) + Half of text area height (24px) = exactly 36px from top */
+  .deal-card .ai-search-shell .search-leading { top: 36px !important; left: 24px !important; transform: translateY(-50%) !important; position: absolute !important; margin: 0; }
+  
+  /* 3. BOTTOM BUTTONS ROW */
+  .search-actions-group { width: 100%; height: 48px; display: flex; gap: 8px; justify-content: flex-end; align-items: center; }
+  
+  /* UPLOAD ICON & FIND DEALS BUTTON - Strictly 48px height to match text area */
+  .upload-img-label { width: 48px !important; height: 48px !important; border-radius: 12px; margin: 0; flex-shrink: 0; }
+  .deal-card .btn-hunt-coupons { height: 48px !important; font-size: 14px !important; padding: 0 20px !important; margin: 0; flex: 1; }
 
   /* Welcome Modal Revert */
   .welcome-modal .reward-banner { flex-direction: column; align-items: stretch; gap: 26px; padding: 40px 22px 28px; border-radius: 22px; }
