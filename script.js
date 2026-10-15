@@ -441,6 +441,8 @@ if (document.getElementById("currentYear")) {
 // =========================================================
 // UTILS: Modals, Auth, Forms, PWA
 // =========================================================
+
+// --- FIX 1: Welcome Modal Infinite Loop Logic ---
 function openModal(id) {
   haptic();
   const modal = document.getElementById(id);
@@ -458,6 +460,11 @@ function closeModal(id) {
     document.body.classList.remove("modal-open");
   }
 
+  // Ensure Welcome Modal logic works even on 'X' click
+  if (id === "welcomeModal") {
+    localStorage.setItem("cheapster_welcome_seen", "1");
+  }
+
   if (id === "formModal") {
     const form = document.getElementById("rewardForm");
     const success = document.getElementById("successView");
@@ -472,6 +479,25 @@ function closeModal(id) {
 document.querySelectorAll("[data-close-modal]").forEach((btn) => {
     btn.addEventListener("click", () => closeModal(btn.dataset.closeModal));
 });
+
+// --- FIX 2: Global Modal Trapping Logic ---
+// Close on outside overlay click for ALL modals
+document.querySelectorAll(".modal-overlay").forEach((overlay) => {
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) {
+      closeModal(overlay.id);
+    }
+  });
+});
+
+// Close on Escape key for ALL modals
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    const openModal = document.querySelector(".modal-overlay:not([hidden])");
+    if (openModal) closeModal(openModal.id);
+  }
+});
+
 
 const headerOfferBtn = document.getElementById("headerOfferBtn");
 if (headerOfferBtn) headerOfferBtn.addEventListener("click", () => openModal("formModal"));
@@ -536,14 +562,6 @@ if (allBrandsSearch) {
   }));
 }
 
-if (allBrandsModal) {
-  allBrandsModal.addEventListener("click", (e) => {
-    if (e.target === allBrandsModal) closeModal("allBrandsModal");
-  });
-}
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && allBrandsModal && !allBrandsModal.hidden) closeModal("allBrandsModal");
-});
 
 // ---------- Hamburger menu ----------
 const hamburgerBtn = document.getElementById("hamburgerBtn");
@@ -784,6 +802,7 @@ if (installBtn && isAndroid) {
 }
 
 // ---------- Promo Banners Carousel (Smooth Infinite Left/Right Loop) ----------
+// --- FIX 3: Carousel Infinite Scroll Jank (iOS/Safari Issue) ---
 const promoCarousel = document.getElementById('promoCarousel');
 const scrollLeftBtn = document.getElementById('scrollLeftBtn');
 const scrollRightBtn = document.getElementById('scrollRightBtn');
@@ -835,20 +854,24 @@ if (promoCarousel) {
       // Agar user extreme left clone set mein enter kar gaya
       if (promoCarousel.scrollLeft <= 50) {
           isResetting = true;
+          promoCarousel.style.scrollSnapType = 'none'; // Disable snap temporarily
           promoCarousel.style.scrollBehavior = 'auto';
           promoCarousel.scrollLeft += setWidth;
           setTimeout(() => { 
               promoCarousel.style.scrollBehavior = 'smooth'; 
+              promoCarousel.style.scrollSnapType = 'x mandatory'; // Re-enable snap
               isResetting = false; 
           }, 50);
       } 
       // Agar user extreme right clone set mein enter kar gaya
       else if (promoCarousel.scrollLeft >= (promoCarousel.scrollWidth - promoCarousel.clientWidth) - 50) {
           isResetting = true;
+          promoCarousel.style.scrollSnapType = 'none'; // Disable snap temporarily
           promoCarousel.style.scrollBehavior = 'auto';
           promoCarousel.scrollLeft -= setWidth;
           setTimeout(() => { 
               promoCarousel.style.scrollBehavior = 'smooth'; 
+              promoCarousel.style.scrollSnapType = 'x mandatory'; // Re-enable snap
               isResetting = false; 
           }, 50);
       }
