@@ -239,6 +239,29 @@ a { color: inherit; text-decoration: none; }
 .success-view h3 { margin: 0 0 7px; color: var(--ink); font-size: 18px; }
 .success-view p { margin: 0 auto 22px; color: var(--muted); font-size: 13px; font-weight: 600; line-height: 1.65; }
 
+/* Trust strip under banner */
+.trust-wrap { width: min(1220px, calc(100% - 34px)); margin: 28px auto 0; }
+.trust-wrap .trust-grid { margin-top: 0; max-width: none; }
+
+/* Welcome popup = festive banner */
+.premium-modal.welcome-modal { width: min(940px, 100%); padding: 0; background: transparent; border: none; box-shadow: none; overflow: visible; }
+.welcome-modal .modal-close { top: 14px; right: 18px; z-index: 5; width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; background: rgba(9, 13, 20, 0.7); border: 1px solid var(--line-gold); color: var(--champagne-bright); font-size: 22px; }
+.welcome-modal .welcome-banner { box-shadow: 0 30px 70px rgba(0, 0, 0, 0.65); }
+.welcome-modal .reward-title { margin-top: 12px; }
+@media (max-width: 768px) { .welcome-modal .welcome-banner { padding: 40px 22px 28px; } }
+
+/* See all shopping sites */
+.store-card[hidden] { display: none; }
+.see-all-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 20px; border: 1px solid var(--line-gold); border-radius: 100px; background: rgba(205, 161, 92, 0.08); color: var(--champagne-bright); font-size: 13px; font-weight: 700; cursor: pointer; transition: transform .2s ease, background-color .2s ease, border-color .2s ease; }
+.see-all-btn:hover { transform: translateY(-1px); background: rgba(205, 161, 92, 0.16); border-color: var(--champagne); }
+.see-all-row { display: flex; justify-content: center; margin-top: 28px; }
+.see-all-btn-wide { min-height: 48px; padding: 0 28px; font-size: 14px; }
+.all-brands-modal { width: min(1080px, 100%); }
+.all-brands-search { max-width: 420px; margin: 4px 0 8px; }
+.all-brands-group { margin-top: 26px; }
+.all-brands-cat { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; color: var(--ink); font-size: 16px; font-weight: 800; }
+.all-brands-cat span { padding: 3px 10px; border: 1px solid var(--line); border-radius: 100px; color: var(--muted); font-size: 12px; font-weight: 700; }
+
 /* Reward Banner (above footer) */
 .reward-banner-wrap { width: min(1220px, calc(100% - 34px)); margin: 0 auto; }
 .reward-banner { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 44px 56px; border: 1px solid var(--line-gold); border-radius: 28px; background: radial-gradient(circle at 80% 35%, rgba(205, 161, 92, 0.20) 0%, transparent 52%), linear-gradient(135deg, rgba(28, 63, 102, 0.78) 0%, rgba(17, 24, 38, 0.98) 62%), var(--obsidian-raised); box-shadow: 0 28px 64px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(236, 205, 143, 0.14); }
