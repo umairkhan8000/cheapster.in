@@ -454,3 +454,14 @@ a { color: inherit; text-decoration: none; }
 .all-brands-modal .store-grid { gap: 12px; }
 .all-brands-modal .store-logo-frame, .all-brands-modal .store-logo { transition: none; }
 @media (max-width: 600px) { .all-brands-modal .store-card { contain-intrinsic-size: 130px 150px; } }
+
+
+/* Swapped positions */
+.hero .reward-banner-wrap { margin-top: 30px; text-align: left; }
+.hero .trust-wrap { margin-top: 24px; }
+.deal-wrap { width: min(1220px, calc(100% - 34px)); margin: 0 auto; padding: 8px 0 20px; }
+.deal-wrap .deal-card { margin-top: 0; }
+@media (max-width: 768px) { .hero .reward-banner-wrap { margin-top: 24px; } }
+
+.hero .trust-wrap { margin-top: 28px; }
+.deal-wrap + .trust-wrap { margin: 4px auto 28px; }
