@@ -472,6 +472,9 @@ document.querySelectorAll("[data-close-modal]").forEach((btn) => {
 const headerOfferBtn = document.getElementById("headerOfferBtn");
 if (headerOfferBtn) headerOfferBtn.addEventListener("click", () => openModal("formModal"));
 
+const bannerClaimBtn = document.getElementById("bannerClaimBtn");
+if (bannerClaimBtn) bannerClaimBtn.addEventListener("click", () => openModal("formModal"));
+
 document.querySelectorAll("[data-info-modal]").forEach((btn) => {
     btn.addEventListener("click", () => openModal(btn.dataset.infoModal));
 });
