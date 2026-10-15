@@ -12,20 +12,20 @@
 
   <!-- Primary Meta Tags -->
   <meta name="title" content="Cheapster.in — The Festive Giveaway is LIVE! 🎁">
-  <meta name="description" content="Shop your favorite fashion, beauty, and tech brands. Participate in the Free Festive Giveaway! 1000+ Winners. No Purchase Necessary.">
+  <meta name="description" content="Shop your favorite fashion, beauty, and tech shopping sites. Participate in the Free Festive Giveaway! 1000+ Winners. No Purchase Necessary.">
 
   <!-- Open Graph / Facebook / WhatsApp -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://cheapster.in/">
   <meta property="og:title" content="Cheapster.in — The Festive Reward is LIVE! 🎁">
-  <meta property="og:description" content="Shop your favorite fashion, beauty, and tech brands. Participate in the Free Festive Rewards! 1000+ Winners. No Purchase Necessary.">
+  <meta property="og:description" content="Shop your favorite fashion, beauty, and tech shopping sites. Participate in the Free Festive Rewards! 1000+ Winners. No Purchase Necessary.">
   <meta property="og:image" content="https://cheapster.in/banner.jpg">
 
   <!-- Twitter / X -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://cheapster.in/">
   <meta property="twitter:title" content="Cheapster.in — The Festive Giveaway is LIVE! 🎁">
-  <meta property="twitter:description" content="Shop your favorite fashion, beauty, and tech brands. Participate in the Free Festive Giveaway! 1000+ Winners. No Purchase Necessary.">
+  <meta property="twitter:description" content="Shop your favorite fashion, beauty, and tech shopping sites. Participate in the Free Festive Giveaway! 1000+ Winners. No Purchase Necessary.">
   <meta property="twitter:image" content="https://cheapster.in/banner.jpg">
   
   <!-- PWA Manifest -->
@@ -141,12 +141,12 @@
         </div>
 
         <h1>
-          Explore 100+ brands<br>
+          Explore 100+ shopping sites<br>
           <span>you already love.</span>
         </h1>
 
         <p class="hero-copy">
-          Shop your favorite fashion, quick-commerce, and tech brands. Participate in exclusive rewards backed by a premium directory.
+          Shop your favorite fashion, quick-commerce, and tech shopping sites. Participate in exclusive rewards backed by a premium directory.
         </p>
 
         <!-- DEAL HUNTER CARD -->
@@ -192,18 +192,10 @@
           </div>
 
           <div class="deal-foot">
-            <span><strong id="heroStoreCount">0</strong> trending brands</span>
+            <span><strong id="heroStoreCount">0</strong> trending shopping sites</span>
             <span>One secure portal</span>
           </div>
         </div>
-
-        <!-- TRUST POINTS -->
-        <ul class="trust-grid">
-          <li class="trust-item"><span class="trust-icon" aria-hidden="true">🔒</span><span>100% Free — No Purchase Necessary</span></li>
-          <li class="trust-item"><span class="trust-icon" aria-hidden="true">🔗</span><span>Direct Links to Official Brand Sites</span></li>
-          <li class="trust-item"><span class="trust-icon" aria-hidden="true">🙅</span><span>We Never Ask for Bank/OTP Details</span></li>
-          <li class="trust-item"><span class="trust-icon" aria-hidden="true">🔐</span><span>Secure Google Sign&#8209;in</span></li>
-        </ul>
 
       </div>
     </section>
@@ -216,6 +208,7 @@
           <span class="section-label">THE DIRECTORY</span>
           <h2>Top Deals & Platforms</h2>
         </div>
+        <button type="button" class="see-all-btn" data-open-all-brands>See all shopping sites <span aria-hidden="true">→</span></button>
       </div>
 
       <!-- BRAND FILTER (below category pills, above cards) -->
@@ -225,15 +218,19 @@
             <circle cx="10.8" cy="10.8" r="6.8"></circle>
             <path d="M16 16L21 21"></path>
           </svg>
-          <input id="brandSearchInput" type="search" placeholder="Search brands like Myntra, Nykaa, Skyscanner..." autocomplete="off">
+          <input id="brandSearchInput" type="search" placeholder="Search shopping sites like Myntra, Nykaa, Skyscanner..." autocomplete="off">
         </div>
       </div>
 
       <div class="store-grid" id="storeGrid"></div>
 
       <div class="empty-state" id="emptyState" hidden>
-        <h3>No matching brands</h3>
-        <p>Try searching for trending brands like Myntra, Snitch, or Lenskart.</p>
+        <h3>No matching shopping sites</h3>
+        <p>Try searching for trending shopping sites like Myntra, Snitch, or Lenskart.</p>
+      </div>
+
+      <div class="see-all-row">
+        <button type="button" class="see-all-btn see-all-btn-wide" data-open-all-brands>See all <span id="allBrandsCount">107</span> shopping sites <span aria-hidden="true">→</span></button>
       </div>
     </section>
   </main>
@@ -261,6 +258,16 @@
     </div>
   </section>
 
+  <!-- TRUST POINTS (below banner) -->
+  <section class="trust-wrap" aria-label="Trust">
+    <ul class="trust-grid">
+          <li class="trust-item"><span class="trust-icon" aria-hidden="true">🔒</span><span>100% Free — No Purchase Necessary</span></li>
+          <li class="trust-item"><span class="trust-icon" aria-hidden="true">🔗</span><span>Direct Links to Official Shopping Sites</span></li>
+          <li class="trust-item"><span class="trust-icon" aria-hidden="true">🙅</span><span>We Never Ask for Bank/OTP Details</span></li>
+          <li class="trust-item"><span class="trust-icon" aria-hidden="true">🔐</span><span>Secure Google Sign&#8209;in</span></li>
+        </ul>
+  </section>
+
   <!-- FOOTER -->
   <footer class="site-footer reveal-on-scroll">
     <div class="footer-main">
@@ -269,7 +276,7 @@
           <div class="css-logo" style="width:28px;height:28px;font-size:16px;">C<span>.</span></div>
           <span class="brand-wordmark">Cheapster<span>.in</span></span>
         </a>
-        <p>A premium independent directory for discovering India's top fashion, beauty, electronics, and lifestyle brands.</p>
+        <p>A premium independent directory for discovering India's top fashion, beauty, electronics, and lifestyle shopping sites.</p>
         
         <p class="footer-legal-note">
           <strong>Legal Disclaimer:</strong> The Cheapster Rewards Giveaway is independently sponsored, administered, and funded by Cheapster.in. It is not endorsed by, sponsored by, or affiliated with any listed brand. Entry is completely free — no purchase is required or considered when selecting winners. Winners are verified and notified securely via WhatsApp before any reward is disbursed.
@@ -309,21 +316,25 @@
 
   <!-- WELCOME POPUP -->
   <div class="modal-overlay" id="welcomeModal" hidden>
-    <div class="modal premium-modal welcome-modal" role="dialog" aria-modal="true">
+    <div class="modal premium-modal welcome-modal" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
       <button class="modal-close" type="button" data-close-modal="welcomeModal" aria-label="Close">×</button>
-      <span class="modal-label">WELCOME TO CHEAPSTER.IN</span>
-      <h2 id="welcomeTitle">The Cheapster Rewards Offer is LIVE.</h2>
-      <p><strong>1000+ lucky users</strong> will be selected to win rewards. Entry is free — no purchase necessary!</p>
-      
-      <div class="welcome-highlight">
-        <span class="highlight-star">✧</span>
-        <div>
-          <strong>Shop Hassle-free & Safely Via Cheapster.in.</strong>
-          <small>"No payment is required on our website. We will never ask for your banking passwords, UPI PINs, or OTPs."</small>
+      <div class="reward-banner welcome-banner">
+        <div class="reward-copy">
+          <span class="reward-chip"><span class="pulse-dot"></span>FESTIVE REWARDS</span>
+          <h2 class="reward-title" id="welcomeTitle">1000+ lucky winners.<span>50% Cashback</span></h2>
+          <p class="reward-sub">100% free entry. No purchase necessary.</p>
+          <button type="button" class="btn reward-btn" id="continueBtn">
+            <span>Explore Directory</span>
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+        <div class="reward-logos" aria-hidden="true">
+          <div class="reward-logo rl-1"><img src="hd-logos/amazon.png" alt=""></div>
+          <div class="reward-logo rl-2"><img src="hd-logos/flipkart.png" alt=""></div>
+          <div class="reward-logo rl-3"><img src="hd-logos/myntra.png" alt=""></div>
+          <div class="reward-logo rl-4"><img src="hd-logos/nykaa.png" alt=""></div>
         </div>
       </div>
-      
-      <button class="btn btn-gold btn-wide" id="continueBtn" type="button">Explore Directory</button>
     </div>
   </div>
 
@@ -370,7 +381,7 @@
       <div class="modal-icon" style="background: transparent; border: none; font-size: 32px; padding: 0;">✨</div>
       <span class="modal-label">DEAL HUNTER</span>
       <h2 id="couponModalTitle">Live Deals & Promo Codes</h2>
-      <p class="modal-intro" id="couponModalSubtitle">Real-time discount codes from 100+ verified brands.</p>
+      <p class="modal-intro" id="couponModalSubtitle">Real-time discount codes from 100+ verified shopping sites.</p>
 
       <div id="couponLoader" class="coupon-loader-box" hidden>
         <div class="loader-spinner"></div>
@@ -378,6 +389,30 @@
       </div>
 
       <div id="couponCardsList" class="coupon-cards-container"></div>
+    </div>
+  </div>
+
+  <!-- ALL BRANDS POPUP -->
+  <div class="modal-overlay" id="allBrandsModal" hidden>
+    <div class="modal premium-modal all-brands-modal" role="dialog" aria-modal="true" aria-labelledby="allBrandsTitle">
+      <button class="modal-close" type="button" data-close-modal="allBrandsModal" aria-label="Close">×</button>
+      <span class="modal-label">THE DIRECTORY</span>
+      <h2 id="allBrandsTitle">All <span id="allBrandsTitleCount">107</span> shopping sites</h2>
+
+      <div class="brand-filter-shell all-brands-search">
+        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2">
+          <circle cx="10.8" cy="10.8" r="6.8"></circle>
+          <path d="M16 16L21 21"></path>
+        </svg>
+        <input id="allBrandsSearch" type="search" placeholder="Search all shopping sites..." autocomplete="off">
+      </div>
+
+      <div id="allBrandsList"></div>
+
+      <div class="empty-state" id="allBrandsEmpty" hidden>
+        <h3>No matching shopping sites</h3>
+        <p>Try a different name.</p>
+      </div>
     </div>
   </div>
 
