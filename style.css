@@ -413,8 +413,11 @@ a { color: inherit; text-decoration: none; }
   .deal-foot span:first-child { padding-left: 14px; }
 
   .deal-card .ai-search-shell { padding: 8px; border-radius: 20px; height: auto; flex-direction: column; gap: 10px; }
-  .deal-card .ai-search-shell .search-input { height: 54px; font-size: 14px; padding-left: 36px; text-overflow: ellipsis; width: 100%; }
-  .deal-card .ai-search-shell .search-leading { top: 35px; left: 18px; }
+  /* Height increased to 68px for ~25% larger text area */
+  .deal-card .ai-search-shell .search-input { height: 68px; font-size: 14.5px; padding-left: 40px; text-overflow: ellipsis; width: 100%; }
+  /* Icon centered perfectly inside the text area (8px padding + 34px half-height = 42px) */
+  .deal-card .ai-search-shell .search-leading { top: 42px; left: 18px; }
+  
   .search-actions-group { width: 100%; justify-content: flex-end; }
   .upload-img-label { width: 48px; height: 48px; border-radius: 12px; }
   .deal-card .btn-hunt-coupons { height: 48px; font-size: 14px; padding: 0 20px; flex: 1; }
