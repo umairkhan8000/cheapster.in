@@ -24,7 +24,10 @@ const safeStore = {
 };
 
 // Mega Brands ka order: best-selling pehle, baaki uske baad
-const MEGA_PRIORITY = ["Amazon", "Flipkart", "Myntra", "Nykaa", "AJIO", "Croma", "JioMart", "Tata CLiQ", "Meesho", "Shopsy", "Tira"];
+const MEGA_PRIORITY = ["Amazon", "Flipkart", "Myntra", "Nykaa", "AJIO", "Croma", "JioMart", "Tata CLiQ", "Meesho", "Shopsy", "Tira", "Cashify", "Reliance Digital", "Tanishq"];
+
+// Kisi store ko ek se zyada category mein dikhana ho to usme alsoIn: ["Mega Brands"] lagao (apni asli category mein bhi rahega)
+const inCategory = (store, cat) => store.category === cat || (Array.isArray(store.alsoIn) && store.alsoIn.includes(cat));
 const megaRank = (store) => {
   const i = MEGA_PRIORITY.indexOf(store.name);
   return i === -1 ? 999 : i;
@@ -92,10 +95,10 @@ const stores = [
   { name: "boAt", domain: "boat-lifestyle.com", category: "Tech", description: "Audio & wearables", link: "https://www.boat-lifestyle.com", logo: "hd-logos/boat.png" },
   { name: "Noise", domain: "gonoise.com", category: "Tech", description: "Smartwatches", link: "https://www.gonoise.com", logo: "hd-logos/noise.png" },
   { name: "JBL", domain: "jbl.com", category: "Tech", description: "Premium audio", link: "https://inr.deals/lWnHDY", logo: "hd-logos/jbl.png" },
-  { name: "Reliance Digital", domain: "reliancedigital.in", category: "Tech", description: "Tech retail", link: "https://www.reliancedigital.in", logo: "hd-logos/reliancedigital.png" },
+  { name: "Reliance Digital", domain: "reliancedigital.in", category: "Tech", alsoIn: ["Mega Brands"], description: "Tech retail", link: "https://www.reliancedigital.in", logo: "hd-logos/reliancedigital.png" },
   { name: "HP", domain: "hp.com", category: "Tech", description: "Laptops & tech", link: "https://bitli.in/6R3BJ2i", logo: "hd-logos/hp.png" },
   { name: "Vijay Sales", domain: "vijaysales.com", category: "Tech", description: "Electronics retail", link: "https://www.vijaysales.com", logo: "hd-logos/vijaysales.png" },
-  { name: "Cashify", domain: "cashify.in", category: "Tech", description: "Sell & buy phones", link: "https://inr.deals/gW2Iby", logo: "hd-logos/cashify.png" },
+  { name: "Cashify", domain: "cashify.in", category: "Tech", alsoIn: ["Mega Brands"], description: "Sell & buy phones", link: "https://inr.deals/gW2Iby", logo: "hd-logos/cashify.png" },
   { name: "Spinny", domain: "spinny.com", category: "Tech", description: "Buy & sell used cars", link: "https://inr.deals/mor4Sf", logo: "hd-logos/spinny.png" },
 
   // 5. WELLNESS & HEALTH
@@ -115,7 +118,7 @@ const stores = [
   // 6. JEWELLERY & GIFTING
   { name: "Lenskart", domain: "lenskart.com", category: "Jewellery & Gifting", description: "Eyewear", link: "https://www.lenskart.com", logo: "hd-logos/lenskart.png" },
   { name: "Titan", domain: "titan.co.in", category: "Jewellery & Gifting", description: "Watches & Eyeplus", link: "https://www.titan.co.in", logo: "hd-logos/titancoin.png" },
-  { name: "Tanishq", domain: "tanishq.co.in", category: "Jewellery & Gifting", description: "Fine jewellery", link: "https://www.tanishq.co.in", logo: "hd-logos/tanishqcoin.png" },
+  { name: "Tanishq", domain: "tanishq.co.in", category: "Jewellery & Gifting", alsoIn: ["Mega Brands"], description: "Fine jewellery", link: "https://www.tanishq.co.in", logo: "hd-logos/tanishqcoin.png" },
   { name: "Giva", domain: "giva.co", category: "Jewellery & Gifting", description: "Silver jewellery", link: "https://www.amazon.in/s?k=Giva&tag=cheapster0a-21", logo: "hd-logos/giva.png" }, 
   { name: "Palmonas", domain: "palmonas.com", category: "Jewellery & Gifting", description: "Demi-fine jewellery", link: "https://www.palmonas.com", logo: "hd-logos/palmonas.png" },
   { name: "Melorra", domain: "melorra.com", category: "Jewellery & Gifting", description: "Trendy gold", link: "https://www.amazon.in/s?k=Melorra&tag=cheapster0a-21", logo: "hd-logos/melorra.png" }, 
@@ -388,7 +391,7 @@ function renderUI() {
   ensureStoreAnchors();
 
   let filtered = stores.filter((store) => {
-        const matchesCat = searchQuery !== "" || store.category === currentCategory;
+        const matchesCat = searchQuery !== "" || inCategory(store, currentCategory);
         const matchesSearch = store.name.toLowerCase().includes(searchQuery) || store.description.toLowerCase().includes(searchQuery);
         return matchesCat && matchesSearch;
   });
@@ -587,8 +590,8 @@ function buildAllBrandsList() {
   if (allBrandsBuilt || !allBrandsList) return;
 
   // Pehle Mega Brands (best-selling order), phir baaki sab
-  const mega = stores.filter((s) => s.category === "Mega Brands").sort((a, b) => megaRank(a) - megaRank(b));
-  const rest = stores.filter((s) => s.category !== "Mega Brands");
+  const mega = stores.filter((s) => inCategory(s, "Mega Brands")).sort((a, b) => megaRank(a) - megaRank(b));
+  const rest = stores.filter((s) => !inCategory(s, "Mega Brands"));
   for (let i = rest.length - 1; i > 0; i--) {
     const k = Math.floor(Math.random() * (i + 1));
     [rest[i], rest[k]] = [rest[k], rest[i]];
