@@ -262,6 +262,24 @@ function shuffleArray(array) {
 
 const grid = document.getElementById("storeGrid");
 
+// Card spotlight: ek hi delegated listener, frame mein max 1 baar update, touch devices par off
+(function cardSpotlight() {
+  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+  let raf = 0, last = null;
+  document.addEventListener("mousemove", (e) => {
+    const card = e.target.closest ? e.target.closest(".store-card") : null;
+    if (!card) return;
+    last = { card, x: e.clientX, y: e.clientY };
+    if (raf) return;
+    raf = requestAnimationFrame(() => {
+      raf = 0;
+      const r = last.card.getBoundingClientRect();
+      last.card.style.setProperty("--mouse-x", `${last.x - r.left}px`);
+      last.card.style.setProperty("--mouse-y", `${last.y - r.top}px`);
+    });
+  }, { passive: true });
+})();
+
 function buildCard(store, index) {
   const url = store.link || (store.domain ? `https://www.${store.domain}` : null);
   if (!url) return null;
@@ -281,12 +299,6 @@ function buildCard(store, index) {
 
   card.setAttribute("aria-label", `Shop from ${store.name}`);
 
-  card.addEventListener("mousemove", (e) => {
-      const rect = card.getBoundingClientRect();
-      card.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
-      card.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
-  });
-
   const frame = document.createElement("div");
   frame.className = "store-logo-frame";
 
@@ -295,6 +307,7 @@ function buildCard(store, index) {
   img.className = "store-logo";
   img.alt = store.name;
   img.loading = index < 12 ? "eager" : "lazy";
+  img.decoding = "async";
 
   const bgColors = ["#1c3f66", "#0d2138", "#142a44"];
   const bg = bgColors[index % bgColors.length];
@@ -406,9 +419,15 @@ function renderCategoryNav() {
 
       pill.addEventListener("click", () => {
           haptic();
+          if (currentCategory === cat) return;
           currentCategory = cat;
-          pill.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-          renderCategoryNav();
+          navScroll.querySelectorAll(".cat-pill").forEach((p) => p.classList.toggle("active", p === pill));
+          const nr = navScroll.getBoundingClientRect();
+          const pr = pill.getBoundingClientRect();
+          navScroll.scrollTo({
+            left: navScroll.scrollLeft + (pr.left - nr.left) - (nr.width - pr.width) / 2,
+            behavior: "smooth"
+          });
           renderUI();
       });
       navScroll.appendChild(pill);
@@ -846,6 +865,7 @@ const scrollRightBtn = document.getElementById('scrollRightBtn');
 if (promoCarousel) {
   const originalSlides = Array.from(promoCarousel.children);
   const originalCount = originalSlides.length;
+  promoCarousel.querySelectorAll("img").forEach((im) => { im.decoding = "async"; });
 
   // Peeking UI ke liye dono taraf multiple clones add karte hain taaki seamlessly loop ho sake
   originalSlides.forEach(slide => {
@@ -860,6 +880,12 @@ if (promoCarousel) {
       const gap = parseInt(window.getComputedStyle(promoCarousel).gap) || 16;
       return (slide.clientWidth + gap) * originalCount;
   };
+
+  // Width ek baar measure, sirf resize par dobara (scroll ke dauran layout-read nahi)
+  let cachedSetWidth = 0;
+  const measureSetWidth = () => { cachedSetWidth = getSetWidth(); };
+  measureSetWidth();
+  window.addEventListener('resize', debounce(measureSetWidth, 200), { passive: true });
 
   // Center wale original set par scroll set karna on load
   setTimeout(() => {
@@ -882,10 +908,10 @@ if (promoCarousel) {
 
   // Infinite Scroll Detection (Bina Jitter Ke)
   let isResetting = false;
-  promoCarousel.addEventListener('scroll', () => {
+  const checkLoop = () => {
       if (isResetting) return;
-      
-      const setWidth = getSetWidth();
+
+      const setWidth = cachedSetWidth || getSetWidth();
       
       // Agar user extreme left clone set mein enter kar gaya
       if (promoCarousel.scrollLeft <= 50) {
@@ -911,6 +937,13 @@ if (promoCarousel) {
               isResetting = false; 
           }, 50);
       }
+  };
+
+  let loopTicking = false;
+  promoCarousel.addEventListener('scroll', () => {
+      if (loopTicking) return;
+      loopTicking = true;
+      requestAnimationFrame(() => { loopTicking = false; checkLoop(); });
   }, { passive: true });
 }
 
@@ -1140,3 +1173,13 @@ function renderAICards(rawText) {
     container.appendChild(card);
   });
 }
+
+// ---------- Offscreen animations pause (reward banner floating logos) ----------
+(function pauseOffscreenAnimations() {
+  const wrap = document.querySelector(".reward-banner-wrap");
+  if (!wrap || !("IntersectionObserver" in window)) return;
+  wrap.classList.add("anim-paused");
+  new IntersectionObserver((entries) => {
+    entries.forEach((en) => wrap.classList.toggle("anim-paused", !en.isIntersecting));
+  }, { rootMargin: "100px" }).observe(wrap);
+})();
