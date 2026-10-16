@@ -1,4 +1,4 @@
-// build: 2026-10-11-AI-Coupons-Final-Script-V5
+// build: 2026-10-11-AI-Coupons-Final-Script-V6
 // =========================================================
 // CHEapSTER.IN — PREMIUM BRAND DIRECTORY 
 // =========================================================
@@ -725,7 +725,7 @@ if (authBtn && window.auth) {
 }
 
 // ---------- GOOGLE APPS SCRIPT MASTER URL ----------
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbziQvJq8kqk-CAHRekAHjkSVEJkQmbBp84girc4vjfTPbY20VJl2hz_I-OC-bWBcjQf/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzKCFsVI77-NmlKO5phtylG4zNdJfjuU7OGph6U0LXMlzD509h5k-Fcl9cMDO-P1aVT/exec"; 
 
 // ---------- Reward Form ----------
 const GIVEAWAY_WHATSAPP_NUMBER = "919762527926";
