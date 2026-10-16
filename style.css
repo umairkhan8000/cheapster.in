@@ -51,7 +51,6 @@ body::before {
   content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.55;
   background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='320'%20height='320'%3E%3Ccircle%20cx='46'%20cy='58'%20r='20'%20fill='%23cda15c'%20opacity='0.05'/%3E%3Ccircle%20cx='46'%20cy='58'%20r='9'%20fill='%23cda15c'%20opacity='0.10'/%3E%3Ccircle%20cx='46'%20cy='58'%20r='3'%20fill='%23eccd8f'%20opacity='0.20'/%3E%3Ccircle%20cx='244'%20cy='96'%20r='17'%20fill='%235b9eea'%20opacity='0.05'/%3E%3Ccircle%20cx='244'%20cy='96'%20r='8'%20fill='%235b9eea'%20opacity='0.09'/%3E%3Ccircle%20cx='244'%20cy='96'%20r='3'%20fill='%23bcdcff'%20opacity='0.17'/%3E%3Ccircle%20cx='128'%20cy='236'%20r='15'%20fill='%23cda15c'%20opacity='0.04'/%3E%3Ccircle%20cx='128'%20cy='236'%20r='7'%20fill='%23eccd8f'%20opacity='0.09'/%3E%3Ccircle%20cx='128'%20cy='236'%20r='2.5'%20fill='%23f4e2b8'%20opacity='0.16'/%3E%3Ccircle%20cx='288'%20cy='276'%20r='13'%20fill='%235b9eea'%20opacity='0.04'/%3E%3Ccircle%20cx='288'%20cy='276'%20r='6'%20fill='%235b9eea'%20opacity='0.08'/%3E%3C/svg%3E");
   background-size: 320px 320px;
-  will-change: transform;
 }
 
 body > * { position: relative; z-index: 1; }
@@ -73,7 +72,7 @@ a { color: inherit; text-decoration: none; }
 
 /* Premium Dynamic Toasts */
 .toast-container { position: fixed; top: 20px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 9999; pointer-events: none; }
-.toast-msg { background: rgba(19, 27, 40, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--line-gold); color: var(--champagne-bright); font-size: 13px; font-weight: 700; padding: 12px 24px; border-radius: 50px; box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 20px rgba(205, 161, 92, 0.15); animation: toastEnter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; display: flex; align-items: center; gap: 10px; pointer-events: auto; will-change: transform, opacity; }
+.toast-msg { background: rgba(19, 27, 40, 0.97); border: 1px solid var(--line-gold); color: var(--champagne-bright); font-size: 13px; font-weight: 700; padding: 12px 24px; border-radius: 50px; box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 20px rgba(205, 161, 92, 0.15); animation: toastEnter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; display: flex; align-items: center; gap: 10px; pointer-events: auto; will-change: transform, opacity; }
 .toast-msg.toast-exit { animation: toastExit 0.3s ease-in forwards; }
 @keyframes toastEnter { from { opacity: 0; transform: translateY(-20px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes toastExit { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-20px) scale(0.9); } }
@@ -87,10 +86,9 @@ a { color: inherit; text-decoration: none; }
 .giveaway-date-bar span { color: var(--champagne-bright); font-weight: 800; letter-spacing: 0.8px; margin-left: 3px; }
 
 /* Header */
-.site-header { position: sticky; top: 0; z-index: 100; background: rgba(9, 13, 20, 0.88); backdrop-filter: blur(9px); -webkit-backdrop-filter: blur(9px); border-bottom: 1px solid var(--line); transition: box-shadow .3s ease, background-color .3s ease; will-change: transform; }
-.site-header.is-scrolled { background: rgba(9, 13, 20, 0.65) !important; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-.site-header::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne), var(--sapphire-glow), transparent); background-size: 200% 100%; opacity: 0.55; animation: shimmerLine 7s linear infinite; }
-@keyframes shimmerLine { to { background-position: -200% 0; } }
+.site-header { position: sticky; top: 0; z-index: 100; background: rgba(9, 13, 20, 0.97); border-bottom: 1px solid var(--line); transition: box-shadow .3s ease; }
+.site-header.is-scrolled { background: rgba(9, 13, 20, 0.97) !important; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+.site-header::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne), var(--sapphire-glow), transparent); background-size: 200% 100%; opacity: 0.55; }
 .header-inner { width: min(1220px, calc(100% - 34px)); min-height: 70px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
 .brand { display: flex; align-items: center; gap: 10px; }
 .css-logo { width: 38px; height: 38px; background: linear-gradient(145deg, var(--sapphire), #0d2138); border-radius: 10px; border: 1px solid var(--line-gold); color: var(--champagne-bright); font-family: 'Manrope', sans-serif; font-size: 22px; font-weight: 800; display: flex; justify-content: center; align-items: center; padding-right: 2px; box-shadow: var(--shadow-soft); }
@@ -109,7 +107,7 @@ a { color: inherit; text-decoration: none; }
 .header-dropdown button:hover { background: var(--panel-solid-hover); color: var(--champagne-bright); }
 
 /* Category Nav */
-.category-nav-wrapper { position: sticky; top: 60px; background: rgba(19, 27, 40, 0.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 100; padding: 10px; margin-bottom: 20px; border: 1px solid var(--line); border-radius: 22px; box-shadow: var(--shadow-soft); }
+.category-nav-wrapper { position: sticky; top: 60px; background: rgba(19, 27, 40, 0.98); z-index: 100; padding: 10px; margin-bottom: 20px; border: 1px solid var(--line); border-radius: 22px; box-shadow: var(--shadow-soft); }
 .category-nav { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; border-radius: 16px; }
 .category-nav::-webkit-scrollbar { display: none; }
 .cat-pill { background: rgba(255, 255, 255, 0.04); color: var(--platinum); border: 1px solid var(--line); border-radius: 100px; padding: 8px 18px; font-size: 13px; font-weight: 700; white-space: nowrap; cursor: pointer; transition: all 0.25s ease; user-select: none; }
@@ -181,7 +179,7 @@ a { color: inherit; text-decoration: none; }
 .reveal-on-scroll.reveal-armed.in-view { opacity: 1; transform: none; }
 
 /* Modals */
-.modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(4, 6, 10, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: grid; place-items: center; padding: 20px; }
+.modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(4, 6, 10, 0.88); display: grid; place-items: center; padding: 20px; }
 .premium-modal { position: relative; width: min(480px, 100%); padding: 30px; background: var(--obsidian-raised); border: 1px solid var(--line-gold); border-radius: var(--radius-modal); max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6); }
 .modal-close { position: absolute; top: 15px; right: 20px; font-size: 26px; background: transparent; border: none; color: var(--muted); line-height: 1; }
 .modal-close:hover { color: var(--ink); }
@@ -350,7 +348,7 @@ a { color: inherit; text-decoration: none; }
   background: rgba(255, 255, 255, 0.05); 
   color: var(--champagne-bright); 
   border: 1px solid var(--line); 
-  transition: all 0.2s ease; 
+  transition: background-color .2s ease, border-color .2s ease; 
   flex-shrink: 0;
 }
 .upload-img-label:hover { background: rgba(205, 161, 92, 0.15); border-color: var(--champagne); }
@@ -526,4 +524,28 @@ a { color: inherit; text-decoration: none; }
   .section-top .see-all-btn { order: 2; flex: 0 0 auto; white-space: nowrap; }
   .section-top .brand-filter-row .brand-filter-shell { width: 100%; min-width: 0; height: 42px; padding: 0 16px; }
   .section-top .brand-filter-shell input { font-size: 13px; }
+}
+
+/* =========================================================
+   SMOOTHNESS / PERFORMANCE LAYER
+   (look same, bas GPU/CPU ka kaam kam)
+   ========================================================= */
+
+/* Offscreen sections tab tak render nahi hote jab tak scroll karke paas na aayein */
+.trust-wrap, .site-footer { content-visibility: auto; contain-intrinsic-size: auto 320px; }
+
+/* Reward banner ke floating logos tabhi chalen jab screen par dikh rahe hon (JS class lagata hai) */
+.reward-banner-wrap.anim-paused .reward-logo { animation-play-state: paused; }
+
+/* Carousel: native touch scrolling smooth, edge par page bounce nahi */
+.promo-carousel { -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+
+/* Touch devices par "sticky hover" lift/jank nahi */
+@media (hover: none) {
+  .store-card:hover, .promo-slide:hover, .carousel-btn:hover { transform: none; }
+  .store-card:hover::before { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reward-logo, .blinking-dot { animation: none !important; }
 }
