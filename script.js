@@ -881,12 +881,6 @@ if (promoCarousel) {
       return (slide.clientWidth + gap) * originalCount;
   };
 
-  // Width ek baar measure, sirf resize par dobara (scroll ke dauran layout-read nahi)
-  let cachedSetWidth = 0;
-  const measureSetWidth = () => { cachedSetWidth = getSetWidth(); };
-  measureSetWidth();
-  window.addEventListener('resize', debounce(measureSetWidth, 200), { passive: true });
-
   // Center wale original set par scroll set karna on load
   setTimeout(() => {
       promoCarousel.style.scrollBehavior = 'auto';
@@ -911,14 +905,12 @@ if (promoCarousel) {
   const checkLoop = () => {
       if (isResetting) return;
 
-      const setWidth = cachedSetWidth || getSetWidth();
-      
       // Agar user extreme left clone set mein enter kar gaya
       if (promoCarousel.scrollLeft <= 50) {
           isResetting = true;
           promoCarousel.style.scrollSnapType = 'none'; // Disable snap temporarily
           promoCarousel.style.scrollBehavior = 'auto';
-          promoCarousel.scrollLeft += setWidth;
+          promoCarousel.scrollLeft += getSetWidth();
           setTimeout(() => { 
               promoCarousel.style.scrollBehavior = 'smooth'; 
               promoCarousel.style.scrollSnapType = 'x mandatory'; // Re-enable snap
@@ -930,7 +922,7 @@ if (promoCarousel) {
           isResetting = true;
           promoCarousel.style.scrollSnapType = 'none'; // Disable snap temporarily
           promoCarousel.style.scrollBehavior = 'auto';
-          promoCarousel.scrollLeft -= setWidth;
+          promoCarousel.scrollLeft -= getSetWidth();
           setTimeout(() => { 
               promoCarousel.style.scrollBehavior = 'smooth'; 
               promoCarousel.style.scrollSnapType = 'x mandatory'; // Re-enable snap
