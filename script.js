@@ -17,6 +17,12 @@ const CATEGORY_ORDER = [
   "Kids"
 ];
 
+// localStorage private mode / blocked cookies mein error de sakta hai
+const safeStore = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+};
+
 // Mega Brands ka order: best-selling pehle, baaki uske baad
 const MEGA_PRIORITY = ["Amazon", "Flipkart", "Myntra", "Nykaa", "AJIO", "Croma", "JioMart", "Tata CLiQ", "Meesho", "Shopsy", "Tira"];
 const megaRank = (store) => {
@@ -413,15 +419,17 @@ function renderCategoryNav() {
   navScroll.innerHTML = "";
 
   CATEGORY_ORDER.forEach((cat) => {
-      const pill = document.createElement("div");
+      const pill = document.createElement("button");
+      pill.type = "button";
       pill.className = `cat-pill ${cat === currentCategory ? "active" : ""}`;
       pill.textContent = cat;
+      pill.setAttribute("aria-pressed", cat === currentCategory ? "true" : "false");
 
       pill.addEventListener("click", () => {
           haptic();
           if (currentCategory === cat) return;
           currentCategory = cat;
-          navScroll.querySelectorAll(".cat-pill").forEach((p) => p.classList.toggle("active", p === pill));
+          navScroll.querySelectorAll(".cat-pill").forEach((p) => { p.classList.toggle("active", p === pill); p.setAttribute("aria-pressed", p === pill ? "true" : "false"); });
           const nr = navScroll.getBoundingClientRect();
           const pr = pill.getBoundingClientRect();
           navScroll.scrollTo({
@@ -449,20 +457,12 @@ injectStylesAndNav();
 renderCategoryNav();
 renderUI();
 
-// ---------- Brand search ko "See all" button ke saath same row mein rakhna (mobile + laptop) ----------
-(function placeBrandSearch() {
-  const row = document.querySelector(".brand-filter-row");
-  const top = document.querySelector(".directory-section .section-top");
+// ---------- Brand search placeholder (mobile pe chhota) ----------
+(function brandSearchPlaceholder() {
   const input = document.getElementById("brandSearchInput");
-  if (!row || !top || !input) return;
-
-  top.appendChild(row);
-  input.setAttribute("aria-label", "Search shopping sites");
-
+  if (!input) return;
   const mq = window.matchMedia("(max-width: 768px)");
-  const setPlaceholder = () => {
-    input.placeholder = mq.matches ? "Search" : "Search shopping sites...";
-  };
+  const setPlaceholder = () => { input.placeholder = mq.matches ? "Search" : "Search shopping sites..."; };
   setPlaceholder();
   if (mq.addEventListener) mq.addEventListener("change", setPlaceholder);
   else if (mq.addListener) mq.addListener(setPlaceholder);
@@ -498,12 +498,16 @@ if (document.getElementById("currentYear")) {
 // =========================================================
 
 // --- FIX 1: Welcome Modal Infinite Loop Logic ---
+let lastFocusedEl = null;
 function openModal(id) {
   haptic();
   const modal = document.getElementById(id);
   if (modal) {
+    lastFocusedEl = document.activeElement;
     modal.hidden = false;
     document.body.classList.add("modal-open");
+    const dlg = modal.querySelector(".modal");
+    if (dlg) { dlg.setAttribute("tabindex", "-1"); try { dlg.focus({ preventScroll: true }); } catch (e) {} }
   }
 }
 
@@ -512,12 +516,13 @@ function closeModal(id) {
   const modal = document.getElementById(id);
   if (modal) {
     modal.hidden = true;
-    document.body.classList.remove("modal-open");
+    if (!document.querySelector(".modal-overlay:not([hidden])")) document.body.classList.remove("modal-open");
+    if (lastFocusedEl && document.contains(lastFocusedEl)) { try { lastFocusedEl.focus({ preventScroll: true }); } catch (e) {} }
   }
 
   // Ensure Welcome Modal logic works even on 'X' click
   if (id === "welcomeModal") {
-    localStorage.setItem("cheapster_welcome_seen", "1");
+    safeStore.set("cheapster_welcome_seen", "1");
   }
 
   if (id === "formModal") {
@@ -548,8 +553,8 @@ document.querySelectorAll(".modal-overlay").forEach((overlay) => {
 // Close on Escape key for ALL modals
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
-    const openModal = document.querySelector(".modal-overlay:not([hidden])");
-    if (openModal) closeModal(openModal.id);
+    const openOverlay = document.querySelector(".modal-overlay:not([hidden])");
+    if (openOverlay) closeModal(openOverlay.id);
   }
 });
 
@@ -659,8 +664,10 @@ if (authBtn && window.auth) {
       haptic();
       if (currentUser) return;
       window.auth.signInWithPopup(window.googleProvider).catch((err) => {
-            if (err.code === "auth/popup-blocked" || err.code === "auth/operation-not-supported-in-this-environment" || err.code === "auth/popup-closed-by-user" || err.code === "auth/cancelled-popup-request") {
+            if (err.code === "auth/popup-blocked" || err.code === "auth/operation-not-supported-in-this-environment") {
               window.auth.signInWithRedirect(window.googleProvider);
+            } else if (err.code === "auth/popup-closed-by-user" || err.code === "auth/cancelled-popup-request") {
+              /* user ne khud band kiya — kuch mat karo */
             } else if (err.code === "auth/unauthorized-domain") {
               showToast("Domain not authorized for login.", "⚠️");
             } else {
@@ -818,7 +825,7 @@ if (header) {
 
 // ---------- Welcome popup ----------
 window.addEventListener("load", () => {
-    if (localStorage.getItem("cheapster_welcome_seen") !== "1") {
+    if (safeStore.get("cheapster_welcome_seen") !== "1") {
       setTimeout(() => openModal("welcomeModal"), 800);
     }
 });
@@ -826,7 +833,7 @@ window.addEventListener("load", () => {
 const continueBtn = document.getElementById("continueBtn");
 if (continueBtn) {
   continueBtn.addEventListener("click", () => {
-      localStorage.setItem("cheapster_welcome_seen", "1");
+      safeStore.set("cheapster_welcome_seen", "1");
       closeModal("welcomeModal");
   });
 }
@@ -945,6 +952,8 @@ if (promoCarousel) {
 
 let selectedProductBase64 = null;
 let loaderInterval;
+let huntInFlight = false;
+let lastHuntAt = 0;
 
 const productImageInput = document.getElementById("productImageInput");
 const imagePreviewBadge = document.getElementById("imagePreviewBadge");
@@ -966,12 +975,30 @@ if (productImageInput) {
     const file = e.target.files[0];
     if (!file) return;
 
+    if (!file.type.startsWith("image/")) { showToast("Please choose an image file.", "⚠️"); e.target.value = ""; return; }
+
     const reader = new FileReader();
     reader.onload = () => {
-      selectedProductBase64 = reader.result;
-      if (imagePreviewBadge) imagePreviewBadge.hidden = false;
-      showToast("Product image attached! Ready to hunt.", "📸");
-      aiSearchInput.focus();
+      // Badi phone photo ko chhota (max 1024px JPEG) karke bhejte hain -> fast + backend limit safe
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const max = 1024;
+          const scale = Math.min(1, max / Math.max(img.width, img.height));
+          const canvas = document.createElement("canvas");
+          canvas.width = Math.round(img.width * scale);
+          canvas.height = Math.round(img.height * scale);
+          canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+          selectedProductBase64 = canvas.toDataURL("image/jpeg", 0.82);
+        } catch (err) {
+          selectedProductBase64 = reader.result;
+        }
+        if (imagePreviewBadge) imagePreviewBadge.hidden = false;
+        showToast("Product image attached! Ready to hunt.", "📸");
+        aiSearchInput.focus();
+      };
+      img.onerror = () => { selectedProductBase64 = reader.result; if (imagePreviewBadge) imagePreviewBadge.hidden = false; };
+      img.src = reader.result;
     };
     reader.readAsDataURL(file);
   });
@@ -1017,8 +1044,16 @@ async function triggerSecureAIHunt() {
   // Deal Hunter sirf logged-in users ke liye (reward form jaisa hi simple toast)
   if (!currentUser) {
     showToast("Please login with Google first.", "🔒");
+    if (authBtn && window.auth) authBtn.click();
     return;
   }
+
+  // Double-tap / spam se bachao (AI request mehngi hoti hai)
+  if (huntInFlight) return;
+  if (Date.now() - lastHuntAt < 4000) { showToast("Please wait a few seconds before searching again.", "⏳"); return; }
+  huntInFlight = true;
+  lastHuntAt = Date.now();
+  if (searchCouponBtn) searchCouponBtn.disabled = true;
 
   haptic();
   openModal("couponResultsModal");
@@ -1090,80 +1125,143 @@ async function triggerSecureAIHunt() {
   } finally {
     if (loader) loader.hidden = true;
     clearInterval(loaderInterval);
+    huntInFlight = false;
+    if (searchCouponBtn) searchCouponBtn.disabled = false;
   }
 }
 
-// --- Render AI Results ---
+// --- Render AI Results (safe: koi bhi AI text HTML ki tarah execute nahi hota) ---
+function safeHttpUrl(url) {
+  try {
+    const u = new URL(url, location.href);
+    return (u.protocol === "https:" || u.protocol === "http:") ? u.href : null;
+  } catch (e) { return null; }
+}
+
+function findStoreByName(name) {
+  const n = name.toLowerCase().trim();
+  if (!n) return null;
+  return stores.find((s) => s.name.toLowerCase() === n) || stores.find((s) => s.name.toLowerCase().includes(n)) || null;
+}
+
+async function copyText(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(text); return true; }
+  } catch (e) {}
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.setAttribute("readonly", "");
+    ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    const ok = document.execCommand("copy");
+    document.body.removeChild(ta);
+    return ok;
+  } catch (e) { return false; }
+}
+
 function renderAICards(rawText) {
   const container = document.getElementById("couponCardsList");
   if (!container) return;
 
-  // Clean Markdown formatting aur extra spaces
-  const cleanText = rawText.replace(/\*/g, '').replace(/`/g, '');
-  const lines = cleanText.split("\n").map(l => l.trim()).filter(l => l.length > 0);
+  const cleanText = String(rawText).replace(/\*/g, "").replace(/`/g, "");
+  const lines = cleanText.split("\n").map((l) => l.trim()).filter((l) => l.length > 0);
+
+  container.replaceChildren();
 
   if (lines.length === 0) {
-    container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--muted);"><p>No live promo codes found right now. Check back soon!</p></div>`;
+    const empty = document.createElement("div");
+    empty.style.cssText = "text-align:center; padding:20px; color:var(--muted);";
+    empty.textContent = "No live promo codes found right now. Check back soon!";
+    container.appendChild(empty);
     return;
   }
 
-  container.innerHTML = "";
+  const frag = document.createDocumentFragment();
 
   lines.forEach((line) => {
-    // Agar Gemini galti se bina format bhej de, toh strict filtering nikal di hai
     const match = line.match(/^([^-:]+)[-:]\s*(\S+)\s+(.+)$/);
     let brandName = "Promo Deal", code = "CLICK2APPLY", desc = line;
-
     if (match) {
       brandName = match[1].trim();
       code = match[2].trim();
       desc = match[3].trim();
-    } else {
-      // Agar dash (-) na mile toh fallback format
-      desc = line;
     }
 
-    const matchedStore = stores.find(s => s.name.toLowerCase().includes(brandName.toLowerCase()));
-    const storeUrl = matchedStore ? matchedStore.link : `https://www.google.com/search?q=${encodeURIComponent(brandName+ ' store')}`;
+    const matchedStore = findStoreByName(brandName);
+    const storeUrl = safeHttpUrl(matchedStore ? matchedStore.link : `https://www.google.com/search?q=${encodeURIComponent(brandName + " store")}`);
     const logoSrc = matchedStore && matchedStore.logo ? matchedStore.logo : null;
-
-    const logoHtml = logoSrc 
-        ? `<div class="coupon-logo-box"><img src="${logoSrc}" alt="${brandName}" onerror="this.style.display='none'"></div>`
-        : `<div class="coupon-logo-box" style="background:var(--sapphire); color:var(--champagne-bright); font-size:16px; font-weight:800;">${initials(brandName)}</div>`;
 
     const card = document.createElement("div");
     card.className = "coupon-card-item";
-    card.innerHTML = `
-      ${logoHtml}
-      <div class="coupon-card-info">
-        <span class="coupon-brand-tag">${brandName}</span>
-        <div><span class="coupon-code-badge" title="Click to Copy code">${code}</span></div>
-        <p class="coupon-desc">${desc}</p>
-      </div>
-      <a href="${storeUrl}" target="_blank" rel="noopener" class="coupon-action-btn">
-        Shop Now ↗
-      </a>
-    `;
 
-    const badge = card.querySelector(".coupon-code-badge");
-    badge.addEventListener("click", () => {
-      navigator.clipboard.writeText(code);
+    const logoBox = document.createElement("div");
+    logoBox.className = "coupon-logo-box";
+    if (logoSrc) {
+      const im = document.createElement("img");
+      im.src = logoSrc; im.alt = brandName; im.loading = "lazy"; im.decoding = "async";
+      im.onerror = () => { im.style.display = "none"; };
+      logoBox.appendChild(im);
+    } else {
+      logoBox.style.cssText = "background:var(--sapphire); color:var(--champagne-bright); font-size:16px; font-weight:800;";
+      logoBox.textContent = initials(brandName);
+    }
+
+    const info = document.createElement("div");
+    info.className = "coupon-card-info";
+
+    const tag = document.createElement("span");
+    tag.className = "coupon-brand-tag";
+    tag.textContent = brandName;
+
+    const badgeWrap = document.createElement("div");
+    const badge = document.createElement("span");
+    badge.className = "coupon-code-badge";
+    badge.title = "Click to Copy code";
+    badge.setAttribute("role", "button");
+    badge.tabIndex = 0;
+    badge.textContent = code;
+    badgeWrap.appendChild(badge);
+
+    const descEl = document.createElement("p");
+    descEl.className = "coupon-desc";
+    descEl.textContent = desc;
+
+    info.append(tag, badgeWrap, descEl);
+    card.append(logoBox, info);
+
+    if (storeUrl) {
+      const link = document.createElement("a");
+      link.href = storeUrl;
+      link.target = "_blank";
+      link.rel = (storeUrl.includes("amazon.in") || storeUrl.includes("amzn.to")) ? "noopener noskim" : "noopener";
+      link.className = "coupon-action-btn";
+      link.textContent = "Shop Now ↗";
+      card.appendChild(link);
+    }
+
+    const doCopy = async () => {
+      const ok = await copyText(code);
       haptic();
+      if (!ok) { showToast("Couldn't copy — please copy the code manually.", "⚠️"); return; }
       badge.textContent = "COPIED! ✓";
       badge.style.background = "var(--success)";
       badge.style.color = "#fff";
       badge.style.borderColor = "var(--success)";
-      setTimeout(() => { 
-        badge.textContent = code; 
+      setTimeout(() => {
+        badge.textContent = code;
         badge.style.background = "";
         badge.style.color = "";
         badge.style.borderColor = "";
       }, 1800);
-      showToast(`Code copied!`, "📋");
-    });
+      showToast("Code copied!", "📋");
+    };
+    badge.addEventListener("click", doCopy);
+    badge.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); doCopy(); } });
 
-    container.appendChild(card);
+    frag.appendChild(card);
   });
+
+  container.appendChild(frag);
 }
 
 // ---------- Offscreen animations pause (reward banner floating logos) ----------
