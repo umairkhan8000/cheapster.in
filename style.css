@@ -358,8 +358,7 @@ a { color: inherit; text-decoration: none; }
 .modal-overlay { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(4, 6, 10, 0.88); overscroll-behavior: contain; }
 .premium-modal { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; scroll-behavior: auto; transform: translateZ(0); will-change: scroll-position; backface-visibility: hidden; }
 .all-brands-modal .store-card,
-.coupon-card-item { content-visibility: auto; contain-intrinsic-size: 150px 168px; transition: none; box-shadow: none; }
-.coupon-card-item { contain-intrinsic-size: auto 96px; }
+.coupon-card-item { transition: none; box-shadow: inset 0 1px 0 rgba(236, 205, 143, 0.14); }
 .all-brands-modal .store-card:hover,
 .coupon-card-item:hover { transform: none; }
 .all-brands-modal .store-grid { gap: 12px; }
@@ -479,7 +478,6 @@ a { color: inherit; text-decoration: none; }
   .festive-pill { border-radius: 16px; padding: 10px 16px; line-height: 1.45; }
   .footer-nav { justify-content: flex-start; }
   .site-footer .brand-wordmark { display: inline; }
-  .all-brands-modal .store-card { contain-intrinsic-size: 130px 150px; }
 }
 
 @media (max-width: 400px) {
@@ -542,10 +540,41 @@ a { color: inherit; text-decoration: none; }
 
 /* Touch devices par "sticky hover" lift/jank nahi */
 @media (hover: none) {
-  .store-card:hover, .promo-slide:hover, .carousel-btn:hover { transform: none; }
+  .store-card:hover, .promo-slide:hover { transform: none; }
   .store-card:hover::before { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .reward-logo, .blinking-dot { animation: none !important; }
 }
+
+/* =========================================================
+   POPUPS: side scrollbar hata di (scroll smooth rehta hai), horizontal crop nahi
+   ========================================================= */
+.premium-modal {
+  overflow-x: hidden;
+  scrollbar-width: none;          /* Firefox + new Chrome */
+  -ms-overflow-style: none;       /* old Edge */
+}
+.premium-modal::-webkit-scrollbar { display: none; width: 0; height: 0; }
+
+/* Page scrollbar popup khulne/band hone par gayab/wapas nahi hota -> background 5px hilta nahi */
+html { scrollbar-gutter: stable; }
+
+/* =========================================================
+   GOLD OUTLINE THEME (Festive Rewards banner jaisi)
+   gold border + top highlight line + inset glow
+   ========================================================= */
+
+/* Brand cards (home grid + "See all" popup) */
+.store-card { border-color: var(--line-gold); box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(236, 205, 143, 0.14); }
+.store-card::after { content: ""; position: absolute; top: 0; left: 14%; right: 14%; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne-bright), transparent); opacity: 0.8; pointer-events: none; }
+.store-card:hover { border-color: rgba(236, 205, 143, 0.6); box-shadow: 0 16px 34px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(205, 161, 92, 0.18), inset 0 1px 0 rgba(236, 205, 143, 0.22); }
+
+/* Brand search bars (home + popup search) */
+.brand-filter-shell { border-color: var(--line-gold); box-shadow: inset 0 1px 0 rgba(236, 205, 143, 0.14), 0 4px 14px rgba(0, 0, 0, 0.25); }
+.brand-filter-shell:focus-within { border-color: var(--champagne-bright); box-shadow: inset 0 1px 0 rgba(236, 205, 143, 0.2), 0 0 0 2px rgba(205, 161, 92, 0.18); }
+
+/* Category selector bar */
+.category-nav-wrapper { border-color: var(--line-gold); box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(236, 205, 143, 0.14); }
+.category-nav-wrapper::before { content: ""; position: absolute; top: 0; left: 12%; right: 12%; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne-bright), transparent); opacity: 0.8; pointer-events: none; }
