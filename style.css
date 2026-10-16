@@ -578,3 +578,21 @@ html { scrollbar-gutter: stable; }
 /* Category selector bar */
 .category-nav-wrapper { border-color: var(--line-gold); box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(236, 205, 143, 0.14); }
 .category-nav-wrapper::before { content: ""; position: absolute; top: 0; left: 12%; right: 12%; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne-bright), transparent); opacity: 0.8; pointer-events: none; }
+
+/* =========================================================
+   GOLD OUTLINE: trust blocks + saari separator lines
+   ========================================================= */
+
+/* 4 trust blocks (Free / Direct Links / No Bank-OTP / Google Sign-in) */
+.trust-item { position: relative; border-color: var(--line-gold); box-shadow: inset 0 1px 0 rgba(236, 205, 143, 0.14), 0 4px 14px rgba(0, 0, 0, 0.25); }
+.trust-item::before { content: ""; position: absolute; top: 0; left: 14%; right: 14%; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne-bright), transparent); opacity: 0.8; pointer-events: none; }
+.trust-icon { border: 1px solid var(--line-gold); }
+
+/* Separator lines */
+.site-header { border-bottom-color: var(--line-gold); }
+.site-header.is-scrolled { border-bottom: 1px solid var(--line-gold); }
+.site-footer { border-top-color: var(--line-gold); }
+.footer-legal-note { border-top-color: var(--line-gold); }
+.footer-bottom { border-top-color: var(--line-gold); }
+.divider-label::before { background: var(--line-gold); }
+hr { border-color: var(--line-gold) !important; }
