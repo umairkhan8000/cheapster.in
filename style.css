@@ -691,8 +691,7 @@ hr { border-color: var(--line-gold) !important; }
 
 
 /* =========================================================
-   MOBILE BOTTOM NAV (sirf phones): Home / Directory / Reward / Login-Logout
-   Login & Logout phone par yahan aate hain, isliye hamburger menu se hide
+   MOBILE BOTTOM NAV (sirf phones): Home / Directory / Reward / Deals
    ========================================================= */
 .mobile-nav { display: none; }
 
@@ -721,7 +720,10 @@ hr { border-color: var(--line-gold) !important; }
   /* Keyboard khulne par bar hide (input ke upar na tike) */
   body.kb-open .mobile-nav { display: none; }
   body.kb-open { padding-bottom: 0; }
-
-  /* Login / Logout ab bottom bar mein hai -> hamburger se hata diya (sirf phone) */
-  #menuLoginBtn, #logoutBtn, .header-dropdown .dropdown-divider { display: none !important; }
 }
+
+/* Deals popup: page wala Deal Hunter block hi popup mein khulta hai (apna border/gold frame already uska hai) */
+.deal-popup { position: relative; width: min(480px, 100%); max-height: 90vh; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; }
+.deal-popup::-webkit-scrollbar { display: none; width: 0; height: 0; }
+.deal-wrap-popup { width: 100%; margin: 0; padding: 0; }
+.deal-popup .modal-close { top: 10px; right: 10px; z-index: 5; width: 30px; height: 30px; display: grid; place-items: center; padding: 0 0 2px; border-radius: 50%; background: rgba(9, 13, 20, 0.85); border: 1px solid var(--line-gold); color: var(--platinum); font-size: 20px; }
