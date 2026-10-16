@@ -596,3 +596,12 @@ html { scrollbar-gutter: stable; }
 .footer-bottom { border-top-color: var(--line-gold); }
 .divider-label::before { background: var(--line-gold); }
 hr { border-color: var(--line-gold) !important; }
+
+/* =========================================================
+   LEGAL PAGES: section headings + links + deal-hunter note
+   ========================================================= */
+.legal-copy h3 { margin: 26px 0 14px; padding-top: 18px; border-top: 1px solid var(--line-gold); font-size: 12px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: var(--champagne-bright); }
+.legal-copy h3:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.legal-copy a { color: var(--champagne); text-decoration: underline; text-underline-offset: 2px; }
+
+.coupon-disclaimer { margin: 16px 0 0; padding-top: 12px; border-top: 1px solid var(--line-gold); text-align: center; font-size: 11.5px; font-weight: 600; line-height: 1.55; color: var(--faint); }
