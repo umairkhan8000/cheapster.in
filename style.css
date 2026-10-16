@@ -672,7 +672,8 @@ hr { border-color: var(--line-gold) !important; }
 .promo-slide:hover { border-color: rgba(236, 205, 143, 0.6); }
 
 /* Coupon result cards, menu dropdown, contact box */
-.coupon-card-item, .header-dropdown, .gold-card { position: relative; }
+/* .header-dropdown yahan se hata diya: position:relative usko page flow mein daal deta tha (header lamba + menu side mein) */
+.coupon-card-item, .gold-card { position: relative; }
 .header-dropdown { box-shadow: var(--shadow-lift), inset 0 1px 0 rgba(236, 205, 143, 0.14); }
 .gold-card { box-shadow: inset 0 1px 0 rgba(236, 205, 143, 0.14); }
 .coupon-card-item::after, .header-dropdown::after, .gold-card::after { content: ""; position: absolute; top: 0; left: 14%; right: 14%; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne-bright), transparent); opacity: 0.8; pointer-events: none; }
