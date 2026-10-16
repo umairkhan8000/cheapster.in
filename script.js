@@ -985,8 +985,32 @@ let huntInFlight = false;
 let lastHuntAt = 0;
 
 const productImageInput = document.getElementById("productImageInput");
-const imagePreviewBadge = document.getElementById("imagePreviewBadge");
-const removeImgBtn = document.getElementById("removeImgBtn");
+const uploadLabel = document.querySelector(".upload-img-label");
+const uploadThumb = document.getElementById("uploadThumb");
+const uploadIcon = uploadLabel ? uploadLabel.querySelector("svg") : null;
+let cutTimer;
+
+// Preview ab upload icon ke andar hi dikhta hai
+function setImagePreview(dataUrl) {
+  if (!uploadLabel || !uploadThumb) return;
+  uploadThumb.src = dataUrl;
+  uploadThumb.hidden = false;
+  if (uploadIcon) uploadIcon.style.display = "none";
+  uploadLabel.classList.add("has-image");
+  uploadLabel.title = "Tap to remove image";
+}
+
+function clearImagePreview() {
+  selectedProductBase64 = null;
+  if (productImageInput) productImageInput.value = "";
+  clearTimeout(cutTimer);
+  if (!uploadLabel || !uploadThumb) return;
+  uploadThumb.hidden = true;
+  uploadThumb.removeAttribute("src");
+  if (uploadIcon) uploadIcon.style.display = "";
+  uploadLabel.classList.remove("has-image", "confirm-remove");
+  uploadLabel.title = "Upload Product Image";
+}
 const searchCouponBtn = document.getElementById("searchCouponBtn");
 const aiSearchInput = document.getElementById("searchInput");
 
@@ -1060,24 +1084,33 @@ if (productImageInput) {
         } catch (err) {
           selectedProductBase64 = reader.result;
         }
-        if (imagePreviewBadge) imagePreviewBadge.hidden = false;
+        setImagePreview(selectedProductBase64);
         showToast("Product image attached! Ready to hunt.", "📸");
         aiSearchInput.focus();
       };
-      img.onerror = () => { selectedProductBase64 = reader.result; if (imagePreviewBadge) imagePreviewBadge.hidden = false; };
+      img.onerror = () => { selectedProductBase64 = reader.result; setImagePreview(selectedProductBase64); };
       img.src = reader.result;
     };
     reader.readAsDataURL(file);
   });
 }
 
-// --- Remove Image ---
-if (removeImgBtn) {
-  removeImgBtn.addEventListener("click", () => {
-    selectedProductBase64 = null;
-    productImageInput.value = "";
-    imagePreviewBadge.hidden = true;
-    showToast("Image removed.", "ℹ️");
+// --- Remove Image: 1st tap on thumbnail shows cut (x), 2nd tap removes ---
+if (uploadLabel) {
+  uploadLabel.addEventListener("click", (e) => {
+    if (!uploadLabel.classList.contains("has-image")) return; // no image yet: normal file picker
+    e.preventDefault();
+    if (uploadLabel.classList.contains("confirm-remove")) {
+      clearImagePreview();
+      showToast("Image removed.", "ℹ️");
+    } else {
+      uploadLabel.classList.add("confirm-remove");
+      clearTimeout(cutTimer);
+      cutTimer = setTimeout(() => uploadLabel.classList.remove("confirm-remove"), 3500);
+    }
+  });
+  document.addEventListener("click", (e) => {
+    if (!uploadLabel.contains(e.target)) uploadLabel.classList.remove("confirm-remove");
   });
 }
 
@@ -1178,9 +1211,7 @@ async function triggerSecureAIHunt() {
     renderAICards(data);
 
     // Free memory
-    selectedProductBase64 = null;
-    productImageInput.value = "";
-    if (imagePreviewBadge) imagePreviewBadge.hidden = true;
+    clearImagePreview();
 
   } catch (err) {
     console.error("AI Hunter Error:", err);
