@@ -1,753 +1,1553 @@
-/* =========================================================
-   CHEAPSTER.IN — DARK PREMIUM THEME
-   Obsidian + Champagne Gold + Sapphire.
-   ========================================================= */
+// build: 2026-10-11-AI-Coupons-Final-Script-V6
+// =========================================================
+// CHEapSTER.IN — PREMIUM BRAND DIRECTORY 
+// =========================================================
 
-:root {
-  --obsidian: #090d14;
-  --obsidian-raised: #111826;
-  --panel-solid: #131b28;
-  --panel-solid-hover: #182233;
-  --sapphire: #1c3f66;
-  --sapphire-glow: #5b9eea;
-  --champagne: #cda15c;
-  --champagne-bright: #eccd8f;
-  --platinum: #eef2f7;
-  --ink: #f3f6f9;
-  --muted: #e3e9f1;
-  --faint: #cdd6e2;
-  --line: rgba(255, 255, 255, 0.08);
-  --line-gold: rgba(205, 161, 92, 0.3);
-  --glow-line: rgba(91, 158, 234, 0.35);
-  --success: #4fbf82;
-  --radius-card: 16px;
-  --radius-modal: 22px;
-  --shadow-soft: 0 10px 26px rgba(0, 0, 0, 0.4);
-  --shadow-lift: 0 20px 45px rgba(0, 0, 0, 0.55);
+const CATEGORY_ORDER = [
+  "Mega Brands", 
+  "Fashion", 
+  "Beauty & Grooming", 
+  "Tech", 
+  "Wellness & Health", 
+  "Jewellery & Gifting", 
+  "Travel", 
+  "Home", 
+  "Pets", 
+  "Digital", 
+  "Kids"
+];
+
+// localStorage private mode / blocked cookies mein error de sakta hai
+const safeStore = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+};
+
+// Mega Brands ka order: best-selling pehle, baaki uske baad
+const MEGA_PRIORITY = ["Amazon", "Flipkart", "Myntra", "Nykaa", "AJIO", "Croma", "JioMart", "Tata CLiQ", "Meesho", "Shopsy", "Tira", "Cashify", "Reliance Digital", "Tanishq"];
+
+// Kisi store ko ek se zyada category mein dikhana ho to usme alsoIn: ["Mega Brands"] lagao (apni asli category mein bhi rahega)
+const inCategory = (store, cat) => store.category === cat || (Array.isArray(store.alsoIn) && store.alsoIn.includes(cat));
+const megaRank = (store) => {
+  const i = MEGA_PRIORITY.indexOf(store.name);
+  return i === -1 ? 999 : i;
+};
+
+// --- BRAND MASTER LIST WITH EXACT ZIP LOGO FILENAMES ---
+const stores = [
+  // 1. MEGA BRANDS
+  { name: "Amazon", domain: "amazon.in", category: "Mega Brands", description: "Everything marketplace", link: "https://www.amazon.in/?tag=cheapster0a-21", logo: "hd-logos/amazon.png" },
+  { name: "Flipkart", domain: "flipkart.com", category: "Mega Brands", description: "Shopping marketplace", link: "https://fktr.in/Ve7AKTM", logo: "hd-logos/flipkart.png" },
+  { name: "Myntra", domain: "myntra.com", category: "Mega Brands", description: "Fashion & lifestyle", link: "https://myntr.it/0IKBm9j", logo: "hd-logos/myntra.png" },
+  { name: "Nykaa", domain: "nykaa.com", category: "Mega Brands", description: "Beauty & cosmetics", link: "https://bitli.in/cYKpZba", logo: "hd-logos/nykaa.png" },
+  { name: "AJIO", domain: "ajio.com", category: "Mega Brands", description: "Fashion destination", link: "https://ajiio.in/hSTHlOO", logo: "hd-logos/ajio.png" },
+  { name: "Tata CLiQ", domain: "tatacliq.com", category: "Mega Brands", description: "Multi-category retail", link: "https://bitli.in/Ufnwuqh", logo: "hd-logos/tatacliq.png" },
+  { name: "Croma", domain: "croma.com", category: "Mega Brands", description: "Electronics", link: "https://bitli.in/3MjWfz5", logo: "hd-logos/croma.png" },
+  { name: "Tira", domain: "tirabeauty.com", category: "Mega Brands", description: "Premium beauty", link: "https://myntr.it/8rjwEfS", logo: "hd-logos/tirabeautycom.png" }, 
+  { name: "Shopsy", domain: "shopsy.in", category: "Mega Brands", description: "Value shopping", link: "https://bitli.in/q3GTiTJ", logo: "hd-logos/shopsy.png" },
+  { name: "JioMart", domain: "jiomart.com", category: "Mega Brands", description: "Groceries & more", link: "https://bitli.in/6jJqYGx", logo: "hd-logos/jiomart.png" },
+  { name: "Meesho", domain: "meesho.com", category: "Mega Brands", description: "Value shopping marketplace", link: "https://www.meesho.com", logo: "hd-logos/meesho.png" },
+
+  // 2. FASHION & FOOTWEAR
+  { name: "Snitch", domain: "", category: "Fashion", description: "Men's fashion", link: "https://myntr.it/4Z4putW", logo: "hd-logos/snitchcom.png" },
+  { name: "Urbanic", domain: "urbanic.com", category: "Fashion", description: "Gen-Z women's fashion", link: "https://inr.deals/JNTFEn", logo: "hd-logos/urbanic.png" },
+  { name: "Beyoung", domain: "beyoung.in", category: "Fashion", description: "Everyday fashion", link: "https://inr.deals/dg4LBQ", logo: "hd-logos/beyoungin.png" },
+  { name: "Savana", domain: "savana.com", category: "Fashion", description: "Trendy fashion", link: "https://www.savana.com", logo: "hd-logos/savana.png" },
+  { name: "Bewakoof", domain: "bewakoof.com", category: "Fashion", description: "Quirky fashion", link: "https://myntr.it/k5op88M", logo: "hd-logos/bewakoof.png" },
+  { name: "The Souled Store", domain: "thesouledstore.com", category: "Fashion", description: "Pop culture merch", link: "https://myntr.it/DWA75BD", logo: "hd-logos/thesouledstore.png" },
+  { name: "XYXX", domain: "xyxxcrew.com", category: "Fashion", description: "Men's innerwear", link: "https://bitli.in/3zj1f7A", logo: "hd-logos/xyxx.png" },
+  { name: "Cahoot", domain: "cahoot.in", category: "Fashion", description: "Casual streetwear", link: "https://cahoot.in/collections/men-bestsellers", logo: "hd-logos/cahootin.png" },
+  { name: "Bonkers Corner", domain: "bonkerscorner.com", category: "Fashion", description: "Gen-Z streetwear", link: "https://myntr.it/9dOkPqa", logo: "hd-logos/bonkerscorner.png" },
+  { name: "Levi's", domain: "levi.in", category: "Fashion", description: "Premium denim", link: "https://www.levi.in", logo: "hd-logos/leviin.png" },
+  { name: "Shoppers Stop", domain: "shoppersstop.com", category: "Fashion", description: "Premium retail", link: "https://www.shoppersstop.com", logo: "hd-logos/shoppersstop.png" },
+  { name: "Crocs", domain: "crocs.in", category: "Fashion", description: "Comfort footwear", link: "https://www.crocs.in", logo: "hd-logos/crocs.png" },
+
+  // 3. BEAUTY & GROOMING
+  { name: "Minimalist", domain: "beminimalist.co", category: "Beauty & Grooming", description: "Science skincare", link: "https://myntr.it/rMINbqf", logo: "hd-logos/minimalist.png" }, 
+  { name: "Plum", domain: "plumgoodness.com", category: "Beauty & Grooming", description: "Vegan beauty", link: "https://www.plumgoodness.com", logo: "hd-logos/plum.png" },
+  { name: "Dot & Key", domain: "dotandkey.com", category: "Beauty & Grooming", description: "Skincare essentials", link: "https://bitli.in/kxVP911", logo: "hd-logos/dotkey.png" },
+  { name: "Mamaearth", domain: "mamaearth.in", category: "Beauty & Grooming", description: "Toxin-free care", link: "https://myntr.it/HKn907y", logo: "hd-logos/mamaearth.png" }, 
+  { name: "MCaffeine", domain: "mcaffeine.com", category: "Beauty & Grooming", description: "Caffeinated care", link: "https://bitli.in/l5q8RB9", logo: "hd-logos/mcaffeine.png" },
+  { name: "Foxtale", domain: "foxtale.in", category: "Beauty & Grooming", description: "Skincare essentials", link: "https://bitli.in/0AmuJ4D", logo: "hd-logos/foxtale.png" },
+  { name: "Pilgrim", domain: "discoverpilgrim.com", category: "Beauty & Grooming", description: "Global beauty secrets", link: "https://myntr.it/b15Xj44", logo: "hd-logos/pilgrim.png" }, 
+  { name: "WOW Skin Science", domain: "buywow.in", category: "Beauty & Grooming", description: "Natural care", link: "https://myntr.it/cL2I60J", logo: "hd-logos/wowskinscience.png" }, 
+  { name: "Purplle", domain: "purplle.com", category: "Beauty & Grooming", description: "Beauty shopping", link: "https://myntr.it/DtZXMYc", logo: "hd-logos/purplle.png" }, 
+  { name: "Sugar Cosmetics", domain: "sugarcosmetics.com", category: "Beauty & Grooming", description: "Makeup brand", link: "https://www.sugarcosmetics.com", logo: "hd-logos/sugarcosmetics.png" },
+  { name: "MyGlamm", domain: "myglamm.com", category: "Beauty & Grooming", description: "Makeup & beauty", link: "https://myntr.it/kdZ8qNm", logo: "hd-logos/myglammcom.png" }, 
+  { name: "Bella Vita", domain: "bellavitaluxury.co.in", category: "Beauty & Grooming", description: "Luxury perfumes", link: "https://bitli.in/my55y0T", logo: "hd-logos/bellavitaorganiccom.png" },
+  { name: "Skinn by Titan", domain: "skinn.in", category: "Beauty & Grooming", description: "Indian luxury fragrances", link: "https://www.skinn.in", logo: "hd-logos/skinnbytitan.png" },
+  { name: "Swiss Beauty", domain: "swissbeauty.in", category: "Beauty & Grooming", description: "Budget makeup", link: "https://bitli.in/aIuUSl6", logo: "hd-logos/swissbeautyin.png" },
+  { name: "MAC Cosmetics", domain: "maccosmetics.in", category: "Beauty & Grooming", description: "Luxury makeup", link: "https://www.myntra.com/mac", logo: "hd-logos/maccosmeticsin.png" }, 
+  { name: "Bare Anatomy", domain: "innovist.com", category: "Beauty & Grooming", description: "Science hair care", link: "https://myntr.it/KZrg2I3", logo: "hd-logos/bareanatomy.png" }, 
+  { name: "BBlunt", domain: "bblunt.com", category: "Beauty & Grooming", description: "Salon-style hair care", link: "https://myntr.it/XcUHhAy", logo: "hd-logos/bbluntcom.png" }, 
+  { name: "Beardo", domain: "beardo.in", category: "Beauty & Grooming", description: "Men's grooming", link: "https://myntr.it/7LmnKhJ", logo: "hd-logos/beardo.png" }, 
+  { name: "Bombay Shaving Co", domain: "bombayshavingcompany.com", category: "Beauty & Grooming", description: "Premium grooming", link: "https://bombayshavingcompany.com", logo: "hd-logos/bombayshavingcompany.png" },
+  { name: "The Man Company", domain: "themancompany.com", category: "Beauty & Grooming", description: "Premium essentials", link: "https://bitli.in/bNc5aYS", logo: "hd-logos/themancompany.png" },
+  { name: "Ghar Soaps", domain: "gharsoaps.in", category: "Beauty & Grooming", description: "Ayurvedic skincare", link: "https://www.gharsoaps.shop", logo: "hd-logos/gharsoapsin.png" },
+  { name: "Lakme", domain: "lakmeindia.com", category: "Beauty & Grooming", description: "Indian makeup giant", link: "https://myntr.it/sZFb9xo", logo: "hd-logos/lakmeindiacom.png" }, 
+  { name: "Maybelline", domain: "maybelline.co.in", category: "Beauty & Grooming", description: "Global makeup", link: "https://myntr.it/6W0Y2f6", logo: "hd-logos/maybellinecoin.png" }, 
+  { name: "L'Oréal", domain: "lorealparis.co.in", category: "Beauty & Grooming", description: "Hair & cosmetics", link: "https://myntr.it/sgEANQg", logo: "hd-logos/loral.png" }, 
+
+  // 4. TECH & GADGETS
+  { name: "Dell", domain: "dell.com", category: "Tech", description: "Laptops & PCs", link: "https://bitli.in/iNehXK5", logo: "hd-logos/dell.png" },
+  { name: "Lenovo", domain: "lenovo.com", category: "Tech", description: "Laptops & tech", link: "https://inr.deals/8SVnGa", logo: "hd-logos/lenovo.png" },
+  { name: "Realme", domain: "realme.com", category: "Tech", description: "Smartphones & AIoT", link: "https://fktr.in/NklgOgg", logo: "hd-logos/realme.png" }, 
+  { name: "boAt", domain: "boat-lifestyle.com", category: "Tech", description: "Audio & wearables", link: "https://www.boat-lifestyle.com", logo: "hd-logos/boat.png" },
+  { name: "Noise", domain: "gonoise.com", category: "Tech", description: "Smartwatches", link: "https://www.gonoise.com", logo: "hd-logos/noise.png" },
+  { name: "JBL", domain: "jbl.com", category: "Tech", description: "Premium audio", link: "https://inr.deals/lWnHDY", logo: "hd-logos/jbl.png" },
+  { name: "Reliance Digital", domain: "reliancedigital.in", category: "Tech", alsoIn: ["Mega Brands"], description: "Tech retail", link: "https://www.reliancedigital.in", logo: "hd-logos/reliancedigital.png" },
+  { name: "HP", domain: "hp.com", category: "Tech", description: "Laptops & tech", link: "https://bitli.in/6R3BJ2i", logo: "hd-logos/hp.png" },
+  { name: "Vijay Sales", domain: "vijaysales.com", category: "Tech", description: "Electronics retail", link: "https://www.vijaysales.com", logo: "hd-logos/vijaysales.png" },
+  { name: "Cashify", domain: "cashify.in", category: "Tech", alsoIn: ["Mega Brands"], description: "Sell & buy phones", link: "https://inr.deals/gW2Iby", logo: "hd-logos/cashify.png" },
+  { name: "Spinny", domain: "spinny.com", category: "Tech", description: "Buy & sell used cars", link: "https://inr.deals/mor4Sf", logo: "hd-logos/spinny.png" },
+
+  // 5. WELLNESS & HEALTH
+  { name: "Tata 1mg", domain: "1mg.com", category: "Wellness & Health", description: "Online pharmacy", link: "https://www.amazon.in/b?node=22180802031&tag=cheapster0a-21", logo: "hd-logos/tata1mg.png" }, 
+  { name: "Apollo 24|7", domain: "apollo247.com", category: "Wellness & Health", description: "Healthcare delivery", link: "https://www.amazon.in/b?node=22180802031&tag=cheapster0a-21", logo: "hd-logos/apollo247.png" }, 
+  { name: "Netmeds", domain: "netmeds.com", category: "Wellness & Health", description: "Medicine delivery", link: "https://bitli.in/zXbiP37", logo: "hd-logos/netmeds.png" },
+  { name: "MuscleBlaze", domain: "muscleblaze.com", category: "Wellness & Health", description: "Sports nutrition", link: "https://www.muscleblaze.com", logo: "hd-logos/muscleblaze.png" },
+  { name: "Myprotein", domain: "myprotein.co.in", category: "Wellness & Health", description: "Fitness supplements", link: "https://www.myprotein.co.in", logo: "hd-logos/myproteincoin.png" },
+  { name: "Plix", domain: "", category: "Wellness & Health", description: "Plant nutrition", link: "https://www.amazon.in/s?k=Plix&tag=cheapster0a-21", logo: "hd-logos/plix.png" }, 
+  { name: "Kapiva", domain: "kapiva.in", category: "Wellness & Health", description: "Ayurvedic nutrition", link: "https://www.kapiva.in", logo: "hd-logos/kapiva.png" },
+  { name: "HealthKart", domain: "healthkart.com", category: "Wellness & Health", description: "Health supplements", link: "https://www.healthkart.com", logo: "hd-logos/healthkart.png" },
+  { name: "Traya", domain: "traya.health", category: "Wellness & Health", description: "Hair fall treatment", link: "https://www.amazon.in/s?k=Traya&tag=cheapster0a-21", logo: "hd-logos/traya.png" }, 
+  { name: "Man Matters", domain: "manmatters.com", category: "Wellness & Health", description: "Men's wellness", link: "https://www.amazon.in/s?k=Man+Matters&tag=cheapster0a-21", logo: "hd-logos/manmatters.png" }, 
+  { name: "Perfora", domain: "perforacare.com", category: "Wellness & Health", description: "Premium oral care", link: "https://inr.deals/ZAEqzs", logo: "hd-logos/perfora.png" },
+  { name: "Optimum Nutrition", domain: "optimumnutrition.com", category: "Wellness & Health", description: "Premium whey protein", link: "https://www.healthkart.com/brand/optimum-nutrition", logo: "hd-logos/optimumnutrition.png" },
+
+  // 6. JEWELLERY & GIFTING
+  { name: "Lenskart", domain: "lenskart.com", category: "Jewellery & Gifting", description: "Eyewear", link: "https://www.lenskart.com", logo: "hd-logos/lenskart.png" },
+  { name: "Titan", domain: "titan.co.in", category: "Jewellery & Gifting", description: "Watches & Eyeplus", link: "https://www.titan.co.in", logo: "hd-logos/titancoin.png" },
+  { name: "Tanishq", domain: "tanishq.co.in", category: "Jewellery & Gifting", alsoIn: ["Mega Brands"], description: "Fine jewellery", link: "https://www.tanishq.co.in", logo: "hd-logos/tanishqcoin.png" },
+  { name: "Giva", domain: "giva.co", category: "Jewellery & Gifting", description: "Silver jewellery", link: "https://www.amazon.in/s?k=Giva&tag=cheapster0a-21", logo: "hd-logos/giva.png" }, 
+  { name: "Palmonas", domain: "palmonas.com", category: "Jewellery & Gifting", description: "Demi-fine jewellery", link: "https://www.palmonas.com", logo: "hd-logos/palmonas.png" },
+  { name: "Melorra", domain: "melorra.com", category: "Jewellery & Gifting", description: "Trendy gold", link: "https://www.amazon.in/s?k=Melorra&tag=cheapster0a-21", logo: "hd-logos/melorra.png" }, 
+  { name: "BlueStone", domain: "bluestone.com", category: "Jewellery & Gifting", description: "Fine jewellery", link: "https://www.bluestone.com", logo: "hd-logos/bluestone.png" },
+  { name: "FNP", domain: "fnp.com", category: "Jewellery & Gifting", description: "Flowers & gifts", link: "https://www.amazon.in/s?k=FNP+gifts&tag=cheapster0a-21", logo: "hd-logos/fnp.png" }, 
+
+  // 7. TRAVEL & FLIGHTS
+  { name: "MakeMyTrip", domain: "makemytrip.com", category: "Travel", description: "Flights & hotels", link: "https://bitli.in/xj6tXro", logo: "hd-logos/makemytrip.png" },
+  { name: "Agoda", domain: "agoda.com", category: "Travel", description: "Hotels & stays", link: "https://inr.deals/E1HvrY", logo: "hd-logos/agodacom.png" },
+  { name: "Booking.com", domain: "booking.com", category: "Travel", description: "Global travel", link: "https://bitli.in/tuUeY6U", logo: "hd-logos/bookingcom.png" },
+  { name: "Goibibo", domain: "goibibo.com", category: "Travel", description: "Travel bookings", link: "https://bitli.in/nr6ckLO", logo: "hd-logos/goibibo.png" },
+  { name: "Ixigo", domain: "ixigo.com", category: "Travel", description: "Flight & train bookings", link: "https://www.ixigo.com", logo: "hd-logos/ixigo.png" },
+  { name: "Oyo Rooms", domain: "oyorooms.com", category: "Travel", description: "Budget stays", link: "https://www.oyorooms.com", logo: "hd-logos/oyorooms.png" },
+
+  // 8. HOME & HARDWARE
+  { name: "Pepperfry", domain: "pepperfry.com", category: "Home", description: "Furniture marketplace", link: "https://www.pepperfry.com", logo: "hd-logos/pepperfry.png" },
+  { name: "WoodenStreet", domain: "woodenstreet.com", category: "Home", description: "Solid wood furniture", link: "https://www.amazon.in/s?k=Wooden+Street&tag=cheapster0a-21", logo: "hd-logos/woodenstreet.png" }, 
+  { name: "Urban Ladder", domain: "urbanladder.com", category: "Home", description: "Premium furniture", link: "https://inr.deals/IenJf0", logo: "hd-logos/urbanladdercom.png" },
+  { name: "Wakefit", domain: "wakefit.co", category: "Home", description: "Mattress & furniture", link: "https://www.amazon.in/s?k=Wakefit&tag=cheapster0a-21", logo: "hd-logos/wakefit.png" }, 
+  { name: "SleepyCat", domain: "sleepycat.in", category: "Home", description: "Sleep solutions", link: "https://sleepycat.in", logo: "hd-logos/sleepycat.png" },
+  { name: "Rentomojo", domain: "rentomojo.com", category: "Home", description: "Furniture rentals", link: "https://www.rentomojo.com", logo: "hd-logos/rentomojo.png" },
+  { name: "Moglix", domain: "moglix.com", category: "Home", description: "Hardware & tools", link: "https://www.moglix.com", logo: "hd-logos/moglix.png" },
+  { name: "Bosch Tools", domain: "bosch-pt.co.in", category: "Home", description: "Power tools", link: "https://www.moglix.com/brands/bosch", logo: "hd-logos/boschptcoin.png" },
+
+  // 9. PETS
+  { name: "Supertails", domain: "supertails.com", category: "Pets", description: "Pet care & food", link: "https://www.amazon.in/h/pets?tag=cheapster0a-21", logo: "hd-logos/supertails.png" }, 
+  { name: "Heads Up For Tails", domain: "headsupfortails.com", category: "Pets", description: "Luxury pet supplies", link: "https://www.amazon.in/s?k=Heads+Up+For+Tails&tag=cheapster0a-21", logo: "hd-logos/headsupfortails.png" }, 
+  { name: "Drools", domain: "drools.com", category: "Pets", description: "Dog & cat food", link: "https://www.amazon.in/s?k=Drools&tag=cheapster0a-21", logo: "hd-logos/drools.png" }, 
+  { name: "Pedigree", domain: "pedigree.in", category: "Pets", description: "Dog nutrition", link: "https://www.amazon.in/s?k=Pedigree&tag=cheapster0a-21", logo: "hd-logos/pedigreein.png" }, 
+  { name: "Royal Canin", domain: "royalcanin.com", category: "Pets", description: "Premium pet nutrition", link: "https://www.amazon.in/s?k=Royal+Canin&tag=cheapster0a-21", logo: "hd-logos/royalcanin.png" }, 
+
+  // 10. DIGITAL & SOFTWARE
+  { name: "Hostinger", domain: "hostinger.in", category: "Digital", description: "Web hosting", link: "https://inr.deals/8mfMZB", logo: "hd-logos/hostingerin.png" },
+  { name: "GoDaddy", domain: "godaddy.com", category: "Digital", description: "Domains & web tools", link: "https://www.godaddy.com/en-in", logo: "hd-logos/godaddy.png" },
+  { name: "Microsoft", domain: "microsoft.com", category: "Digital", description: "Office 365 & Xbox", link: "https://www.microsoft.com/en-in", logo: "hd-logos/microsoft.png" },
+  { name: "upGrad", domain: "upgrad.com", category: "Digital", description: "Higher education", link: "https://www.upgrad.com", logo: "hd-logos/upgrad.png" },
+  { name: "Physics Wallah", domain: "pw.live", category: "Digital", description: "EdTech platform", link: "https://www.pw.live", logo: "hd-logos/pw.png" },
+
+  // 11. KIDS & TOYS
+  { name: "FirstCry", domain: "firstcry.com", category: "Kids", description: "Kids & baby gear", link: "https://www.firstcry.com", logo: "hd-logos/firstcry.png" },
+  { name: "Hopscotch", domain: "hopscotch.in", category: "Kids", description: "Kids fashion", link: "https://www.amazon.in/s?k=Hopscotch&tag=cheapster0a-21", logo: "hd-logos/hopscotch.png" }, 
+  { name: "Hamleys", domain: "hamleys.in", category: "Kids", description: "Premium toys", link: "https://www.amazon.in/s?k=Hamleys&tag=cheapster0a-21", logo: "hd-logos/hamleysin.png" }, 
+  { name: "Smartivity", domain: "smartivity.in", category: "Kids", description: "DIY & STEM toys", link: "https://www.amazon.in/s?k=Smartivity&tag=cheapster0a-21", logo: "hd-logos/smartivity.png" }, 
+  { name: "LEGO", domain: "lego.com", category: "Kids", description: "Building blocks", link: "https://www.amazon.in/s?k=LEGO&tag=cheapster0a-21", logo: "hd-logos/lego.png" } 
+];
+
+// ---------- Premium UI Injections ----------
+function injectStylesAndNav() {
+  const gridElement = document.getElementById("storeGrid");
+  if(!document.getElementById("categoryNavWrapper") && gridElement) {
+    const navWrapper = document.createElement("div");
+    navWrapper.id = "categoryNavWrapper";
+    navWrapper.className = "category-nav-wrapper"; 
+    
+    const navScroll = document.createElement("div");
+    navScroll.className = "category-nav";
+    navScroll.id = "categoryNav";
+    
+    navWrapper.appendChild(navScroll);
+    const anchor = document.querySelector(".brand-filter-row") || gridElement;
+    anchor.parentNode.insertBefore(navWrapper, anchor);
+  }
 }
 
-*, *::before, *::after { 
-  box-sizing: border-box; 
-  -webkit-tap-highlight-color: transparent; 
-}
-html { scroll-behavior: smooth; }
+let currentCategory = "Mega Brands";
+let searchQuery = "";
 
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: var(--obsidian); }
-::-webkit-scrollbar-thumb { background: var(--champagne); border-radius: 10px; }
+const haptic = () => { if (navigator.vibrate) navigator.vibrate(40); };
 
-body {
-  margin: 0;
-  color: var(--platinum);
-  background-color: var(--obsidian);
-  background-image: none;
-  font-family: "DM Sans", sans-serif;
-  overflow-x: hidden;
-  min-height: 100vh;
-  position: relative;
-}
+// Ek time par sirf EK toast: naya aate hi purana turant replace ho jaata hai (list nahi banti)
+let activeToast = null;
+let toastTimer = null;
 
-body::before {
-  content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.55;
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='320'%20height='320'%3E%3Ccircle%20cx='46'%20cy='58'%20r='20'%20fill='%23cda15c'%20opacity='0.05'/%3E%3Ccircle%20cx='46'%20cy='58'%20r='9'%20fill='%23cda15c'%20opacity='0.10'/%3E%3Ccircle%20cx='46'%20cy='58'%20r='3'%20fill='%23eccd8f'%20opacity='0.20'/%3E%3Ccircle%20cx='244'%20cy='96'%20r='17'%20fill='%235b9eea'%20opacity='0.05'/%3E%3Ccircle%20cx='244'%20cy='96'%20r='8'%20fill='%235b9eea'%20opacity='0.09'/%3E%3Ccircle%20cx='244'%20cy='96'%20r='3'%20fill='%23bcdcff'%20opacity='0.17'/%3E%3Ccircle%20cx='128'%20cy='236'%20r='15'%20fill='%23cda15c'%20opacity='0.04'/%3E%3Ccircle%20cx='128'%20cy='236'%20r='7'%20fill='%23eccd8f'%20opacity='0.09'/%3E%3Ccircle%20cx='128'%20cy='236'%20r='2.5'%20fill='%23f4e2b8'%20opacity='0.16'/%3E%3Ccircle%20cx='288'%20cy='276'%20r='13'%20fill='%235b9eea'%20opacity='0.04'/%3E%3Ccircle%20cx='288'%20cy='276'%20r='6'%20fill='%235b9eea'%20opacity='0.08'/%3E%3C/svg%3E");
-  background-size: 320px 320px;
-}
-
-body > * { position: relative; z-index: 1; }
-
-
-body.modal-open { overflow: hidden; }
-button, input, select, textarea { font: inherit; outline: none; }
-button { cursor: pointer; }
-a { color: inherit; text-decoration: none; }
-[hidden] { display: none !important; }
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-}
-
-/* Premium Dynamic Toasts */
-.toast-container { position: fixed; top: 20px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 9999; pointer-events: none; }
-.toast-msg { background: rgba(19, 27, 40, 0.97); border: 1px solid var(--line-gold); color: var(--champagne-bright); font-size: 13px; font-weight: 700; padding: 12px 24px; border-radius: 50px; box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 20px rgba(205, 161, 92, 0.15); animation: toastEnter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; display: flex; align-items: center; gap: 10px; pointer-events: auto; will-change: transform, opacity; }
-.toast-msg.toast-exit { animation: toastExit 0.3s ease-in forwards; }
-@keyframes toastEnter { from { opacity: 0; transform: translateY(-20px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
-@keyframes toastExit { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-20px) scale(0.9); } }
-
-/* Top Live Banner */
-.live-contest-banner { background: linear-gradient(90deg, var(--sapphire), #142a44); color: var(--champagne-bright); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: center; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--line-gold); }
-.blinking-dot { width: 6px; height: 6px; background-color: #7fe3ab; border-radius: 50%; box-shadow: 0 0 10px #7fe3ab; animation: blink 1.5s infinite ease-in-out; }
-@keyframes blink { 0%, 100% { opacity: 0.35; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.15); } }
-
-.giveaway-date-bar { background: linear-gradient(90deg, var(--sapphire), #142a44); border-bottom: 1px solid var(--line-gold); text-align: center; padding: 8px 15px; font-size: 12.5px; font-weight: 700; color: var(--platinum); letter-spacing: 0.3px; }
-.giveaway-date-bar span { color: var(--champagne-bright); font-weight: 800; letter-spacing: 0.8px; margin-left: 3px; }
-
-/* Header */
-.site-header { position: sticky; top: 0; z-index: 100; background: rgba(9, 13, 20, 0.97); border-bottom: 1px solid var(--line); transition: box-shadow .3s ease; }
-.site-header.is-scrolled { background: rgba(9, 13, 20, 0.97) !important; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-.site-header::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne), var(--sapphire-glow), transparent); background-size: 200% 100%; opacity: 0.55; }
-.header-inner { width: min(1220px, calc(100% - 34px)); min-height: 70px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-.brand { display: flex; align-items: center; gap: 10px; }
-.css-logo { width: 38px; height: 38px; background: linear-gradient(145deg, var(--sapphire), #0d2138); border-radius: 10px; border: 1px solid var(--line-gold); color: var(--champagne-bright); font-family: 'Manrope', sans-serif; font-size: 22px; font-weight: 800; display: flex; justify-content: center; align-items: center; padding-right: 2px; box-shadow: var(--shadow-soft); }
-.css-logo span { color: var(--champagne); margin-left: 2px; }
-.brand-wordmark { color: var(--ink); font-size: 19px; font-weight: 800; }
-.brand-wordmark span { color: var(--champagne); }
-.header-actions { display: flex; gap: 10px; align-items: center; }
-.hamburger-btn { width: 42px; height: 42px; border-radius: 100px; border: 1px solid var(--line); background: var(--panel-solid); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; }
-.hamburger-btn:hover { border-color: var(--line-gold); }
-.hamburger-btn span { width: 18px; height: 2px; background: var(--platinum); border-radius: 2px; transition: transform .2s ease, opacity .2s ease; }
-.hamburger-btn[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-.hamburger-btn[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
-.hamburger-btn[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
-.header-dropdown { position: absolute; top: calc(100% + 8px); right: 17px; background: var(--panel-solid); border: 1px solid var(--line-gold); border-radius: 14px; box-shadow: var(--shadow-lift); display: flex; flex-direction: column; padding: 8px; min-width: 220px; z-index: 110; }
-.header-dropdown button { background: none; border: none; text-align: left; color: var(--platinum); font-size: 13.5px; font-weight: 700; padding: 10px 12px; border-radius: 8px; cursor: pointer; }
-.header-dropdown button:hover { background: var(--panel-solid-hover); color: var(--champagne-bright); }
-
-/* Category Nav */
-.category-nav-wrapper { position: sticky; top: calc(var(--header-h, 98px) + 8px); background: rgba(19, 27, 40, 0.98); z-index: 100; padding: 10px; margin-bottom: 20px; border: 1px solid var(--line); border-radius: 22px; box-shadow: var(--shadow-soft); }
-.category-nav { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; border-radius: 16px; }
-.category-nav::-webkit-scrollbar { display: none; }
-.cat-pill { font-family: inherit; appearance: none; -webkit-appearance: none; background: rgba(255, 255, 255, 0.04); color: var(--platinum); border: 1px solid var(--line); border-radius: 100px; padding: 8px 18px; font-size: 13px; font-weight: 700; white-space: nowrap; cursor: pointer; transition: all 0.25s ease; user-select: none; }
-.cat-pill:hover { background: rgba(205, 161, 92, 0.10); color: var(--champagne-bright); border-color: var(--line-gold); }
-.cat-pill.active { background: linear-gradient(135deg, var(--champagne-bright) 0%, var(--champagne) 100%); color: #14100a; border-color: transparent; font-weight: 700; box-shadow: 0 4px 14px rgba(205, 161, 92, 0.28); }
-
-/* Buttons */
-.btn { min-height: 42px; padding: 0 16px; border-radius: 100px; border: none; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; font-size: 13px; transition: transform .2s ease, box-shadow .2s ease; }
-.btn-gold { color: #14100a; background: linear-gradient(135deg, var(--champagne-bright) 0%, var(--champagne) 100%); box-shadow: 0 6px 18px rgba(205, 161, 92, 0.28); }
-.btn-gold:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(205, 161, 92, 0.38); }
-.btn-google { color: var(--ink); background: var(--panel-solid); border: 1px solid var(--line); }
-.btn-google:hover { border-color: var(--line-gold); }
-.google-icon { width: 18px; }
-.auth-avatar { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line-gold); }
-.auth-avatar-fallback { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--sapphire); color: var(--champagne-bright); font-size: 11px; font-weight: 800; border: 1px solid var(--line-gold); }
-
-/* Hero */
-.hero { text-align: center; padding: 64px 20px 20px; position: relative; }
-.hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border: 1px solid var(--line-gold); border-radius: 999px; color: var(--champagne-bright); background: rgba(205, 161, 92, 0.08); font-size: 11px; font-weight: 800; letter-spacing: 1.6px; }
-.pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--champagne); }
-.hero h1 { font-family: 'Manrope', 'DM Sans', sans-serif; margin: 20px 0 14px; color: var(--ink); font-size: clamp(34px, 6vw, 60px); font-weight: 800; line-height: 1.12; letter-spacing: -0.5px; }
-.hero h1 span { color: var(--champagne-bright); }
-.festive-pill { display: inline-flex; align-items: center; gap: 8px; margin: 0 auto 18px; padding: 8px 18px; background: rgba(91, 158, 234, 0.08); border: 1px solid rgba(91, 158, 234, 0.28); border-radius: 50px; color: var(--sapphire-glow); font-size: 13px; font-weight: 600; }
-.festive-sparkle { font-size: 14px; }
-.hero-copy { max-width: 600px; margin: 0 auto 20px; color: var(--muted); font-size: 15px; font-weight: 600; line-height: 1.6; }
-
-/* Trust points */
-.trust-grid { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; max-width: 980px; margin: 24px auto 0; padding: 0; }
-.trust-item { display: flex; align-items: center; gap: 10px; padding: 12px 14px; text-align: left; border: 1px solid var(--line); border-radius: 14px; background: rgba(255, 255, 255, 0.03); color: var(--platinum); font-size: 12.5px; font-weight: 700; line-height: 1.35; }
-.trust-icon { flex-shrink: 0; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: rgba(205, 161, 92, 0.12); font-size: 14px; }
-
-/* Directory Grid */
-.directory-section { width: min(1220px, calc(100% - 34px)); margin: 0 auto; padding-bottom: 24px; }
-.section-top { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 25px; }
-.section-label { color: var(--champagne); font-size: 11px; font-weight: 800; letter-spacing: 1.6px; }
-.section-top h2 { margin: 5px 0 0; color: var(--ink); font-size: 26px; font-weight: 800; }
-.store-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
-
-/* Sleek Brand Filter Search */
-.brand-filter-row { margin-bottom: 20px; }
-@media (min-width: 769px) {
-  .brand-filter-row { display: flex; justify-content: center; }
-  .brand-filter-row .brand-filter-shell { width: 25%; min-width: 340px; }
-}
-.brand-filter-shell { display: flex; align-items: center; background: var(--panel-solid); border: 1px solid var(--line); border-radius: 100px; padding: 0 14px; height: 38px; width: 100%; max-width: 100%; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
-.brand-filter-shell:focus-within { border-color: var(--champagne); box-shadow: 0 0 0 2px rgba(205, 161, 92, 0.15); }
-.brand-filter-shell svg { color: var(--muted); margin-right: 8px; flex-shrink: 0; }
-.brand-filter-shell input { border: none; background: transparent; color: var(--ink); font-size: 13px; width: 100%; outline: none; text-overflow: ellipsis; }
-.brand-filter-shell input::placeholder { color: #b9c5d3; font-weight: 600; }
-
-/* Store Cards */
-.store-card { background: var(--panel-solid); border: 1px solid var(--line); border-radius: var(--radius-card); padding: 16px 12px; text-align: center; box-shadow: var(--shadow-soft); transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease, background-color .22s ease; cursor: pointer; display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden; contain: content; }
-.store-card::before { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(205, 161, 92, 0.12), transparent 40%); z-index: 0; pointer-events: none; opacity: 0; transition: opacity 0.4s ease; }
-.store-card:hover::before { opacity: 1; }
-.store-card:hover { transform: translateY(-5px); border-color: var(--line-gold); background: var(--panel-solid-hover); box-shadow: 0 16px 34px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(91, 158, 234, 0.15); }
-.store-card > * { position: relative; z-index: 1; } 
-
-.store-logo-frame { width: 76px; height: 76px; margin: 0 auto 12px; background: #fff; border-radius: 16px; padding: 6px; display: grid; place-items: center; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35); }
-.store-logo { width: 100%; height: 100%; object-fit: contain; object-position: center center; }
-.store-name { color: var(--ink); font-size: 15px; font-weight: 700; margin: 0 0 5px; }
-.store-meta { color: var(--muted); font-size: 12px; font-weight: 600; min-height: 30px; margin: 0 0 15px; }
-.shop-button { width: 100%; padding: 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); color: var(--champagne-bright); border: 1px solid var(--line); font-size: 12px; font-weight: 700; transition: background .2s ease, color .2s ease, box-shadow .2s ease; }
-.store-card:hover .shop-button { background: linear-gradient(135deg, var(--champagne-bright), var(--champagne)); color: #14100a; box-shadow: 0 6px 16px rgba(205, 161, 92, 0.3); border-color: transparent; }
-
-.empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
-.empty-state h3 { color: var(--ink); margin-bottom: 8px; }
-
-
-/* Modals */
-.modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(4, 6, 10, 0.88); display: grid; place-items: center; padding: 20px; }
-.premium-modal { position: relative; width: min(480px, 100%); padding: 30px; background: var(--obsidian-raised); border: 1px solid var(--line-gold); border-radius: var(--radius-modal); max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6); }
-.modal-close { position: absolute; top: 15px; right: 20px; font-size: 26px; background: transparent; border: none; color: var(--muted); line-height: 1; }
-.modal-close:hover { color: var(--ink); }
-.modal-icon { width: 50px; height: 50px; background: rgba(205, 161, 92, 0.1); color: var(--champagne-bright); font-size: 22px; display: grid; place-items: center; border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--line-gold); }
-.modal-label { font-size: 10px; font-weight: 800; color: var(--sapphire-glow); letter-spacing: 1.4px; }
-.premium-modal h2 { margin: 5px 0 15px; font-size: 22px; color: var(--ink); }
-.modal-intro { color: var(--muted); font-size: 14px; font-weight: 600; margin: -6px 0 18px; }
-
-.field { margin-bottom: 15px; }
-.field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; font-weight: 700; }
-.field input, .field select, .field textarea { width: 100%; padding: 12px 14px; border-radius: 10px; background: var(--panel-solid); border: 1px solid var(--line); color: var(--ink); font-family: inherit; font-size: 14px; }
-.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--sapphire-glow); }
-.field select option { background-color: var(--obsidian-raised); color: var(--ink); padding: 10px; }
-
-.btn-wide { width: 100%; min-height: 48px; border-radius: 12px; }
-.form-note { text-align: center; font-size: 11.5px; font-weight: 600; line-height: 1.5; color: var(--faint); margin-top: 15px; }
-.legal-copy p { font-size: 14px; font-weight: 600; margin-bottom: 15px; line-height: 1.7; color: var(--muted); }
-.legal-copy strong { color: #fff; font-weight: 800; }
-.divider-label { text-align: center; margin: 25px 0 15px; position: relative; }
-.divider-label::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--line); }
-.divider-label span { background: var(--obsidian-raised); padding: 0 10px; position: relative; font-size: 10px; font-weight: 800; color: var(--muted); letter-spacing: 1px; }
-.success-mark { width: 68px; height: 68px; margin: 0 auto 17px; display: grid; place-items: center; color: var(--success); background: rgba(79, 191, 130, .1); border: 1px solid rgba(79, 191, 130, .25); border-radius: 50%; font-size: 28px; font-weight: 800; }
-.success-view { text-align: center; }
-.success-view h3 { margin: 0 0 7px; color: var(--ink); font-size: 18px; }
-.success-view p { margin: 0 auto 22px; color: var(--muted); font-size: 13px; font-weight: 600; line-height: 1.65; }
-
-/* See all shopping sites */
-.store-card[hidden] { display: none; }
-.see-all-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 20px; border: 1px solid var(--line-gold); border-radius: 100px; background: rgba(205, 161, 92, 0.08); color: var(--champagne-bright); font-size: 13px; font-weight: 700; cursor: pointer; transition: transform .2s ease, background-color .2s ease, border-color .2s ease; }
-.see-all-btn:hover { transform: translateY(-1px); background: rgba(205, 161, 92, 0.16); border-color: var(--champagne); }
-.see-all-row { display: flex; justify-content: center; margin-top: 28px; }
-.see-all-btn-wide { min-height: 48px; padding: 0 28px; font-size: 14px; }
-.all-brands-modal { width: min(1080px, 100%); }
-.all-brands-search { max-width: 420px; margin: 4px 0 8px; }
-
-/* Reward Banner (Desktop & Base) */
-.reward-banner-wrap { width: min(1220px, calc(100% - 34px)); margin: 0 auto 24px auto; text-align: left; }
-.reward-banner { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 44px 56px; border: 1px solid var(--line-gold); border-radius: 28px; background: radial-gradient(circle at 80% 35%, rgba(205, 161, 92, 0.20) 0%, transparent 52%), linear-gradient(135deg, rgba(28, 63, 102, 0.78) 0%, rgba(17, 24, 38, 0.98) 62%), var(--obsidian-raised); box-shadow: 0 28px 64px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(236, 205, 143, 0.14); }
-.reward-banner::before { content: ""; position: absolute; top: -1px; left: 12%; right: 12%; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne-bright), transparent); }
-.reward-copy { position: relative; z-index: 2; max-width: 520px; }
-.reward-chip { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border: 1px solid var(--line-gold); border-radius: 999px; background: rgba(205, 161, 92, 0.10); color: var(--champagne-bright); font-size: 11px; font-weight: 800; letter-spacing: 1.6px; }
-.reward-title { margin: 18px 0 0; font-family: 'Manrope', 'DM Sans', sans-serif; font-size: clamp(30px, 4.4vw, 46px); font-weight: 800; line-height: 1.1; letter-spacing: -0.8px; color: #fff; }
-.reward-title span { display: block; margin-top: 6px; background: linear-gradient(135deg, var(--champagne-bright) 0%, var(--champagne) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.reward-sub { margin: 14px 0 26px; color: var(--muted); font-size: 15px; font-weight: 600; line-height: 1.6; }
-.reward-btn { display: inline-flex; width: auto; min-height: 52px; padding: 0 28px; font-size: 15px; color: var(--champagne-bright); background: rgba(205, 161, 92, 0.10); border: 1px solid var(--champagne); box-shadow: 0 6px 18px rgba(205, 161, 92, 0.18), inset 0 1px 0 rgba(236, 205, 143, 0.18); cursor: pointer; transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease, border-color .2s ease; }
-.reward-btn:hover { transform: translateY(-1px); background: rgba(205, 161, 92, 0.18); border-color: var(--champagne-bright); box-shadow: 0 10px 24px rgba(205, 161, 92, 0.28), inset 0 1px 0 rgba(236, 205, 143, 0.24); }
-.reward-btn-icon { flex-shrink: 0; }
-.reward-logos { position: relative; z-index: 1; flex: 0 0 380px; height: 290px; }
-.reward-logo { position: absolute; width: 112px; height: 112px; padding: 8px; display: grid; place-items: center; background: #fff; border-radius: 26px; box-shadow: 0 18px 38px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(205, 161, 92, 0.25); transform: rotate(var(--r)); animation: rewardFloat 6s ease-in-out infinite; will-change: transform; }
-.reward-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: 18px; }
-.rl-1 { --r: -7deg; top: 4px; left: 30px; }
-.rl-2 { --r: 5deg; top: 40px; left: 190px; animation-delay: -1.5s; }
-.rl-3 { --r: -4deg; top: 132px; left: 70px; animation-delay: -3s; }
-.rl-4 { --r: 7deg; top: 168px; left: 236px; animation-delay: -4.5s; }
-@keyframes rewardFloat { 0%, 100% { transform: rotate(var(--r)) translateY(0); } 50% { transform: rotate(var(--r)) translateY(-9px); } }
-
-/* Footer */
-.site-footer { border-top: 1px solid var(--line); background: rgba(9, 13, 20, 0.7); padding: 40px 20px 20px; margin-top: 40px; }
-.footer-main { width: min(1220px, 100%); margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px; }
-.footer-brand-block { max-width: 520px; }
-.footer-brand-block p { font-size: 14px; font-weight: 600; color: var(--muted); margin-top: 15px; line-height: 1.65; }
-.footer-legal-note { font-size: 12px !important; font-weight: 600; line-height: 1.65 !important; color: var(--faint) !important; margin-top: 15px !important; border-top: 1px solid var(--line); padding-top: 15px; }
-.footer-nav { display: flex; flex-wrap: wrap; align-content: flex-start; justify-content: flex-end; gap: 8px 26px; }
-.footer-nav button { background: none; border: none; color: var(--muted); font-size: 13.5px; font-weight: 700; padding: 4px 0; cursor: pointer; }
-.footer-nav button:hover { color: var(--champagne-bright); }
-.footer-bottom { width: min(1220px, 100%); margin: 20px auto 0; padding-top: 20px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; font-weight: 600; color: var(--faint); }
-
-/* Promo Banners */
-.promo-carousel-wrapper { position: relative; width: min(1220px, calc(100% - 34px)); margin: 25px auto 0; display: flex; align-items: center; }
-.promo-carousel { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 12px; align-items: center; }
-.promo-carousel::-webkit-scrollbar { display: none; }
-.promo-slide { flex: 0 0 calc(33.333% - 11px); scroll-snap-align: start; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--panel-solid); box-shadow: 0 6px 16px rgba(0,0,0,0.3); transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; display: block; text-decoration: none; height: max-content; }
-.promo-slide img { width: 100%; height: auto; display: block; }
-.promo-slide:hover { transform: translateY(-4px); border-color: var(--line-gold); box-shadow: 0 12px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(205, 161, 92, 0.2); }
-.carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(11, 26, 48, 0.95); color: var(--champagne-bright); border: 1px solid var(--line-gold); width: 44px; height: 44px; border-radius: 50%; font-size: 18px; z-index: 10; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.6); transition: background 0.2s, transform 0.2s; }
-.carousel-btn:hover { background: var(--panel-solid-hover); transform: translateY(-50%) scale(1.05); }
-.left-btn { left: -22px; }
-.right-btn { right: -22px; }
-
-/* AI Coupon Modal & Results Styling */
-.coupon-cards-container { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
-.coupon-card-item { display: flex; justify-content: space-between; align-items: center; gap: 14px; background: var(--obsidian); border: 1px solid var(--line-gold); border-radius: 16px; padding: 14px 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: transform 0.2s ease, border-color 0.2s ease; }
-.coupon-card-item:hover { transform: translateY(-2px); border-color: var(--champagne); }
-.coupon-logo-box { width: 48px; height: 48px; flex-shrink: 0; background: #fff; border-radius: 10px; padding: 4px; display: grid; place-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-.coupon-logo-box img { width: 100%; height: 100%; object-fit: contain; }
-.coupon-card-info { text-align: left; flex: 1; overflow: hidden; }
-.coupon-brand-tag { font-size: 11.5px; font-weight: 800; color: var(--champagne-bright); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 2px;}
-.coupon-code-badge { display: inline-flex; align-items: center; background: rgba(205, 161, 92, 0.12); border: 1px dashed var(--champagne); color: var(--ink); font-size: 14px; font-weight: 800; padding: 5px 12px; border-radius: 6px; margin: 2px 0 6px; cursor: pointer; letter-spacing: 1px; transition: all 0.2s ease;}
-.coupon-code-badge:hover { background: var(--champagne); color: #090d14; border-style: solid; }
-.coupon-desc { font-size: 13px; font-weight: 600; color: var(--platinum); margin: 0; line-height: 1.4; }
-.coupon-action-btn { padding: 10px 16px; font-size: 12px; font-weight: 700; border-radius: 10px; background: linear-gradient(135deg, var(--champagne-bright), var(--champagne)); color: #14100a; border: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; box-shadow: 0 4px 12px rgba(205, 161, 92, 0.25); transition: transform 0.2s ease; flex-shrink: 0;}
-.coupon-action-btn:hover { transform: scale(1.03); }
-.coupon-loader-box { text-align: center; padding: 30px 10px; color: var(--platinum); font-size: 13px; }
-.loader-spinner { width: 36px; height: 36px; border: 3px solid rgba(205, 161, 92, 0.2); border-top-color: var(--champagne-bright); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
-#loadingTextAnim { transition: opacity 0.3s ease; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ===== Premium Deal Hunter + golden outlines (Wide Split Layout) ===== */
-.deal-wrap { width: min(1220px, calc(100% - 34px)); margin: 0 auto; padding: 0 0 20px; }
-.deal-card { 
-  max-width: 100%; 
-  padding: 44px 56px; 
-  border-radius: 28px; 
-  background: radial-gradient(circle at 85% 0%, rgba(205, 161, 92, 0.20) 0%, transparent 50%), radial-gradient(circle at 8% 100%, rgba(28, 63, 102, 0.55) 0%, transparent 55%), linear-gradient(135deg, rgba(28, 63, 102, 0.78) 0%, rgba(17, 24, 38, 0.98) 62%), var(--obsidian-raised);
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 380px;
-  grid-template-rows: 1fr repeat(4, auto) 1fr;
-  column-gap: 40px;
-  align-items: center;
-  text-align: left;
-  border: 1px solid var(--line-gold);
-  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(236, 205, 143, 0.14);
-  position: relative;
-  overflow: hidden;
-}
-.deal-card::before { content: ""; position: absolute; top: -1px; left: 12%; right: 12%; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne-bright), transparent); }
-/* Left column = chip, title, sub, search, footer (stacked); right column = floating promo codes */
-.deal-card-left { display: contents; }
-.deal-card-right { grid-column: 1; grid-row: 5; width: 100%; max-width: 560px; margin-top: 24px; z-index: 2; position: relative; display: flex; align-items: center; }
-
-.deal-chip { grid-column: 1; grid-row: 2; justify-self: start; margin: 0; }
-.deal-card-title { grid-column: 1; grid-row: 3; margin: 18px 0 0; font-family: 'Manrope', 'DM Sans', sans-serif; font-size: clamp(24px, 2.9vw, 34px); font-weight: 800; line-height: 1.12; letter-spacing: -0.6px; color: #fff; }
-.deal-card-title span { display: block; margin-top: 6px; background: linear-gradient(135deg, var(--champagne-bright) 0%, var(--champagne) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.deal-card-sub { grid-column: 1; grid-row: 4; max-width: 520px; margin: 12px 0 0; color: var(--muted); font-size: 14px; font-weight: 600; line-height: 1.6; }
-
-
-/* Perfect Alignment & Centered Search Shell */
-.deal-card .ai-search-shell { 
-  margin: 0; 
-  padding: 6px 6px 6px 20px; 
-  background: rgba(9, 13, 20, 0.72); 
-  border: 1px solid var(--champagne); 
-  box-shadow: 0 10px 28px rgba(205, 161, 92, 0.16), inset 0 1px 0 rgba(236, 205, 143, 0.14); 
-  border-radius: 100px; 
-  display: flex; 
-  align-items: center; 
-  position: relative; 
-  width: 100%;
-  height: 60px;
-  transition: border-color .2s ease, box-shadow .2s ease; 
-}
-.deal-card .ai-search-shell:focus-within { box-shadow: 0 0 0 3px rgba(205, 161, 92, 0.20), 0 10px 28px rgba(205, 161, 92, 0.22); }
-.deal-card .ai-search-shell .search-leading { position: absolute; top: 50%; transform: translateY(-50%); color: var(--champagne-bright); left: 20px; display: flex; align-items: center; pointer-events: none; }
-.deal-card .ai-search-shell .search-input { border: none; background: transparent; box-shadow: none; flex: 1; color: var(--ink); outline: none; height: 100%; font-size: 14px; padding-left: 32px; min-width: 0; }
-.deal-card .ai-search-shell .search-input::placeholder { color: #b9c5d3; font-weight: 600; }
-
-/* Actions Group & Square Upload Icon */
-.search-actions-group { display: flex; align-items: center; gap: 6px; flex-shrink: 0; height: 100%; }
-.upload-img-label { 
-  cursor: pointer; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  width: 48px; 
-  height: 48px; 
-  border-radius: 12px; 
-  background: rgba(255, 255, 255, 0.05); 
-  color: var(--champagne-bright); 
-  border: 1px solid var(--line); 
-  transition: background-color .2s ease, border-color .2s ease; 
-  flex-shrink: 0;
-}
-.upload-img-label { position: relative; overflow: hidden; }
-.upload-img-label:hover { background: rgba(205, 161, 92, 0.15); border-color: var(--champagne); }
-.upload-img-label.has-image { border-color: var(--champagne); padding: 0; }
-.upload-thumb { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
-.upload-cut { position: absolute; inset: 0; display: none; place-items: center; background: rgba(9, 13, 20, 0.72); color: #fff; font-size: 26px; font-weight: 800; line-height: 1; }
-.upload-img-label.confirm-remove .upload-cut { display: grid; }
-.deal-card .btn-hunt-coupons { height: 48px; padding: 0 24px; font-size: 14px; font-weight: 800; border-radius: 100px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
-
-/* ===== Floating promo codes (same size + float animation as Festive Rewards icons) ===== */
-.deal-promos { grid-column: 2; grid-row: 1 / -1; align-self: center; position: relative; z-index: 1; width: 380px; height: 350px; }
-.deal-promo { position: absolute; width: 112px; height: 112px; padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; background: #fff; color: #14100a; border-radius: 26px; box-shadow: 0 18px 38px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(205, 161, 92, 0.25); transform: rotate(var(--r)); animation: rewardFloat 6s ease-in-out infinite; will-change: transform; text-align: center; }
-.deal-promo::before { content: ""; position: absolute; inset: 7px; border: 1.5px dashed var(--champagne); border-radius: 19px; pointer-events: none; }
-.deal-promo img { width: 46px; height: 46px; object-fit: contain; display: block; }
-.deal-promo b { font-family: 'Manrope', 'DM Sans', sans-serif; font-size: 16px; font-weight: 800; letter-spacing: 0.4px; line-height: 1; color: #14100a; }
-.dp-1 { --r: -7deg; top: 0; left: 20px; }
-.dp-2 { --r: 5deg; top: 30px; left: 214px; animation-delay: -1.5s; }
-.dp-3 { --r: -4deg; top: 122px; left: 0; animation-delay: -3s; }
-.dp-4 { --r: 7deg; top: 152px; left: 190px; animation-delay: -4.5s; }
-.dp-5 { --r: -5deg; top: 238px; left: 80px; animation-delay: -6s; }
-.deal-wrap.anim-paused .deal-promo { animation-play-state: paused; }
-
-/* Tablet: shrink the promo column so text still fits */
-@media (min-width: 769px) and (max-width: 1000px) {
-  .deal-card { grid-template-columns: minmax(0, 1fr) 252px; column-gap: 24px; padding: 36px 32px; }
-  .deal-promos { zoom: 0.66; }
-}
-
-/* Welcome popup: no outer frame, only the banner */
-.premium-modal.welcome-modal { padding: 0; background: transparent; border: none; box-shadow: none; border-radius: 0; }
-.welcome-modal .modal-close { z-index: 5; }
-
-/* ===== Ultra-smooth scrolling inside popups ===== */
-.modal-overlay { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(4, 6, 10, 0.88); overscroll-behavior: contain; }
-.premium-modal { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; scroll-behavior: auto; transform: translateZ(0); will-change: scroll-position; backface-visibility: hidden; }
-.all-brands-modal .store-card,
-.coupon-card-item { transition: none; box-shadow: inset 0 1px 0 rgba(236, 205, 143, 0.14); }
-.all-brands-modal .store-card:hover,
-.coupon-card-item:hover { transform: none; }
-.all-brands-modal .store-grid { gap: 12px; }
-.all-brands-modal .store-logo-frame, .all-brands-modal .store-logo { transition: none; }
-
-
-/* =========================================================
-   Mobile Handling
-   ========================================================= */
-@media (max-width: 768px) {
-  .hero { padding: 28px 15px 10px; } 
-  .hero h1 { margin: 14px 0 10px; } 
-  .hero-copy { margin: 0 auto 12px; } 
-  .store-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-  .offer-text-hide, #authBtnText, .brand-wordmark { display: none; }
-  .btn { padding: 0 12px; }
-  .promo-carousel-wrapper { width: 100% !important; margin: 15px auto 20px !important; display: block !important; }
-  #promoCarousel { display: flex !important; flex-wrap: nowrap !important; gap: 12px !important; padding: 0 10vw !important; scroll-padding: 0 10vw !important; }
-  #promoCarousel .promo-slide { flex: 0 0 80% !important; width: 80% !important; scroll-snap-align: center !important; }
-  .promo-carousel-wrapper .carousel-btn { display: none !important; }
-  
-  /* DIRECTORY HEADER (mobile): heading upar, neeche "See all" button + search ek hi row mein */
-  .section-top { align-items: center !important; gap: 12px !important; }
-  .section-top > div:first-child { flex: 1 1 100% !important; min-width: 100% !important; }
-  .section-top .see-all-btn { flex: 0 0 auto; padding: 0 16px; white-space: nowrap; }
-  .section-top .brand-filter-row { display: block; flex: 1 1 0; min-width: 0; margin: 0; }
-  .section-top .brand-filter-shell { height: 42px; width: 100%; max-width: 100%; padding: 0 14px; }
-  .section-top .brand-filter-shell input { font-size: 13px; }
-
-  /* MINI REWARD BANNER (IN-PAGE) */
-  .reward-banner { flex-direction: row; align-items: center; justify-content: space-between; gap: 10px; padding: 22px 16px; border-radius: 20px; }
-  .reward-copy { flex: 1; max-width: calc(100% - 130px); }
-  .reward-title { font-size: clamp(18px, 4.5vw, 24px); margin-top: 10px; }
-  .reward-sub { font-size: 11px; margin: 8px 0 16px; }
-  .reward-btn { width: auto; min-height: 40px; padding: 0 16px; font-size: 12.5px; }
-  
-  .reward-logos { flex: 0 0 120px; height: 120px; display: block; position: relative; }
-  .reward-logo { position: absolute; width: 44px; height: 44px; padding: 4px; border-radius: 10px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(205, 161, 92, 0.25); }
-  .reward-logo img { border-radius: 7px; }
-  
-  .rl-1 { top: 0px; left: 10px; }
-  .rl-2 { top: 16px; left: 64px; }
-  .rl-3 { top: 54px; left: 0px; }
-  .rl-4 { top: 68px; left: 56px; }
-
-  /* DEAL HUNTER MOBILE OVERRIDE */
-  /* promo codes on the left, chip + title + sub on the right (like Festive Rewards), search + footer full width below */
-  .deal-card { grid-template-columns: minmax(0, 1fr) 118px; grid-template-rows: auto auto 1fr auto; column-gap: 10px; align-content: start; align-items: start; text-align: left; padding: 24px 14px 20px; border-radius: 22px; }
-
-  .deal-promos { grid-column: 2; grid-row: 1 / span 3; width: 118px; height: 178px; align-self: center; }
-  .deal-promo { width: 50px; height: 50px; padding: 3px; gap: 3px; border-radius: 11px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(205, 161, 92, 0.25); }
-  .deal-promo::before { inset: 3px; border-width: 1px; border-radius: 8px; }
-  .deal-promo img { width: 22px; height: 22px; }
-  .deal-promo b { font-size: 8.5px; letter-spacing: 0; }
-  .dp-1 { top: 0; left: 4px; }
-  .dp-2 { top: 16px; left: 62px; }
-  .dp-3 { top: 58px; left: 0; }
-  .dp-4 { top: 76px; left: 60px; }
-  .dp-5 { top: 126px; left: 30px; }
-
-  .deal-chip { grid-column: 1; grid-row: 1; justify-self: start; align-self: start; padding: 5px 10px; font-size: 9px; letter-spacing: 1.1px; gap: 6px; }
-  .deal-card-title { grid-column: 1; grid-row: 2; font-size: 19px; line-height: 1.15; margin-top: 10px; letter-spacing: -0.3px; }
-  .deal-card-sub { grid-column: 1; grid-row: 3; margin: 8px 0 0; font-size: 11.5px; line-height: 1.5; }
-
-  .deal-card-right { grid-column: 1 / -1; grid-row: 4; max-width: 100%; height: auto; width: 100%; margin-top: 16px; }
-
-
-  /* SEARCH BOX MAIN CONTAINER */
-  .deal-card .ai-search-shell {
-    --search-h: 54px;
-    padding: 12px;
-    border-radius: 20px;
-    height: auto;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    position: relative;
+function showToast(message, icon = "✨") {
+  haptic();
+  let container = document.getElementById("toastContainer");
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "toastContainer";
+    container.className = "toast-container";
+    document.body.appendChild(container);
   }
 
-  /* 1. TEXT AREA - 54px height (Find Deals 48px se ~12% bada) */
-  .deal-card .ai-search-shell .search-input {
-    flex: none;
-    height: var(--search-h);
-    width: 100%;
-    margin: 0;
-    padding: 0 14px 0 46px;
-    font-size: 14px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    text-overflow: ellipsis;
-  }
-  .deal-card .ai-search-shell .search-input:focus { border-color: var(--champagne); }
+  // purana toast + uska timer hata do
+  if (toastTimer) { clearTimeout(toastTimer); toastTimer = null; }
+  if (activeToast) { activeToast.remove(); activeToast = null; }
+  container.replaceChildren();
 
-  /* 2. MAGNIFIER - text area ke vertical center mein (12px shell padding + half of input height) */
-  .deal-card .ai-search-shell .search-leading {
-    position: absolute !important;
-    top: calc(12px + var(--search-h) / 2) !important;
-    left: 28px !important;
-    transform: translateY(-50%) !important;
-    margin: 0;
-  }
+  const toast = document.createElement("div");
+  toast.className = "toast-msg";
+  const iconEl = document.createElement("span");
+  iconEl.style.fontSize = "16px";
+  iconEl.textContent = icon;
+  toast.append(iconEl, document.createTextNode(message));
+  container.appendChild(toast);
+  activeToast = toast;
 
-  /* 3. BOTTOM BUTTONS ROW */
-  .search-actions-group { width: 100%; height: 48px; display: flex; gap: 8px; justify-content: flex-end; align-items: center; }
-
-  .upload-img-label { width: 48px !important; height: 48px !important; border-radius: 12px; margin: 0; flex-shrink: 0; }
-  .deal-card .btn-hunt-coupons { height: 48px !important; font-size: 14px !important; padding: 0 20px !important; margin: 0; flex: 1; }
-
-  /* Welcome Modal Revert */
-  .welcome-modal .reward-banner { flex-direction: column; align-items: stretch; gap: 26px; padding: 40px 22px 28px; border-radius: 22px; }
-  .welcome-modal .reward-copy { max-width: 100%; }
-  .welcome-modal .reward-title { font-size: clamp(28px, 6vw, 36px); margin-top: 12px; }
-  .welcome-modal .reward-sub { font-size: 14px; margin: 12px 0 22px; }
-  .welcome-modal .reward-btn { width: 100%; min-height: 50px; font-size: 14px; padding: 0; }
-  .welcome-modal .reward-logos { flex: none; height: auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; position: static; }
-  .welcome-modal .reward-logo { position: static; width: 78px; height: 78px; padding: 6px; border-radius: 20px; box-shadow: 0 18px 38px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(205, 161, 92, 0.25); }
-  .welcome-modal .reward-logo img { border-radius: 14px; }
+  toastTimer = setTimeout(() => {
+    toast.classList.add("toast-exit");
+    toast.addEventListener("animationend", () => {
+      toast.remove();
+      if (activeToast === toast) activeToast = null;
+    }, { once: true });
+    toastTimer = null;
+  }, 3500);
 }
 
-@media (max-width: 600px) {
-  .trust-grid { gap: 10px; }
-  .trust-item { gap: 8px; padding: 10px; font-size: 12px; line-height: 1.35; }
-  .trust-icon { width: 26px; height: 26px; font-size: 13px; }
-  .festive-sparkle { display: none; }
-  .festive-pill { border-radius: 16px; padding: 10px 16px; line-height: 1.45; }
-  .footer-nav { justify-content: flex-start; }
-  .site-footer .brand-wordmark { display: inline; }
+function initials(name) {
+  return name.substring(0, 2).toUpperCase();
 }
 
-@media (max-width: 400px) {
-  .reward-banner { padding: 18px 12px; gap: 8px; }
-  .reward-copy { max-width: calc(100% - 105px); }
-  .reward-title { font-size: 16px; }
-  .reward-sub { font-size: 10px; }
+function debounce(fn, delay = 160) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), delay);
+  };
+}
+
+function buildLogoChain(store) {
+  const chain = [];
+  if (store.logo) {
+    chain.push(store.logo);
+  }
+  return chain;
+}
+
+function openStoreLink(store) {
+  let url = store.link || (store.domain ? `https://www.${store.domain}` : null);
+  if (!url) return;
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.target = "_blank";
+  a.rel = "noopener noreferrer";
+
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function shuffleArray(array) {
+  let arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+const grid = document.getElementById("storeGrid");
+
+// Card spotlight: ek hi delegated listener, frame mein max 1 baar update, touch devices par off
+(function cardSpotlight() {
+  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+  let raf = 0, last = null;
+  document.addEventListener("mousemove", (e) => {
+    const card = e.target.closest ? e.target.closest(".store-card") : null;
+    if (!card) return;
+    last = { card, x: e.clientX, y: e.clientY };
+    if (raf) return;
+    raf = requestAnimationFrame(() => {
+      raf = 0;
+      const r = last.card.getBoundingClientRect();
+      last.card.style.setProperty("--mouse-x", `${last.x - r.left}px`);
+      last.card.style.setProperty("--mouse-y", `${last.y - r.top}px`);
+    });
+  }, { passive: true });
+})();
+
+function buildCard(store, index) {
+  const url = store.link || (store.domain ? `https://www.${store.domain}` : null);
+  if (!url) return null;
+
+  const card = document.createElement("a");
+  card.className = "store-card";
+  card.href = url;
+  card.target = "_blank";
+
+  // CUELINKS EXCLUSION LOGIC for grid only (not AI modal)
+  if (url.includes("amazon.in") || url.includes("amzn.to")) {
+      card.rel = "noopener noskim";
+      card.classList.add("noskim");
+  } else {
+      card.rel = "noopener";
+  }
+
+  card.setAttribute("aria-label", `Shop from ${store.name}`);
+
+  const frame = document.createElement("div");
+  frame.className = "store-logo-frame";
+
+  const chain = buildLogoChain(store);
+  const img = document.createElement("img");
+  img.className = "store-logo";
+  img.alt = store.name;
+  img.loading = index < 12 ? "eager" : "lazy";
+  img.decoding = "async";
+
+  const bgColors = ["#1c3f66", "#0d2138", "#142a44"];
+  const bg = bgColors[index % bgColors.length];
+
+  const svgFallback =
+    `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E` +
+    `%3Crect width='100' height='100' rx='20' fill='${encodeURIComponent(bg)}'/%3E` +
+    `%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' ` +
+    `font-family='sans-serif' font-size='38' font-weight='800' fill='%23ffffff'%3E` +
+    `${initials(store.name)}` +
+    `%3C/text%3E%3C/svg%3E`;
+
+  if (chain.length > 0) {
+    let currentStep = 0;
+    img.onerror = () => {
+      currentStep++;
+      if (currentStep < chain.length) {
+        img.src = chain[currentStep];
+      } else {
+        img.onerror = null;
+        img.src = svgFallback;
+      }
+    };
+    img.src = chain[0];
+  } else {
+    img.src = svgFallback;
+  }
+
+  frame.appendChild(img);
+
+  const name = document.createElement("h3");
+  name.className = "store-name";
+  name.textContent = store.name;
+
+  const meta = document.createElement("p");
+  meta.className = "store-meta";
+  meta.textContent = store.description;
+
+  const button = document.createElement("div");
+  button.className = "shop-button";
+  button.textContent = "Shop Now";
+
+  card.append(frame, name, meta, button);
+
+  card.addEventListener("click", () => {
+      haptic();
+  });
+
+  return card;
+}
+
+let storeAnchorsReady = false;
+let storeCardMap = new Map();
+
+function ensureStoreAnchors() {
+  if (storeAnchorsReady || !grid) return;
+
+  const fragment = document.createDocumentFragment();
+  stores.forEach((store, index) => {
+      const card = buildCard(store, index);
+      if (!card) return;
+      storeCardMap.set(store.name, card);
+      fragment.appendChild(card);
+  });
+
+  grid.appendChild(fragment);
+  storeAnchorsReady = true;
+}
+
+function renderUI() {
+  if (!grid) return;
+  ensureStoreAnchors();
+
+  let filtered = stores.filter((store) => {
+        const matchesCat = searchQuery !== "" || inCategory(store, currentCategory);
+        const matchesSearch = store.name.toLowerCase().includes(searchQuery) || store.description.toLowerCase().includes(searchQuery);
+        return matchesCat && matchesSearch;
+  });
+
+  if (currentCategory === "Mega Brands" && searchQuery === "") {
+    filtered.sort((a, b) => megaRank(a) - megaRank(b));
+  } else {
+    filtered.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  storeCardMap.forEach((card) => { card.hidden = true; });
+
+  filtered.forEach((store) => {
+      const card = storeCardMap.get(store.name);
+      if (card) { card.hidden = false; grid.appendChild(card); }
+  });
+
+  const heroStoreCount = document.getElementById("heroStoreCount");
+  if (heroStoreCount) heroStoreCount.textContent = stores.length;
+
+  const emptyState = document.getElementById("emptyState");
+  if (emptyState) emptyState.hidden = filtered.length !== 0;
+}
+
+function renderCategoryNav() {
+  const navScroll = document.getElementById("categoryNav");
+  if (!navScroll) return;
+  navScroll.innerHTML = "";
+
+  CATEGORY_ORDER.forEach((cat) => {
+      const pill = document.createElement("button");
+      pill.type = "button";
+      pill.className = `cat-pill ${cat === currentCategory ? "active" : ""}`;
+      pill.textContent = cat;
+      pill.setAttribute("aria-pressed", cat === currentCategory ? "true" : "false");
+
+      pill.addEventListener("click", () => {
+          haptic();
+          if (currentCategory === cat) return;
+          currentCategory = cat;
+          navScroll.querySelectorAll(".cat-pill").forEach((p) => { p.classList.toggle("active", p === pill); p.setAttribute("aria-pressed", p === pill ? "true" : "false"); });
+          const nr = navScroll.getBoundingClientRect();
+          const pr = pill.getBoundingClientRect();
+          navScroll.scrollTo({
+            left: navScroll.scrollLeft + (pr.left - nr.left) - (nr.width - pr.width) / 2,
+            behavior: "smooth"
+          });
+          renderUI();
+      });
+      navScroll.appendChild(pill);
+  });
+}
+
+// ---------- Brand Filter Logic ----------
+const brandSearchInput = document.getElementById("brandSearchInput");
+
+if (brandSearchInput) {
+  brandSearchInput.addEventListener("input", debounce((e) => {
+    searchQuery = e.target.value.toLowerCase().trim();
+    renderUI();
+  }));
+}
+
+// ---------- Initialization ----------
+injectStylesAndNav();
+renderCategoryNav();
+renderUI();
+
+// ---------- Brand search placeholder (mobile pe chhota) ----------
+(function brandSearchPlaceholder() {
+  const input = document.getElementById("brandSearchInput");
+  if (!input) return;
+  const mq = window.matchMedia("(max-width: 768px)");
+  const setPlaceholder = () => { input.placeholder = mq.matches ? "Search" : "Search shopping sites..."; };
+  setPlaceholder();
+  if (mq.addEventListener) mq.addEventListener("change", setPlaceholder);
+  else if (mq.addListener) mq.addListener(setPlaceholder);
+})();
+
+// =========================================================
+// CUELINKS LOADER
+// =========================================================
+(function loadCuelinks() {
+  if (window.__cheapsterCuelinksLoaded || window.__cheapsterCuelinksLoading) return;
+  window.cId = "322091";
+  window.__cheapsterCuelinksLoading = true;
+
+  const script = document.createElement("script");
+  script.type = "text/javascript";
+  script.async = false;
+  script.src = document.location.protocol === "https:" ? "https://cdn0.cuelinks.com/js/cuelinksv2.js" : "http://cdn0.cuelinks.com/js/cuelinksv2.js";
+
+  script.onload = () => {
+      window.__cheapsterCuelinksLoaded = true;
+      window.__cheapsterCuelinksLoading = false;
+  };
+  script.onerror = () => { window.__cheapsterCuelinksLoading = false; };
+  document.body.appendChild(script);
+})();
+
+if (document.getElementById("currentYear")) {
+  document.getElementById("currentYear").textContent = new Date().getFullYear();
+}
+
+// =========================================================
+// UTILS: Modals, Auth, Forms, PWA
+// =========================================================
+
+// --- FIX 1: Welcome Modal Infinite Loop Logic ---
+let lastFocusedEl = null;
+function openModal(id) {
+  haptic();
+  const modal = document.getElementById(id);
+  if (modal) {
+    lastFocusedEl = document.activeElement;
+    modal.hidden = false;
+    document.body.classList.add("modal-open");
+    const dlg = modal.querySelector(".modal");
+    if (dlg) { dlg.setAttribute("tabindex", "-1"); try { dlg.focus({ preventScroll: true }); } catch (e) {} }
+  }
+  syncMobileNav();
+}
+
+function closeModal(id) {
+  haptic();
+  const modal = document.getElementById(id);
+  if (modal) {
+    modal.hidden = true;
+    if (!document.querySelector(".modal-overlay:not([hidden])")) document.body.classList.remove("modal-open");
+    if (lastFocusedEl && document.contains(lastFocusedEl)) { try { lastFocusedEl.focus({ preventScroll: true }); } catch (e) {} }
+  }
+  if (id === "dealHunterModal") restoreDealCard();
+  syncMobileNav();
+
+  // Ensure Welcome Modal logic works even on 'X' click
+  if (id === "welcomeModal") {
+    safeStore.set("cheapster_welcome_seen", "1");
+  }
+
+  if (id === "formModal") {
+    const form = document.getElementById("rewardForm");
+    const success = document.getElementById("successView");
+    if (form && success) {
+      form.reset();
+      form.hidden = false;
+      success.hidden = true;
+    }
+  }
+}
+
+document.querySelectorAll("[data-close-modal]").forEach((btn) => {
+    btn.addEventListener("click", () => closeModal(btn.dataset.closeModal));
+});
+
+// --- FIX 2: Global Modal Trapping Logic ---
+// Close on outside overlay click for ALL modals
+document.querySelectorAll(".modal-overlay").forEach((overlay) => {
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) {
+      closeModal(overlay.id);
+    }
+  });
+});
+
+// Close on Escape key for ALL modals
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    const openOverlays = document.querySelectorAll(".modal-overlay:not([hidden])");
+    const topOverlay = openOverlays[openOverlays.length - 1];
+    if (topOverlay) closeModal(topOverlay.id);
+  }
+});
+
+
+const headerOfferBtn = document.getElementById("headerOfferBtn");
+if (headerOfferBtn) headerOfferBtn.addEventListener("click", () => openModal("formModal"));
+
+const bannerClaimBtn = document.getElementById("bannerClaimBtn");
+if (bannerClaimBtn) bannerClaimBtn.addEventListener("click", () => openModal("formModal"));
+
+document.querySelectorAll("[data-info-modal]").forEach((btn) => {
+    btn.addEventListener("click", () => openModal(btn.dataset.infoModal));
+});
+
+// ---------- All brands popup ----------
+const allBrandsList = document.getElementById("allBrandsList");
+const allBrandsEmpty = document.getElementById("allBrandsEmpty");
+const allBrandsSearch = document.getElementById("allBrandsSearch");
+const allBrandsModal = document.getElementById("allBrandsModal");
+let allBrandsBuilt = false;
+
+document.querySelectorAll("#allBrandsCount, .all-brands-count").forEach((el) => { el.textContent = stores.length; });
+const tc = document.getElementById("allBrandsTitleCount"); if (tc) tc.textContent = stores.length;
+
+function buildAllBrandsList() {
+  if (allBrandsBuilt || !allBrandsList) return;
+
+  // Pehle Mega Brands (best-selling order), phir baaki sab
+  const mega = stores.filter((s) => inCategory(s, "Mega Brands")).sort((a, b) => megaRank(a) - megaRank(b));
+  const rest = stores.filter((s) => !inCategory(s, "Mega Brands"));
+  for (let i = rest.length - 1; i > 0; i--) {
+    const k = Math.floor(Math.random() * (i + 1));
+    [rest[i], rest[k]] = [rest[k], rest[i]];
+  }
+
+  const gridEl = document.createElement("div");
+  gridEl.className = "store-grid";
+  [...mega, ...rest].forEach((store, i) => {
+    const card = buildCard(store, i);
+    if (!card) return;
+    card.dataset.search = (store.name + " " + store.description).toLowerCase();
+    gridEl.appendChild(card);
+  });
+  allBrandsList.appendChild(gridEl);
+  allBrandsBuilt = true;
+}
+
+document.querySelectorAll("[data-open-all-brands]").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    buildAllBrandsList();
+    openModal("allBrandsModal");
+  });
+});
+
+// ---------- Mobile bottom nav (phones) ----------
+function syncMobileNav() {
+  const nav = document.getElementById("mobileNav");
+  if (!nav) return;
+  const isOpen = (id) => { const m = document.getElementById(id); return !!(m && !m.hidden); };
+  const active = isOpen("allBrandsModal") ? "mnavDirectory"
+    : isOpen("formModal") ? "mnavReward"
+    : (isOpen("dealHunterModal") || isOpen("couponResultsModal")) ? "mnavDeals"
+    : "mnavHome";
+  nav.querySelectorAll(".mnav-item").forEach((b) => {
+    const on = b.id === active;
+    b.classList.toggle("active", on);
+    if (on) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current");
+  });
+}
+
+// ---- Deals popup: page ka .deal-card (search + photo upload + Find Deals) popup mein shift hota hai ----
+// Same element move hota hai (clone nahi), isliye search, image preview aur saari JS logic waisi hi chalti hai.
+const dealCardEl = document.querySelector(".deal-wrap .deal-card");
+const dealCardHome = dealCardEl ? dealCardEl.parentNode : null;
+
+function openDealPopup() {
+  const slot = document.getElementById("dealPopupSlot");
+  if (dealCardEl && dealCardHome && slot) {
+    dealCardHome.style.minHeight = dealCardHome.offsetHeight + "px"; // peeche page jump na kare
+    slot.appendChild(dealCardEl);
+  }
+  openModal("dealHunterModal");
+}
+
+function restoreDealCard() {
+  if (dealCardEl && dealCardHome && dealCardEl.parentNode !== dealCardHome) {
+    dealCardHome.appendChild(dealCardEl);
+    dealCardHome.style.minHeight = "";
+  }
+}
+
+(function mobileBottomNav() {
+  const nav = document.getElementById("mobileNav");
+  if (!nav) return;
+
+  const homeBtn = document.getElementById("mnavHome");
+  const dirBtn = document.getElementById("mnavDirectory");
+  const rewardBtn = document.getElementById("mnavReward");
+  const dealsBtn = document.getElementById("mnavDeals");
+
+  if (homeBtn) homeBtn.addEventListener("click", () => {
+    haptic();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  if (dirBtn) dirBtn.addEventListener("click", () => {
+    buildAllBrandsList();
+    openModal("allBrandsModal");
+  });
+  if (rewardBtn) rewardBtn.addEventListener("click", () => openModal("formModal"));
+  if (dealsBtn) dealsBtn.addEventListener("click", openDealPopup);
+
+  // Keyboard khulne par bar chhupa do
+  const isField = (el) => !!el && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName);
+  document.addEventListener("focusin", (e) => { if (isField(e.target)) document.body.classList.add("kb-open"); });
+  document.addEventListener("focusout", () => document.body.classList.remove("kb-open"));
+})();
+
+if (allBrandsSearch) {
+  allBrandsSearch.addEventListener("input", debounce((e) => {
+    const q = e.target.value.toLowerCase().trim();
+    let shown = 0;
+    allBrandsList.querySelectorAll(".store-card").forEach((card) => {
+      const ok = !q || card.dataset.search.includes(q);
+      card.hidden = !ok;
+      if (ok) shown++;
+    });
+    if (allBrandsEmpty) allBrandsEmpty.hidden = shown > 0;
+  }));
+}
+
+
+// ---------- Hamburger menu ----------
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+const headerDropdown = document.getElementById("headerDropdown");
+
+if (hamburgerBtn && headerDropdown) {
+  function closeHeaderDropdown() {
+    headerDropdown.hidden = true;
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+  }
+
+  hamburgerBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      haptic();
+      const isOpen = !headerDropdown.hidden;
+      if (isOpen) { closeHeaderDropdown(); } 
+      else { headerDropdown.hidden = false; hamburgerBtn.setAttribute("aria-expanded", "true"); }
+  });
+
+  headerDropdown.querySelectorAll("button").forEach((btn) => {
+      btn.addEventListener("click", closeHeaderDropdown);
+  });
+
+  document.addEventListener("click", (e) => {
+      if (!headerDropdown.hidden && !headerDropdown.contains(e.target)) {
+        closeHeaderDropdown();
+      }
+  });
+}
+
+// ---------- Google login (Firebase Auth) ----------
+const authBtn = document.getElementById("authBtn");
+const authBtnText = document.getElementById("authBtnText");
+const logoutBtn = document.getElementById("logoutBtn");
+const menuLoginBtn = document.getElementById("menuLoginBtn");
+let currentUser = null;
+
+if (authBtn && window.auth) {
+  const handleLogin = () => {
+      haptic();
+      if (currentUser) return;
+      window.auth.signInWithPopup(window.googleProvider).catch((err) => {
+            if (err.code === "auth/popup-blocked" || err.code === "auth/operation-not-supported-in-this-environment") {
+              window.auth.signInWithRedirect(window.googleProvider);
+            } else if (err.code === "auth/popup-closed-by-user" || err.code === "auth/cancelled-popup-request") {
+              /* user ne khud band kiya — kuch mat karo */
+            } else if (err.code === "auth/unauthorized-domain") {
+              showToast("Domain not authorized for login.", "⚠️");
+            } else {
+              showToast("Login failed. Please try again.", "❌");
+            }
+      });
+  };
+
+  authBtn.addEventListener("click", handleLogin);
+  if (menuLoginBtn) menuLoginBtn.addEventListener("click", handleLogin);
+
+  window.auth.getRedirectResult().catch(() => {});
+
+  const googleIcon = document.getElementById("googleIcon");
+  const authAvatarImg = document.getElementById("authAvatarImg");
+  const authAvatarFallback = document.getElementById("authAvatarFallback");
+
+  window.auth.onAuthStateChanged((user) => {
+      currentUser = user;
+      if (user) {
+        authBtnText.textContent = user.displayName ? user.displayName.split(" ")[0] : "Account";
+        authBtn.title = user.displayName || "Signed in";
+        const nameField = document.getElementById("fullName");
+        if (nameField && !nameField.value) nameField.value = user.displayName || "";
+        if (googleIcon) googleIcon.hidden = true;
+        if (authAvatarImg && authAvatarFallback) {
+          if (user.photoURL) {
+            authAvatarImg.src = user.photoURL;
+            authAvatarImg.onerror = () => { authAvatarImg.hidden = true; authAvatarFallback.hidden = false; };
+            authAvatarImg.hidden = false;
+            authAvatarFallback.hidden = true;
+          } else {
+            authAvatarFallback.textContent = initials(user.displayName || user.email || "?");
+            authAvatarFallback.hidden = false;
+            authAvatarImg.hidden = true;
+          }
+        }
+        if (logoutBtn) logoutBtn.hidden = false;
+        if (menuLoginBtn) menuLoginBtn.hidden = true;
+      } else {
+        authBtnText.textContent = "Login";
+        authBtn.title = "Login with Google";
+        if (googleIcon) googleIcon.hidden = false;
+        if (authAvatarImg) authAvatarImg.hidden = true;
+        if (authAvatarFallback) authAvatarFallback.hidden = true;
+        if (logoutBtn) logoutBtn.hidden = true;
+        if (menuLoginBtn) menuLoginBtn.hidden = false;
+      }
+  });
+
+  if (logoutBtn) logoutBtn.addEventListener("click", () => window.auth.signOut());
+} else if (authBtn) {
+  const alertNotConfigured = () => showToast("Login isn't configured yet.", "⚠️");
+  authBtn.addEventListener("click", alertNotConfigured);
+  if (menuLoginBtn) menuLoginBtn.addEventListener("click", alertNotConfigured);
+}
+
+// ---------- GOOGLE APPS SCRIPT MASTER URL ----------
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxw-xN0K6gXdnpQs6uFRM9xOWBvccVIwRowc_nvJyr-Q5X3QXi8zfrrxtms7ka7HC2r/exec"; 
+
+// ---------- Reward Form ----------
+const GIVEAWAY_WHATSAPP_NUMBER = "919762527926";
+const rewardForm = document.getElementById("rewardForm");
+
+if (rewardForm) {
+  rewardForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (!rewardForm.checkValidity()) { rewardForm.reportValidity(); return; }
+    if (!currentUser) { showToast("Please login with Google first.", "🔒"); return; }
+
+    const submitBtn = document.getElementById("submitRewardBtn");
+    const fullName = document.getElementById("fullName").value;
+    const whatsapp = document.getElementById("whatsapp").value;
+    const brand = document.getElementById("brandSelect").value;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Opening WhatsApp...";
+    haptic();
+
+    const text = encodeURIComponent(
+      `🏆 Cheapster Giveaway Entry\n\nName: ${fullName}\nWhatsApp:${whatsapp}\nBrand: ${brand}\nEmail:${currentUser.email || ""}`
+    );
+
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors", 
+      keepalive: true, 
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        fullName: fullName,
+        whatsapp: whatsapp,
+        brand: brand,
+        email: currentUser.email || "",
+        uid: currentUser.uid || "",
+        submittedAt: new Date().toISOString()
+      })
+    }).catch(err => console.log("Background Sheet Save Error:", err));
+
+    openStoreLink({ link: `https://wa.me/${GIVEAWAY_WHATSAPP_NUMBER}?text=${text}` });
+
+    document.getElementById("rewardForm").hidden = true;
+    document.getElementById("successView").hidden = false;
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit Entry";
+    haptic();
+  });
+}
+
+// ---------- Contact Form (Web3Forms) ----------
+const WEB3FORMS_ACCESS_KEY = "5f013235-2314-452d-8f2e-2064a1f2d2e0";
+const contactForm = document.getElementById("contactForm");
+
+if (contactForm) {
+  contactForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!contactForm.checkValidity()) { contactForm.reportValidity(); return; }
+
+      const submitBtn = contactForm.querySelector('button[type="submit"]');
+      const name = document.getElementById("contactName").value;
+      const issue = document.getElementById("contactIssueText").value;
+      const message = document.getElementById("contactMessage").value;
+
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Sending..."; }
+      haptic();
+
+      try {
+        const res = await fetch("https://api.web3forms.com/submit", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Accept: "application/json" },
+              body: JSON.stringify({ access_key: WEB3FORMS_ACCESS_KEY, subject: `Cheapster Support: ${issue}`, from_name: "Cheapster.in Contact Form", name: name, issue: issue, message: message })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast("Message sent! We'll get back to you soon.", "✅");
+          contactForm.reset();
+          closeModal("contactModal");
+        } else { showToast("Something went wrong. Please try again.", "❌"); }
+      } catch (err) { showToast("Network error. Please try again.", "❌"); } 
+      finally { if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Send Message"; } }
+  });
+}
+
+// ---------- Header height -> CSS var (category nav sticky offset) ----------
+// Sticky category bar ko header ke theek neeche rakhne ke liye header ki real height chahiye.
+(function syncHeaderHeight() {
+  const h = document.getElementById("siteHeader");
+  if (!h) return;
+  const set = () => document.documentElement.style.setProperty("--header-h", h.offsetHeight + "px");
+  set();
+  window.addEventListener("load", set);
+  window.addEventListener("resize", set, { passive: true });
+  if ("ResizeObserver" in window) new ResizeObserver(set).observe(h);
+})();
+
+// ---------- Header Shadow Scroll ----------
+const header = document.getElementById("siteHeader");
+if (header) {
+  let ticking = false;
+  window.addEventListener("scroll", () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+          header.classList.toggle("is-scrolled", window.scrollY > 12);
+          ticking = false;
+      });
+  }, { passive: true });
+}
+
+// ---------- Welcome popup ----------
+window.addEventListener("load", () => {
+    if (safeStore.get("cheapster_welcome_seen") !== "1") {
+      setTimeout(() => openModal("welcomeModal"), 1500);
+    }
+});
+
+const continueBtn = document.getElementById("continueBtn");
+if (continueBtn) {
+  continueBtn.addEventListener("click", () => {
+      safeStore.set("cheapster_welcome_seen", "1");
+      closeModal("welcomeModal");
+  });
+}
+
+// ---------- PWA Install Logic ----------
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(()=>{}));
+}
+
+let deferredPrompt;
+const installBtn = document.getElementById("installAppBtn");
+const isAndroid = /Android/i.test(navigator.userAgent);
+
+if (installBtn && isAndroid) {
+  window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = "inline-flex";
+  });
+  installBtn.addEventListener("click", async () => {
+      haptic();
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt = null;
+        installBtn.style.display = "none";
+      }
+  });
+}
+
+// ---------- Promo Banners Carousel (seamless infinite loop) ----------
+const promoCarousel = document.getElementById('promoCarousel');
+const scrollLeftBtn = document.getElementById('scrollLeftBtn');
+const scrollRightBtn = document.getElementById('scrollRightBtn');
+
+if (promoCarousel) {
+  const originalSlides = Array.from(promoCarousel.children);
+  const count = originalSlides.length;
+  promoCarousel.querySelectorAll("img").forEach((im) => { im.decoding = "async"; });
+
+  const makeClone = (node) => {
+    const c = node.cloneNode(true);
+    c.setAttribute("aria-hidden", "true");
+    c.tabIndex = -1;
+    c.querySelectorAll("img").forEach((im) => { im.removeAttribute("fetchpriority"); });
+    return c;
+  };
+  for (let k = 0; k < 2; k++) {
+    originalSlides.forEach((slide) => promoCarousel.appendChild(makeClone(slide)));
+    originalSlides.slice().reverse().forEach((slide) => promoCarousel.insertBefore(makeClone(slide), promoCarousel.firstChild));
+  }
+
+  const slides = () => promoCarousel.children;
+  const slideStep = () => slides()[1].offsetLeft - slides()[0].offsetLeft;
+  const setWidth = () => slides()[count].offsetLeft - slides()[0].offsetLeft;
+
+  const jumpTo = (left) => {
+    promoCarousel.style.scrollSnapType = 'none';
+    promoCarousel.style.scrollBehavior = 'auto';
+    promoCarousel.scrollLeft = left;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      promoCarousel.style.scrollSnapType = '';
+      promoCarousel.style.scrollBehavior = '';
+    }));
+  };
+
+  // Middle set ke pehle slide ka *snap-aligned* scroll position (pehle 2*setWidth tha, jo snap point se ~30px off tha
+  // aur browser ko slide khinch kar centre karna padta tha -> visible jhatka)
+  const middleLeft = () => {
+    const first = slides()[count * 2];
+    const align = (getComputedStyle(first).scrollSnapAlign || "start");
+    if (align.indexOf("center") === 0) return first.offsetLeft + first.offsetWidth / 2 - promoCarousel.clientWidth / 2;
+    return setWidth() * 2;
+  };
+  const goToMiddle = () => jumpTo(middleLeft());
+
+  let userMoved = false;
+  ["touchstart", "pointerdown", "wheel"].forEach((ev) => promoCarousel.addEventListener(ev, () => { userMoved = true; }, { passive: true }));
+
+  goToMiddle();
+  // load par dobara sirf tab center karo jab user ne carousel chhua na ho (warna beech mein khinch jata tha)
+  window.addEventListener("load", () => { if (!userMoved) goToMiddle(); }, { once: true });
+
+  if (scrollLeftBtn) scrollLeftBtn.addEventListener('click', () => promoCarousel.scrollBy({ left: -slideStep(), behavior: 'smooth' }));
+  if (scrollRightBtn) scrollRightBtn.addEventListener('click', () => promoCarousel.scrollBy({ left: slideStep(), behavior: 'smooth' }));
+
+  let touching = false;
+  let settleTimer = null;
+
+  const recenter = () => {
+    if (touching) return;
+    const w = setWidth();
+    if (!w) return;
+    const k = Math.round(promoCarousel.scrollLeft / w);  
+    if (k !== 2) jumpTo(promoCarousel.scrollLeft + (2 - k) * w);
+  };
+
+  const scheduleRecenter = () => {
+    clearTimeout(settleTimer);
+    settleTimer = setTimeout(recenter, 160);
+  };
+
+  promoCarousel.addEventListener('scroll', scheduleRecenter, { passive: true });
+  if ('onscrollend' in window) promoCarousel.addEventListener('scrollend', recenter, { passive: true });
+
+  promoCarousel.addEventListener('touchstart', () => { touching = true; }, { passive: true });
+  const touchDone = () => { touching = false; scheduleRecenter(); };
+  promoCarousel.addEventListener('touchend', touchDone, { passive: true });
+  promoCarousel.addEventListener('touchcancel', touchDone, { passive: true });
+  promoCarousel.addEventListener('pointerdown', () => { touching = true; }, { passive: true });
+  window.addEventListener('pointerup', () => { if (touching) { touching = false; scheduleRecenter(); } }, { passive: true });
+
+  const focusMQ = window.matchMedia("(max-width: 768px)");
+  const reduceMQ = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let centers = [], stepPx = 1, padLeft = 0, focusRaf = 0;
+
+  const measureFocus = () => {
+    const list = Array.from(slides());
+    const first = list[0].offsetLeft;
+    padLeft = parseFloat(getComputedStyle(promoCarousel).paddingLeft) || 0;
+    centers = list.map((el) => (el.offsetLeft - first) + padLeft + el.offsetWidth / 2);
+    stepPx = slideStep() || 1;
+  };
+
+  const applyFocus = () => {
+    focusRaf = 0;
+    const list = slides();
+    if (!focusMQ.matches || reduceMQ.matches) {
+      for (let i = 0; i < list.length; i++) { list[i].style.transform = ''; list[i].style.opacity = ''; }
+      return;
+    }
+    const mid = promoCarousel.scrollLeft + promoCarousel.clientWidth / 2;
+    for (let i = 0; i < list.length; i++) {
+      const d = Math.abs(centers[i] - mid) / stepPx;       
+      if (d > 1.6) { list[i].style.transform = 'scale(0.9)'; list[i].style.opacity = '0.6'; continue; }
+      const t = Math.min(d, 1);
+      const e = t * t * (3 - 2 * t);                       
+      list[i].style.transform = `scale(${(1 - 0.1 * e).toFixed(4)})`;
+      list[i].style.opacity = (1 - 0.4 * e).toFixed(3);
+    }
+  };
+  const requestFocus = () => { if (!focusRaf) focusRaf = requestAnimationFrame(applyFocus); };
+
+  const refreshFocus = () => { measureFocus(); applyFocus(); };
+  promoCarousel.addEventListener('scroll', requestFocus, { passive: true });
+  window.addEventListener('resize', () => setTimeout(refreshFocus, 200), { passive: true });
+  window.addEventListener('load', refreshFocus, { once: true });
+  if (focusMQ.addEventListener) focusMQ.addEventListener('change', refreshFocus);
+  refreshFocus();
+
+  let resizeTimer;
+  window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(goToMiddle, 150); }, { passive: true });
+
+  // ---- Entry reveal: carousel tab dikhao jab position set ho chuki ho + pehla banner decode ho gaya ho ----
+  let revealed = false;
+  const reveal = () => {
+    if (revealed) return;
+    revealed = true;
+    goToMiddle();
+    refreshFocus();
+    requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.add('carousel-ready')));
+  };
+  const heroImg = originalSlides[0] && originalSlides[0].querySelector('img');
+  const heroDecoded = heroImg && heroImg.decode ? heroImg.decode().catch(() => {}) : Promise.resolve();
+  Promise.race([heroDecoded, new Promise((r) => setTimeout(r, 1200))]).then(reveal);
+}
+
+// =========================================================
+// GEMINI AI COUPON HUNTER (Upgraded with Smart Links & Compression)
+// =========================================================
+
+let selectedProductBase64 = null;
+let loaderInterval;
+let huntInFlight = false;
+let lastHuntAt = 0;
+
+const productImageInput = document.getElementById("productImageInput");
+const uploadLabel = document.querySelector(".upload-img-label");
+const uploadThumb = document.getElementById("uploadThumb");
+const uploadIcon = uploadLabel ? uploadLabel.querySelector("svg") : null;
+let cutTimer;
+let previewObjectUrl = null;
+let uploadToken = 0;
+
+function revokePreviewUrl() {
+  if (previewObjectUrl) { try { URL.revokeObjectURL(previewObjectUrl); } catch (e) {} previewObjectUrl = null; }
+}
+
+if (uploadThumb) {
+  // agar blob preview load na ho (jaise HEIC), to compressed copy se dikhayenge
+  uploadThumb.addEventListener("error", () => {
+    if (!uploadThumb.getAttribute("src")) return;
+    uploadThumb.dataset.broken = "1";
+    if (selectedProductBase64 && uploadThumb.src !== selectedProductBase64) setImagePreview(selectedProductBase64);
+  });
+}
+
+// Preview ab upload icon ke andar hi dikhta hai
+function setImagePreview(dataUrl) {
+  if (!uploadLabel || !uploadThumb) return;
+  uploadThumb.dataset.broken = "0";
+  uploadThumb.src = dataUrl;
+  uploadThumb.hidden = false;
+  if (uploadIcon) uploadIcon.style.display = "none";
+  uploadLabel.classList.add("has-image");
+  uploadLabel.title = "Tap to remove image";
+}
+
+function clearImagePreview() {
+  uploadToken++;
+  revokePreviewUrl();
+  selectedProductBase64 = null;
+  if (productImageInput) productImageInput.value = "";
+  clearTimeout(cutTimer);
+  if (!uploadLabel || !uploadThumb) return;
+  uploadThumb.hidden = true;
+  uploadThumb.removeAttribute("src");
+  if (uploadIcon) uploadIcon.style.display = "";
+  uploadLabel.classList.remove("has-image", "confirm-remove");
+  uploadLabel.title = "Upload Product Image";
+}
+const searchCouponBtn = document.getElementById("searchCouponBtn");
+const aiSearchInput = document.getElementById("searchInput");
+
+const loadingNotes = [
+  "Identifying your product and brand…",
+  "Searching the latest coupons across top shopping sites…",
+  "Checking bank offers and flat discounts…",
+  "Verifying codes against live sources…",
+  "Almost there — sorting the best deals for you…"
+];
+
+// --- ADVANCED SMART DEEP LINKING (Category Redirect) ---
+function getDeepLink(brandName, userQuery) {
+  const matchedStore = findStoreByName(brandName);
   
-  .reward-logos { flex: 0 0 100px; height: 100px; }
-  .reward-logo { width: 38px; height: 38px; border-radius: 8px; }
-  .rl-1 { top: 0px; left: 8px; }
-  .rl-2 { top: 12px; left: 54px; }
-  .rl-3 { top: 46px; left: -2px; }
-  .rl-4 { top: 58px; left: 48px; }
-  
-  .reward-btn { min-height: 36px; padding: 0 12px; font-size: 11.5px; }
-}
-
-@media (max-width: 380px) {
-  .deal-card .ai-search-shell .search-input { font-size: 12px; }
-}
-
-@media (max-width: 360px) {
-  .store-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-  .store-card { padding: 14px 8px; }
-}
-
-@media (max-width: 900px) {
-  .trust-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 640px; }
-}
-
-.hero-copy, .deal-card-title, .festive-pill { text-wrap: balance; }
-
-@media (max-width: 360px) {
-  .section-top .see-all-btn { padding: 0 12px; font-size: 12px; gap: 6px; }
-  .section-top .brand-filter-shell { padding: 0 10px; }
-}
-
-/* DIRECTORY HEADER (laptop): heading left, search + "See all" button right side mein ek row mein */
-@media (min-width: 769px) {
-  .section-top .brand-filter-row { order: 1; display: block; flex: 0 0 300px; margin: 0; }
-  .section-top .see-all-btn { order: 2; flex: 0 0 auto; white-space: nowrap; }
-  .section-top .brand-filter-row .brand-filter-shell { width: 100%; min-width: 0; height: 42px; padding: 0 16px; }
-  .section-top .brand-filter-shell input { font-size: 13px; }
-}
-
-/* =========================================================
-   SMOOTHNESS / PERFORMANCE LAYER
-   (look same, bas GPU/CPU ka kaam kam)
-   ========================================================= */
-
-/* Offscreen sections tab tak render nahi hote jab tak scroll karke paas na aayein */
-.trust-wrap { content-visibility: auto; contain-intrinsic-size: auto 120px; }
-.site-footer { content-visibility: auto; contain-intrinsic-size: auto 520px; }
-
-/* Reward banner ke floating logos tabhi chalen jab screen par dikh rahe hon (JS class lagata hai) */
-.reward-banner-wrap.anim-paused .reward-logo { animation-play-state: paused; }
-
-/* Carousel: native touch scrolling smooth, edge par page bounce nahi */
-.promo-carousel { -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
-
-/* Touch devices par "sticky hover" lift/jank nahi */
-@media (hover: none) {
-  .store-card:hover, .promo-slide:hover { transform: none; }
-  .store-card:hover::before { opacity: 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .reward-logo, .blinking-dot { animation: none !important; }
-}
-
-/* =========================================================
-   POPUPS: side scrollbar hata di (scroll smooth rehta hai), horizontal crop nahi
-   ========================================================= */
-.premium-modal {
-  overflow-x: hidden;
-  scrollbar-width: none;          /* Firefox + new Chrome */
-  -ms-overflow-style: none;       /* old Edge */
-}
-.premium-modal::-webkit-scrollbar { display: none; width: 0; height: 0; }
-
-/* Page scrollbar popup khulne/band hone par gayab/wapas nahi hota -> background 5px hilta nahi */
-html { scrollbar-gutter: stable; }
-
-/* =========================================================
-   GOLD OUTLINE THEME (Festive Rewards banner jaisi)
-   gold border + top highlight line + inset glow
-   ========================================================= */
-
-/* Brand cards (home grid + "See all" popup) */
-.store-card { border-color: var(--line-gold); box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(236, 205, 143, 0.14); }
-.store-card::after { content: ""; position: absolute; top: 0; left: 14%; right: 14%; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne-bright), transparent); opacity: 0.8; pointer-events: none; }
-.store-card:hover { border-color: rgba(236, 205, 143, 0.6); box-shadow: 0 16px 34px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(205, 161, 92, 0.18), inset 0 1px 0 rgba(236, 205, 143, 0.22); }
-
-/* Brand search bars (home + popup search) */
-.brand-filter-shell { border-color: var(--line-gold); box-shadow: inset 0 1px 0 rgba(236, 205, 143, 0.14), 0 4px 14px rgba(0, 0, 0, 0.25); }
-.brand-filter-shell:focus-within { border-color: var(--champagne-bright); box-shadow: inset 0 1px 0 rgba(236, 205, 143, 0.2), 0 0 0 2px rgba(205, 161, 92, 0.18); }
-
-/* Category selector bar */
-.category-nav-wrapper { border-color: var(--line-gold); box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(236, 205, 143, 0.14); }
-.category-nav-wrapper::before { content: ""; position: absolute; top: 0; left: 12%; right: 12%; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne-bright), transparent); opacity: 0.8; pointer-events: none; }
-
-/* =========================================================
-   GOLD OUTLINE: trust blocks + saari separator lines
-   ========================================================= */
-
-/* 4 trust blocks (Free / Direct Links / No Bank-OTP / Google Sign-in) */
-.trust-item { position: relative; border-color: var(--line-gold); box-shadow: inset 0 1px 0 rgba(236, 205, 143, 0.14), 0 4px 14px rgba(0, 0, 0, 0.25); }
-.trust-item::before { content: ""; position: absolute; top: 0; left: 14%; right: 14%; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne-bright), transparent); opacity: 0.8; pointer-events: none; }
-.trust-icon { border: 1px solid var(--line-gold); }
-
-/* Separator lines */
-.site-header { border-bottom-color: var(--line-gold); }
-.site-header.is-scrolled { border-bottom: 1px solid var(--line-gold); }
-.site-footer { border-top-color: var(--line-gold); }
-.footer-legal-note { border-top-color: var(--line-gold); }
-.footer-bottom { border-top-color: var(--line-gold); }
-.divider-label::before { background: var(--line-gold); }
-hr { border-color: var(--line-gold) !important; }
-
-/* =========================================================
-   LEGAL PAGES: section headings + links + deal-hunter note
-   ========================================================= */
-.legal-copy h3 { margin: 26px 0 14px; padding-top: 18px; border-top: 1px solid var(--line-gold); font-size: 12px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: var(--champagne-bright); }
-.legal-copy h3:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
-.legal-copy a { color: var(--champagne); text-decoration: underline; text-underline-offset: 2px; }
-
-.coupon-disclaimer { margin: 16px 0 0; padding-top: 12px; border-top: 1px solid var(--line-gold); text-align: center; font-size: 11.5px; font-weight: 600; line-height: 1.55; color: var(--faint); }
-
-
-/* Amazon Associate line + keyboard focus */
-.footer-affiliate-note { margin: 12px 0 0 !important; font-size: 12.5px !important; font-weight: 700 !important; color: var(--champagne-bright) !important; }
-.cat-pill:focus-visible, .see-all-btn:focus-visible, .btn:focus-visible, .coupon-code-badge:focus-visible { outline: 2px solid var(--champagne-bright); outline-offset: 2px; }
-.btn:disabled { opacity: .65; cursor: not-allowed; transform: none; }
-
-
-/* Carousel center-focus (mobile): scale/opacity JS se scroll ke saath chalta hai */
-@media (max-width: 768px) {
-  .promo-slide { transform-origin: center center; will-change: transform, opacity; backface-visibility: hidden; transition: border-color .25s ease; }
-}
-
-
-/* Promo cards: logo + text upar, full-width button neeche (code crop nahi hoga) */
-.coupon-card-item { display: grid; grid-template-columns: 52px minmax(0, 1fr); grid-template-areas: "logo info" "btn btn"; align-items: start; column-gap: 14px; row-gap: 12px; padding: 14px; }
-.coupon-card-item .coupon-logo-box { grid-area: logo; width: 52px; height: 52px; }
-.coupon-card-item .coupon-card-info { grid-area: info; min-width: 0; overflow: visible; }
-.coupon-card-item .coupon-action-btn { grid-area: btn; width: 100%; justify-content: center; padding: 12px 16px; font-size: 13px; }
-.coupon-card-item .coupon-code-badge { max-width: 100%; white-space: normal; overflow-wrap: anywhere; word-break: break-word; line-height: 1.35; }
-.coupon-card-item .coupon-desc { overflow-wrap: anywhere; }
-
-
-/* =========================================================
-   GOLD OUTLINE EVERYWHERE — same recipe as the brand cards:
-   gold border + soft inner top highlight + fading gold line on top
-   ========================================================= */
-
-/* Festive banner, Welcome banner, Deal Hunter: top line sits exactly like on brand cards */
-.reward-banner::before, .deal-card::before { top: 0; left: 14%; right: 14%; opacity: 0.8; pointer-events: none; }
-
-/* Popups (all except the welcome one, which is just the banner) */
-.premium-modal:not(.welcome-modal) {
-  background: linear-gradient(90deg, transparent, rgba(236, 205, 143, 0.85), transparent) top center / 72% 1px no-repeat, var(--obsidian-raised);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(236, 205, 143, 0.14);
-}
-
-/* Offer banners carousel */
-.promo-slide { position: relative; border-color: var(--line-gold); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(236, 205, 143, 0.14); }
-.promo-slide::after { content: ""; position: absolute; top: 0; left: 14%; right: 14%; height: 1px; z-index: 2; background: linear-gradient(90deg, transparent, var(--champagne-bright), transparent); opacity: 0.8; pointer-events: none; }
-.promo-slide:hover { border-color: rgba(236, 205, 143, 0.6); }
-
-/* Coupon result cards, menu dropdown, contact box */
-/* .header-dropdown yahan se hata diya: position:relative usko page flow mein daal deta tha (header lamba + menu side mein) */
-.coupon-card-item, .gold-card { position: relative; }
-.header-dropdown { box-shadow: var(--shadow-lift), inset 0 1px 0 rgba(236, 205, 143, 0.14); }
-.gold-card { box-shadow: inset 0 1px 0 rgba(236, 205, 143, 0.14); }
-.coupon-card-item::after, .header-dropdown::after, .gold-card::after { content: ""; position: absolute; top: 0; left: 14%; right: 14%; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne-bright), transparent); opacity: 0.8; pointer-events: none; }
-
-/* =========================================================
-   OFFER BANNERS: image ki apni moti outline chhupa kar hamari gold outline
-   --promo-crop : image thodi zoom hoke edges (jahan outline baked hai) crop ho jaate hain
-   --promo-ring : hamari gold outline ki motai
-   (outline abhi bhi dikhe to --promo-crop badhao, jaise 1.09; zyada moti chahiye to --promo-ring)
-   ========================================================= */
-.promo-slide { --promo-crop: 1.07; --promo-ring: 2px; border: 1px solid var(--champagne); background: #0d2138; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(205, 161, 92, 0.12); }
-.promo-slide img { transform: scale(var(--promo-crop)); transform-origin: center center; }
-.promo-slide::before { content: ""; position: absolute; inset: 0; z-index: 3; border-radius: inherit; box-shadow: inset 0 0 0 var(--promo-ring) var(--champagne), inset 0 0 14px rgba(205, 161, 92, 0.25); pointer-events: none; }
-.promo-slide:hover { border-color: var(--champagne-bright); }
-
-
-/* =========================================================
-   MOBILE BOTTOM NAV (sirf phones): Home / Directory / Reward / Deals
-   ========================================================= */
-.mobile-nav { display: none; }
-
-@media (max-width: 768px) {
-  body { padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px)); }
-
-  .mobile-nav {
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 900;
-    display: flex; align-items: stretch; justify-content: space-around;
-    height: calc(56px + env(safe-area-inset-bottom, 0px));
-    padding: 0 6px env(safe-area-inset-bottom, 0px);
-    background: rgba(9, 13, 20, 0.97);
-    border-top: 1px solid var(--line-gold);
-    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.45);
-    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  if (!userQuery) {
+    return matchedStore ? matchedStore.link : null;
   }
-  .mobile-nav::before { content: ""; position: absolute; top: -1px; left: 14%; right: 14%; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne-bright), transparent); opacity: 0.8; pointer-events: none; }
-
-  .mnav-item { position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 0; background: none; border: none; color: var(--faint); font-size: 11px; font-weight: 700; letter-spacing: 0.2px; transition: color .2s ease, transform .15s ease; }
-  .mnav-item svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-  .mnav-item:active { transform: scale(0.92); }
-  .mnav-item.active { color: var(--champagne-bright); }
-  .mnav-item.active::before { content: ""; position: absolute; top: 0; left: 32%; right: 32%; height: 2px; border-radius: 0 0 4px 4px; background: linear-gradient(90deg, var(--champagne), var(--champagne-bright)); box-shadow: 0 0 10px rgba(205, 161, 92, 0.5); }
-  .mnav-item:focus-visible { outline: 2px solid var(--champagne-bright); outline-offset: -4px; border-radius: 12px; }
-
-  /* Keyboard khulne par bar hide (input ke upar na tike) */
-  body.kb-open .mobile-nav { display: none; }
-  body.kb-open { padding-bottom: 0; }
+  
+  const query = encodeURIComponent(userQuery.trim());
+  const brand = brandName.toLowerCase();
+  
+  const searchUrls = {
+    myntra: `https://www.myntra.com/${query}`,
+    flipkart: `https://www.flipkart.com/search?q=${query}`,
+    amazon: `https://www.amazon.in/s?k=${query}`,
+    ajio: `https://www.ajio.com/search/?text=${query}`,
+    nykaa: `https://www.nykaa.com/search/result/?q=${query}`
+  };
+  
+  return searchUrls[brand] || (matchedStore ? matchedStore.link : null);
 }
 
-/* Deals popup: page wala Deal Hunter block hi popup mein khulta hai (apna border/gold frame already uska hai) */
-.deal-popup { position: relative; width: min(480px, 100%); max-height: 90vh; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; }
-.deal-popup::-webkit-scrollbar { display: none; width: 0; height: 0; }
-.deal-wrap-popup { width: 100%; margin: 0; padding: 0; }
-.deal-popup .modal-close { top: 10px; right: 10px; z-index: 5; width: 30px; height: 30px; display: grid; place-items: center; padding: 0 0 2px; border-radius: 50%; background: rgba(9, 13, 20, 0.85); border: 1px solid var(--line-gold); color: var(--platinum); font-size: 20px; }
+// --- Image Upload Handler WITH 90% COMPRESSION ---
+if (productImageInput) {
+  productImageInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
+    if (!file.type.startsWith("image/")) { showToast("Please choose an image file.", "⚠️"); e.target.value = ""; return; }
 
-/* =========================================================
-   ENTRY ANIMATION (page load / refresh) + smoother popups
-   Sirf opacity + transform -> GPU par, layout shift nahi.
-   ========================================================= */
-@keyframes enterUp { from { opacity: 0; transform: translateY(16px); } }
-@keyframes enterCarousel { from { opacity: 0; transform: translateY(18px) scale(0.97); } }
-@keyframes overlayIn { from { opacity: 0; } }
-@keyframes modalIn { from { opacity: 0; transform: translateY(14px) scale(0.98); } }
+    // preview turant file se dikhao (compression ka wait nahi)
+    const myToken = ++uploadToken;
+    revokePreviewUrl();
+    try { previewObjectUrl = URL.createObjectURL(file); setImagePreview(previewObjectUrl); } catch (err) {}
 
-/* Hero text: halka stagger (backwards fill => animation ke baad koi transform nahi bachta) */
-.hero-badge { animation: enterUp .7s cubic-bezier(.22, .8, .3, 1) .05s backwards; }
-.hero h1 { animation: enterUp .7s cubic-bezier(.22, .8, .3, 1) .35s backwards; }
-.hero-copy { animation: enterUp .7s cubic-bezier(.22, .8, .3, 1) .45s backwards; }
-.deal-wrap:not(.deal-wrap-popup) { animation: enterUp .7s cubic-bezier(.22, .8, .3, 1) .6s backwards; }
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (myToken !== uploadToken) return; // user ne beech me hata diya
+      const img = new Image();
+      img.onload = () => {
+        if (myToken !== uploadToken) return;
+        try {
+          const MAX_WIDTH = 800;
+          const MAX_HEIGHT = 800;
+          let width = img.width;
+          let height = img.height;
+          
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height = Math.round(height * (MAX_WIDTH / width));
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width = Math.round(width * (MAX_HEIGHT / height));
+              height = MAX_HEIGHT;
+            }
+          }
+          
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx2d = canvas.getContext("2d");
+          ctx2d.fillStyle = "#ffffff"; // transparent PNG/WebP JPEG me black na ban jaye
+          ctx2d.fillRect(0, 0, width, height);
+          ctx2d.drawImage(img, 0, 0, width, height);
+          
+          // Quality 0.6 = 60% JPEG Quality -> Greatly reduces 10MB images
+          selectedProductBase64 = canvas.toDataURL("image/jpeg", 0.6);
+        } catch (err) {
+          selectedProductBase64 = reader.result;
+        }
+        if (!uploadThumb || uploadThumb.dataset.broken === "1" || !uploadThumb.getAttribute("src")) setImagePreview(selectedProductBase64);
+        showToast("Product image attached! Ready to hunt.", "📸");
+        aiSearchInput.focus();
+      };
+      img.onerror = () => { if (myToken !== uploadToken) return; selectedProductBase64 = reader.result; if (!uploadThumb || uploadThumb.dataset.broken === "1" || !uploadThumb.getAttribute("src")) setImagePreview(selectedProductBase64); };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
 
-/* Carousel: JS position set + first banner decode karne ke baad hi dikhta hai (html.carousel-ready) */
-html.js:not(.carousel-ready) .promo-carousel-wrapper { opacity: 0; }
-html.carousel-ready .promo-carousel-wrapper { animation: enterCarousel .8s cubic-bezier(.22, .8, .3, 1) .1s backwards; }
+// --- Remove Image: 1st tap on thumbnail shows cut (x), 2nd tap removes ---
+if (uploadLabel) {
+  uploadLabel.addEventListener("click", (e) => {
+    if (!uploadLabel.classList.contains("has-image")) return; // no image yet: normal file picker
+    e.preventDefault();
+    if (uploadLabel.classList.contains("confirm-remove")) {
+      clearImagePreview();
+      showToast("Image removed.", "ℹ️");
+    } else {
+      uploadLabel.classList.add("confirm-remove");
+      clearTimeout(cutTimer);
+      cutTimer = setTimeout(() => uploadLabel.classList.remove("confirm-remove"), 3500);
+    }
+  });
+  document.addEventListener("click", (e) => {
+    if (!uploadLabel.contains(e.target)) uploadLabel.classList.remove("confirm-remove");
+  });
+}
 
-/* Popups: smooth fade + halka rise */
-.modal-overlay:not([hidden]) { animation: overlayIn .2s ease-out; }
-.modal-overlay:not([hidden]) > .modal { animation: modalIn .28s cubic-bezier(.22, .8, .3, 1); }
+// --- Enter Key & Click Triggers ---
+if (aiSearchInput) {
+  aiSearchInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { e.preventDefault(); triggerSecureAIHunt(); }
+  });
+}
+
+if (searchCouponBtn) {
+  searchCouponBtn.addEventListener("click", triggerSecureAIHunt);
+}
+
+// Helper to format Base64 for Gemini
+function formatGeminiImagePart(dataUrl) {
+  const matches = dataUrl.match(/^data:(.+);base64,(.+)$/);
+  if (!matches || matches.length !== 3) return null;
+  return { inlineData: { mimeType: matches[1], data: matches[2] } };
+}
+
+// --- Trigger Secure Call to Google Apps Script ---
+async function triggerSecureAIHunt() {
+  const query = aiSearchInput ? aiSearchInput.value.trim() : "";
+
+  if (!query && !selectedProductBase64) {
+    showToast("Please enter a brand, product name, or upload an image.", "⚠️");
+    return;
+  }
+
+  // Deal Hunter sirf logged-in users ke liye
+  if (!currentUser) {
+    showToast("Please login with Google first.", "🔒");
+    return;
+  }
+
+  if (huntInFlight) return;
+  if (Date.now() - lastHuntAt < 4000) { showToast("Please wait a few seconds before searching again.", "⏳"); return; }
+  huntInFlight = true;
+  lastHuntAt = Date.now();
+  if (searchCouponBtn) searchCouponBtn.disabled = true;
+
+  haptic();
+  openModal("couponResultsModal");
+
+  const loader = document.getElementById("couponLoader");
+  const container = document.getElementById("couponCardsList");
+  const title = document.getElementById("couponModalTitle");
+  const animText = document.getElementById("loadingTextAnim");
+
+  if (loader) loader.hidden = false;
+  if (container) container.innerHTML = "";
+  if (title) title.textContent = query ? `Coupons for "${query}"` : "Coupons for Uploaded Image";
+
+  if (animText) {
+    let noteIndex = 0;
+    animText.textContent = loadingNotes[0];
+    animText.style.opacity = 1;
+    clearInterval(loaderInterval);
+    loaderInterval = setInterval(() => {
+      noteIndex = (noteIndex + 1) % loadingNotes.length;
+      animText.style.opacity = 0;
+      setTimeout(() => { animText.textContent = loadingNotes[noteIndex]; animText.style.opacity = 1; }, 300);
+    }, 3500);
+  }
+
+  try {
+    const idToken = await currentUser.getIdToken();  
+    const requestBody = { action: "huntCoupons", query: query, idToken: idToken };
+
+    // photo hamesha bhejo: backend pehle Gemini se product + brand + category pehchanta hai
+    if (selectedProductBase64) {
+      const imgPart = formatGeminiImagePart(selectedProductBase64);
+      if (imgPart) requestBody.image = imgPart.inlineData;
+    }
+
+    const response = await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify(requestBody)
+    });
+
+    if (!response.ok) throw new Error(`Backend Error: ${response.status}`);
+
+    const data = await response.json();
+
+    if (data.error) {
+      console.error("AI Hunter Error:", data.error);
+      if (container) {
+        const msg = String(data.error.message || "Something went wrong.")
+          .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--champagne-bright); background:rgba(205,161,92,0.1); border-radius:12px; font-size:13px;"><p>⚠️ ${msg}</p></div>`;
+      }
+      return;
+    }
+
+    if (!query && data.detectedQuery && title) title.textContent = `Coupons for "${data.detectedQuery}"`;
+    renderAICards(data);
+
+    // Free memory
+    clearImagePreview();
+
+  } catch (err) {
+    console.error("AI Hunter Error:", err);
+    if (container) {
+      container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--muted);"><p>⚠️ We couldn't fetch offers right now. Please try again in a moment.</p></div>`;
+    }
+  } finally {
+    if (loader) loader.hidden = true;
+    clearInterval(loaderInterval);
+    huntInFlight = false;
+    if (searchCouponBtn) searchCouponBtn.disabled = false;
+  }
+}
+
+function safeHttpUrl(url) {
+  try {
+    const u = new URL(url, location.href);
+    return (u.protocol === "https:" || u.protocol === "http:") ? u.href : null;
+  } catch (e) { return null; }
+}
+
+function findStoreByName(name) {
+  const n = name.toLowerCase().trim();
+  if (!n) return null;
+  return stores.find((s) => s.name.toLowerCase() === n) || stores.find((s) => s.name.toLowerCase().includes(n)) || null;
+}
+
+async function copyText(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(text); return true; }
+  } catch (e) {}
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.setAttribute("readonly", "");
+    ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    const ok = document.execCommand("copy");
+    document.body.removeChild(ta);
+    return ok;
+  } catch (e) { return false; }
+}
+
+// Backend naya "deals" array deta hai; purana text format bhi chalta rahega
+function dealsFromResponse(data) {
+  if (data && Array.isArray(data.deals) && data.deals.length) return data.deals;
+  const text = String((data && data.text) || (typeof data === "string" ? data : "")).replace(/\*/g, "").replace(/`/g, "");
+  return text.split("\n").map((l) => l.trim()).filter((l) => l.length > 0).map((line) => {
+    const m = line.match(/^([^-:]+)[-:]\s*(\S+)\s+(.+)$/);
+    if (!m) return { brand: "Promo Deal", code: "", desc: line };
+    const code = m[2].trim();
+    return { brand: m[1].trim(), code: code === "NOCODE" ? "" : code, desc: m[3].trim() };
+  });
+}
+
+function renderAICards(data) {
+  const container = document.getElementById("couponCardsList");
+  if (!container) return;
+
+  let deals = dealsFromResponse(data);
+  // coupon code wale pehle, bina code wale offers sabse neeche
+  deals = deals.filter((d) => d.code).concat(deals.filter((d) => !d.code));
+  container.replaceChildren();
+
+  if (deals.length === 0) {
+    const empty = document.createElement("div");
+    empty.style.cssText = "text-align:center; padding:20px; color:var(--muted);";
+    empty.textContent = "No live promo codes found right now. Check back soon!";
+    container.appendChild(empty);
+    return;
+  }
+
+  const frag = document.createDocumentFragment();
+
+  const userQuery = (data && data.detectedQuery) || (aiSearchInput ? aiSearchInput.value.trim() : "");
+
+  let noCodeHeaderShown = false;
+  deals.forEach((deal) => {
+    const brandName = String(deal.brand || "Promo Deal");
+    const code = String(deal.code || "").trim();
+    const desc = String(deal.desc || "");
+    const hasCode = !!code;
+
+    if (!hasCode && !noCodeHeaderShown) {
+      noCodeHeaderShown = true;
+      const hdr = document.createElement("div");
+      hdr.style.cssText = "font-size:12px; font-weight:700; letter-spacing:.04em; color:var(--muted); padding:14px 2px 6px; text-transform:uppercase;";
+      hdr.textContent = "Offers that need no code";
+      frag.appendChild(hdr);
+    }
+
+    const matchedStore = findStoreByName(brandName);
+
+    // Link: backend ka final link (product/category page + Amazon tag / Cuelinks) -> warna brand card ka apna link. Google search kabhi nahi.
+    let storeUrl = safeHttpUrl(deal.shopUrl);
+    if (!storeUrl && matchedStore && matchedStore.link) storeUrl = safeHttpUrl(matchedStore.link);
+    if (!storeUrl) storeUrl = safeHttpUrl(getDeepLink(brandName, userQuery));
+    const logoSrc = matchedStore && matchedStore.logo ? matchedStore.logo : null;
+
+    const card = document.createElement("div");
+    card.className = "coupon-card-item";
+
+    const logoBox = document.createElement("div");
+    logoBox.className = "coupon-logo-box";
+    if (logoSrc) {
+      const im = document.createElement("img");
+      im.src = logoSrc; im.alt = brandName; im.loading = "lazy"; im.decoding = "async";
+      im.onerror = () => { im.style.display = "none"; };
+      logoBox.appendChild(im);
+    } else {
+      logoBox.style.cssText = "background:var(--sapphire); color:var(--champagne-bright); font-size:16px; font-weight:800;";
+      logoBox.textContent = initials(brandName);
+    }
+
+    const info = document.createElement("div");
+    info.className = "coupon-card-info";
+
+    const tag = document.createElement("span");
+    tag.className = "coupon-brand-tag";
+    tag.textContent = brandName;
+
+    const badgeWrap = document.createElement("div");
+    const badge = document.createElement("span");
+    badge.className = "coupon-code-badge";
+    badgeWrap.appendChild(badge);
+    if (hasCode) {
+      badge.title = "Click to Copy code";
+      badge.setAttribute("role", "button");
+      badge.tabIndex = 0;
+      badge.textContent = code;
+    } else {
+      badge.textContent = "NO CODE REQUIRED";
+      badge.style.cursor = "default";
+    }
+
+    const descEl = document.createElement("p");
+    descEl.className = "coupon-desc";
+    descEl.textContent = desc;
+
+    info.append(tag, badgeWrap, descEl);
+
+    // Sirf bina code wale bank offers par chhota label
+    if (!hasCode && deal.type === "bank") {
+      const meta = document.createElement("p");
+      meta.style.cssText = "margin:2px 0 0; font-size:11px; color:var(--muted);";
+      meta.textContent = "🏦 Bank / card offer";
+      info.appendChild(meta);
+    }
+
+    card.append(logoBox, info);
+
+    if (storeUrl) {
+      const link = document.createElement("a");
+      link.href = storeUrl;
+      link.target = "_blank";
+      link.rel = (storeUrl.includes("amazon.in") || storeUrl.includes("amzn.to")) ? "noopener noskim" : "noopener";
+      link.className = "coupon-action-btn";
+      link.textContent = hasCode ? "Copy & Shop ↗" : "Shop Now ↗";
+
+      if (hasCode) {
+        link.addEventListener("click", () => {
+          copyText(code).then((ok) => showToast(ok ? `Code ${code} copied! Opening store…` : "Opening store — please copy the code manually.", ok ? "📋" : "⚠️"));
+        });
+      }
+      card.appendChild(link);
+    }
+
+    if (hasCode) {
+      const doCopy = async () => {
+        const ok = await copyText(code);
+        haptic();
+        if (!ok) { showToast("Couldn't copy — please copy the code manually.", "⚠️"); return; }
+        badge.textContent = "COPIED! ✓";
+        badge.style.background = "var(--success)";
+        badge.style.color = "#fff";
+        badge.style.borderColor = "var(--success)";
+        setTimeout(() => {
+          badge.textContent = code;
+          badge.style.background = "";
+          badge.style.color = "";
+          badge.style.borderColor = "";
+        }, 1800);
+        showToast("Code copied!", "📋");
+      };
+      badge.addEventListener("click", doCopy);
+      badge.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); doCopy(); } });
+    }
+
+    frag.appendChild(card);
+  });
+
+  container.appendChild(frag);
+}
+
+// ---------- Offscreen animations pause ----------
+(function pauseOffscreenAnimations() {
+  if (!("IntersectionObserver" in window)) return;
+  document.querySelectorAll(".reward-banner-wrap, .deal-wrap").forEach((wrap) => {
+    wrap.classList.add("anim-paused");
+    new IntersectionObserver((entries) => {
+      entries.forEach((en) => wrap.classList.toggle("anim-paused", !en.isIntersecting));
+    }, { rootMargin: "100px" }).observe(wrap);
+  });
+})();
