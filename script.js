@@ -1376,10 +1376,11 @@ function renderAICards(data) {
 
 // ---------- Offscreen animations pause ----------
 (function pauseOffscreenAnimations() {
-  const wrap = document.querySelector(".reward-banner-wrap");
-  if (!wrap || !("IntersectionObserver" in window)) return;
-  wrap.classList.add("anim-paused");
-  new IntersectionObserver((entries) => {
-    entries.forEach((en) => wrap.classList.toggle("anim-paused", !en.isIntersecting));
-  }, { rootMargin: "100px" }).observe(wrap);
+  if (!("IntersectionObserver" in window)) return;
+  document.querySelectorAll(".reward-banner-wrap, .deal-wrap").forEach((wrap) => {
+    wrap.classList.add("anim-paused");
+    new IntersectionObserver((entries) => {
+      entries.forEach((en) => wrap.classList.toggle("anim-paused", !en.isIntersecting));
+    }, { rootMargin: "100px" }).observe(wrap);
+  });
 })();
