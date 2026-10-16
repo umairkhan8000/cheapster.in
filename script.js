@@ -725,7 +725,7 @@ if (authBtn && window.auth) {
 }
 
 // ---------- GOOGLE APPS SCRIPT MASTER URL ----------
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzKCFsVI77-NmlKO5phtylG4zNdJfjuU7OGph6U0LXMlzD509h5k-Fcl9cMDO-P1aVT/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxw-xN0K6gXdnpQs6uFRM9xOWBvccVIwRowc_nvJyr-Q5X3QXi8zfrrxtms7ka7HC2r/exec"; 
 
 // ---------- Reward Form ----------
 const GIVEAWAY_WHATSAPP_NUMBER = "919762527926";
@@ -991,10 +991,10 @@ const searchCouponBtn = document.getElementById("searchCouponBtn");
 const aiSearchInput = document.getElementById("searchInput");
 
 const loadingNotes = [
-  "Fetching offers for you… this might take a minute.",
-  "Please hold on while we check the latest deals…",
-  "Scanning top shopping sites for the best discounts…",
-  "Matching offers to your product…",
+  "Identifying your product and brand…",
+  "Searching the latest coupons across top shopping sites…",
+  "Checking bank offers and flat discounts…",
+  "Verifying codes against live sources…",
   "Almost there — sorting the best deals for you…"
 ];
 
@@ -1003,7 +1003,7 @@ function getDeepLink(brandName, userQuery) {
   const matchedStore = findStoreByName(brandName);
   
   if (!userQuery) {
-    return matchedStore ? matchedStore.link : `https://www.google.com/search?q=${encodeURIComponent(brandName)}`;
+    return matchedStore ? matchedStore.link : null;
   }
   
   const query = encodeURIComponent(userQuery.trim());
@@ -1017,7 +1017,7 @@ function getDeepLink(brandName, userQuery) {
     nykaa: `https://www.nykaa.com/search/result/?q=${query}`
   };
   
-  return searchUrls[brand] || `https://www.google.com/search?q=${brand}+${query}`; 
+  return searchUrls[brand] || (matchedStore ? matchedStore.link : null);
 }
 
 // --- Image Upload Handler WITH 90% COMPRESSION ---
@@ -1148,6 +1148,7 @@ async function triggerSecureAIHunt() {
     const idToken = await currentUser.getIdToken();  
     const requestBody = { action: "huntCoupons", query: query, idToken: idToken };
 
+    // photo hamesha bhejo: backend pehle Gemini se product + brand + category pehchanta hai
     if (selectedProductBase64) {
       const imgPart = formatGeminiImagePart(selectedProductBase64);
       if (imgPart) requestBody.image = imgPart.inlineData;
@@ -1173,7 +1174,8 @@ async function triggerSecureAIHunt() {
       return;
     }
 
-    renderAICards(data.text || "");
+    if (!query && data.detectedQuery && title) title.textContent = `Coupons for "${data.detectedQuery}"`;
+    renderAICards(data);
 
     // Free memory
     selectedProductBase64 = null;
@@ -1221,16 +1223,42 @@ async function copyText(text) {
   } catch (e) { return false; }
 }
 
-function renderAICards(rawText) {
+// Backend naya "deals" array deta hai; purana text format bhi chalta rahega
+function dealsFromResponse(data) {
+  if (data && Array.isArray(data.deals) && data.deals.length) return data.deals;
+  const text = String((data && data.text) || (typeof data === "string" ? data : "")).replace(/\*/g, "").replace(/`/g, "");
+  return text.split("\n").map((l) => l.trim()).filter((l) => l.length > 0).map((line) => {
+    const m = line.match(/^([^-:]+)[-:]\s*(\S+)\s+(.+)$/);
+    if (!m) return { brand: "Promo Deal", code: "", desc: line };
+    const code = m[2].trim();
+    return { brand: m[1].trim(), code: code === "NOCODE" ? "" : code, desc: m[3].trim() };
+  });
+}
+
+async function sendCouponFeedback(brand, code, worked) {
+  try {
+    if (!currentUser) return false;
+    const idToken = await currentUser.getIdToken();
+    const r = await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify({ action: "couponFeedback", idToken: idToken, brand: brand, code: code, worked: worked })
+    });
+    const d = await r.json();
+    return !d.error;
+  } catch (e) { return false; }
+}
+
+function renderAICards(data) {
   const container = document.getElementById("couponCardsList");
   if (!container) return;
 
-  const cleanText = String(rawText).replace(/\*/g, "").replace(/`/g, "");
-  const lines = cleanText.split("\n").map((l) => l.trim()).filter((l) => l.length > 0);
-
+  let deals = dealsFromResponse(data);
+  // coupon code wale pehle, bina code wale offers sabse neeche
+  deals = deals.filter((d) => d.code).concat(deals.filter((d) => !d.code));
   container.replaceChildren();
 
-  if (lines.length === 0) {
+  if (deals.length === 0) {
     const empty = document.createElement("div");
     empty.style.cssText = "text-align:center; padding:20px; color:var(--muted);";
     empty.textContent = "No live promo codes found right now. Check back soon!";
@@ -1240,23 +1268,42 @@ function renderAICards(rawText) {
 
   const frag = document.createDocumentFragment();
 
-  // Active query to fuel smart deep links
-  const userQuery = aiSearchInput ? aiSearchInput.value.trim() : "";
+  // Kya pehchana gaya (photo ya text se) — user ka bharosa badhata hai
+  const det = data && data.detected;
+  if (det && (det.productBrand || det.product || det.category)) {
+    const bar = document.createElement("div");
+    bar.style.cssText = "font-size:12px; color:var(--muted); padding:4px 2px 10px;";
+    const parts = [];
+    if (det.productBrand) parts.push(det.productBrand);
+    if (det.product) parts.push(det.product);
+    if (det.category) parts.push("in " + det.category);
+    bar.textContent = "🔍 Detected: " + parts.join(" · ");
+    frag.appendChild(bar);
+  }
 
-  lines.forEach((line) => {
-    const match = line.match(/^([^-:]+)[-:]\s*(\S+)\s+(.+)$/);
-    let brandName = "Promo Deal", code = "CLICK2APPLY", desc = line;
-    const hasCode = !!match;
-    if (match) {
-      brandName = match[1].trim();
-      code = match[2].trim();
-      desc = match[3].trim();
+  const userQuery = (data && data.detectedQuery) || (aiSearchInput ? aiSearchInput.value.trim() : "");
+
+  let noCodeHeaderShown = false;
+  deals.forEach((deal) => {
+    const brandName = String(deal.brand || "Promo Deal");
+    const code = String(deal.code || "").trim();
+    const desc = String(deal.desc || "");
+    const hasCode = !!code;
+
+    if (!hasCode && !noCodeHeaderShown) {
+      noCodeHeaderShown = true;
+      const hdr = document.createElement("div");
+      hdr.style.cssText = "font-size:12px; font-weight:700; letter-spacing:.04em; color:var(--muted); padding:14px 2px 6px; text-transform:uppercase;";
+      hdr.textContent = "Offers that need no code";
+      frag.appendChild(hdr);
     }
 
     const matchedStore = findStoreByName(brandName);
-    
-    // SMART LINKING APPLIED HERE
-    const storeUrl = safeHttpUrl(getDeepLink(brandName, userQuery));
+
+    // Link: backend ka final link (product/category page + Amazon tag / Cuelinks) -> warna brand card ka apna link. Google search kabhi nahi.
+    let storeUrl = safeHttpUrl(deal.shopUrl);
+    if (!storeUrl && matchedStore && matchedStore.link) storeUrl = safeHttpUrl(matchedStore.link);
+    if (!storeUrl) storeUrl = safeHttpUrl(getDeepLink(brandName, userQuery));
     const logoSrc = matchedStore && matchedStore.logo ? matchedStore.logo : null;
 
     const card = document.createElement("div");
@@ -1284,17 +1331,57 @@ function renderAICards(rawText) {
     const badgeWrap = document.createElement("div");
     const badge = document.createElement("span");
     badge.className = "coupon-code-badge";
-    badge.title = "Click to Copy code";
-    badge.setAttribute("role", "button");
-    badge.tabIndex = 0;
-    badge.textContent = code;
     badgeWrap.appendChild(badge);
+    if (hasCode) {
+      badge.title = "Click to Copy code";
+      badge.setAttribute("role", "button");
+      badge.tabIndex = 0;
+      badge.textContent = code;
+    } else {
+      badge.textContent = "NO CODE REQUIRED";
+      badge.style.cursor = "default";
+    }
 
     const descEl = document.createElement("p");
     descEl.className = "coupon-desc";
     descEl.textContent = desc;
 
     info.append(tag, badgeWrap, descEl);
+
+    // Trust line: kitni sources / users ne confirm kiya
+    const bits = [];
+    if (!hasCode && deal.type === "bank") bits.push("🏦 Bank / card offer");
+    if (hasCode && deal.sources >= 2) bits.push("✔ Found on " + deal.sources + " sources");
+    else if (hasCode && deal.sources === 1) bits.push("Found on 1 source");
+    if (deal.userOk > 0) bits.push("👍 " + deal.userOk + " user" + (deal.userOk > 1 ? "s" : "") + " confirmed");
+    if (bits.length) {
+      const meta = document.createElement("p");
+      meta.style.cssText = "margin:2px 0 0; font-size:11px; color:var(--muted);";
+      meta.textContent = bits.join(" · ");
+      info.appendChild(meta);
+    }
+
+    // Worked / Didn't work feedback
+    if (hasCode) {
+      const fb = document.createElement("div");
+      fb.style.cssText = "margin-top:6px; display:flex; gap:6px; align-items:center; font-size:11px; color:var(--muted);";
+      const label = document.createElement("span");
+      label.textContent = "Did it work?";
+      const mkBtn = (txt, worked) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = txt;
+        b.style.cssText = "border:1px solid rgba(255,255,255,0.18); background:transparent; color:inherit; border-radius:999px; padding:2px 8px; font-size:11px; cursor:pointer;";
+        b.addEventListener("click", async () => {
+          fb.textContent = "Thanks for the feedback!";
+          sendCouponFeedback(brandName, code, worked);
+        });
+        return b;
+      };
+      fb.append(label, mkBtn("👍 Worked", true), mkBtn("👎 Not working", false));
+      info.appendChild(fb);
+    }
+
     card.append(logoBox, info);
 
     if (storeUrl) {
@@ -1304,7 +1391,7 @@ function renderAICards(rawText) {
       link.rel = (storeUrl.includes("amazon.in") || storeUrl.includes("amzn.to")) ? "noopener noskim" : "noopener";
       link.className = "coupon-action-btn";
       link.textContent = hasCode ? "Copy & Shop ↗" : "Shop Now ↗";
-      
+
       if (hasCode) {
         link.addEventListener("click", () => {
           copyText(code).then((ok) => showToast(ok ? `Code ${code} copied! Opening store…` : "Opening store — please copy the code manually.", ok ? "📋" : "⚠️"));
@@ -1313,24 +1400,26 @@ function renderAICards(rawText) {
       card.appendChild(link);
     }
 
-    const doCopy = async () => {
-      const ok = await copyText(code);
-      haptic();
-      if (!ok) { showToast("Couldn't copy — please copy the code manually.", "⚠️"); return; }
-      badge.textContent = "COPIED! ✓";
-      badge.style.background = "var(--success)";
-      badge.style.color = "#fff";
-      badge.style.borderColor = "var(--success)";
-      setTimeout(() => {
-        badge.textContent = code;
-        badge.style.background = "";
-        badge.style.color = "";
-        badge.style.borderColor = "";
-      }, 1800);
-      showToast("Code copied!", "📋");
-    };
-    badge.addEventListener("click", doCopy);
-    badge.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); doCopy(); } });
+    if (hasCode) {
+      const doCopy = async () => {
+        const ok = await copyText(code);
+        haptic();
+        if (!ok) { showToast("Couldn't copy — please copy the code manually.", "⚠️"); return; }
+        badge.textContent = "COPIED! ✓";
+        badge.style.background = "var(--success)";
+        badge.style.color = "#fff";
+        badge.style.borderColor = "var(--success)";
+        setTimeout(() => {
+          badge.textContent = code;
+          badge.style.background = "";
+          badge.style.color = "";
+          badge.style.borderColor = "";
+        }, 1800);
+        showToast("Code copied!", "📋");
+      };
+      badge.addEventListener("click", doCopy);
+      badge.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); doCopy(); } });
+    }
 
     frag.appendChild(card);
   });
