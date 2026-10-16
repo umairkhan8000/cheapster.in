@@ -863,87 +863,127 @@ if (installBtn && isAndroid) {
   });
 }
 
-// ---------- Promo Banners Carousel (Smooth Infinite Left/Right Loop) ----------
-// --- FIX 3: Carousel Infinite Scroll Jank (iOS/Safari Issue) ---
+// ---------- Promo Banners Carousel (seamless infinite loop) ----------
+// Approach: 5 identical sets [clone][clone][ORIGINAL][clone][clone]. User hamesha beech wale
+// set se shuru karta hai. Loop ka "jump" sirf tab hota hai jab scroll puri tarah ruk jaye
+// (momentum/snap khatam), aur jump exact 1 set ka hota hai -> user ko kabhi glitch nahi dikhta.
 const promoCarousel = document.getElementById('promoCarousel');
 const scrollLeftBtn = document.getElementById('scrollLeftBtn');
 const scrollRightBtn = document.getElementById('scrollRightBtn');
 
 if (promoCarousel) {
   const originalSlides = Array.from(promoCarousel.children);
-  const originalCount = originalSlides.length;
+  const count = originalSlides.length;
   promoCarousel.querySelectorAll("img").forEach((im) => { im.decoding = "async"; });
 
-  // Peeking UI ke liye dono taraf multiple clones add karte hain taaki seamlessly loop ho sake
-  originalSlides.forEach(slide => {
-      promoCarousel.appendChild(slide.cloneNode(true));
-  });
-  originalSlides.slice().reverse().forEach(slide => {
-      promoCarousel.insertBefore(slide.cloneNode(true), promoCarousel.firstChild);
-  });
-
-  const getSetWidth = () => {
-      const slide = promoCarousel.querySelector('.promo-slide');
-      const gap = parseInt(window.getComputedStyle(promoCarousel).gap) || 16;
-      return (slide.clientWidth + gap) * originalCount;
+  // Clones: 2 sets right + 2 sets left (aria-hidden, links tab-order se bahar)
+  const makeClone = (node) => {
+    const c = node.cloneNode(true);
+    c.setAttribute("aria-hidden", "true");
+    c.tabIndex = -1;
+    c.querySelectorAll("img").forEach((im) => { im.removeAttribute("fetchpriority"); });
+    return c;
   };
-
-  // Center wale original set par scroll set karna on load
-  setTimeout(() => {
-      promoCarousel.style.scrollBehavior = 'auto';
-      promoCarousel.scrollLeft = getSetWidth();
-      setTimeout(() => { promoCarousel.style.scrollBehavior = 'smooth'; }, 50);
-  }, 100);
-
-  // Left & Right Buttons
-  if (scrollLeftBtn && scrollRightBtn) {
-      scrollLeftBtn.addEventListener('click', () => { 
-          const jump = promoCarousel.querySelector('.promo-slide').clientWidth + (parseInt(window.getComputedStyle(promoCarousel).gap) || 16);
-          promoCarousel.scrollBy({ left: -jump, behavior: 'smooth' }); 
-      });
-      scrollRightBtn.addEventListener('click', () => { 
-          const jump = promoCarousel.querySelector('.promo-slide').clientWidth + (parseInt(window.getComputedStyle(promoCarousel).gap) || 16);
-          promoCarousel.scrollBy({ left: jump, behavior: 'smooth' }); 
-      });
+  for (let k = 0; k < 2; k++) {
+    originalSlides.forEach((slide) => promoCarousel.appendChild(makeClone(slide)));
+    originalSlides.slice().reverse().forEach((slide) => promoCarousel.insertBefore(makeClone(slide), promoCarousel.firstChild));
   }
 
-  // Infinite Scroll Detection (Bina Jitter Ke)
-  let isResetting = false;
-  const checkLoop = () => {
-      if (isResetting) return;
+  const slides = () => promoCarousel.children;
+  // Exact (sub-pixel safe) distances — clientWidth+gap rounding se drift hota tha
+  const slideStep = () => slides()[1].offsetLeft - slides()[0].offsetLeft;
+  const setWidth = () => slides()[count].offsetLeft - slides()[0].offsetLeft;
 
-      // Agar user extreme left clone set mein enter kar gaya
-      if (promoCarousel.scrollLeft <= 50) {
-          isResetting = true;
-          promoCarousel.style.scrollSnapType = 'none'; // Disable snap temporarily
-          promoCarousel.style.scrollBehavior = 'auto';
-          promoCarousel.scrollLeft += getSetWidth();
-          setTimeout(() => { 
-              promoCarousel.style.scrollBehavior = 'smooth'; 
-              promoCarousel.style.scrollSnapType = 'x mandatory'; // Re-enable snap
-              isResetting = false; 
-          }, 50);
-      } 
-      // Agar user extreme right clone set mein enter kar gaya
-      else if (promoCarousel.scrollLeft >= (promoCarousel.scrollWidth - promoCarousel.clientWidth) - 50) {
-          isResetting = true;
-          promoCarousel.style.scrollSnapType = 'none'; // Disable snap temporarily
-          promoCarousel.style.scrollBehavior = 'auto';
-          promoCarousel.scrollLeft -= getSetWidth();
-          setTimeout(() => { 
-              promoCarousel.style.scrollBehavior = 'smooth'; 
-              promoCarousel.style.scrollSnapType = 'x mandatory'; // Re-enable snap
-              isResetting = false; 
-          }, 50);
-      }
+  const jumpTo = (left) => {
+    promoCarousel.style.scrollSnapType = 'none';
+    promoCarousel.style.scrollBehavior = 'auto';
+    promoCarousel.scrollLeft = left;
+    // 2 frames baad snap + smooth wapas (position already exact snap point par hai)
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      promoCarousel.style.scrollSnapType = '';
+      promoCarousel.style.scrollBehavior = '';
+    }));
   };
 
-  let loopTicking = false;
-  promoCarousel.addEventListener('scroll', () => {
-      if (loopTicking) return;
-      loopTicking = true;
-      requestAnimationFrame(() => { loopTicking = false; checkLoop(); });
-  }, { passive: true });
+  const goToMiddle = () => jumpTo(setWidth() * 2);
+
+  // Beech wale set par start
+  goToMiddle();
+  window.addEventListener("load", goToMiddle, { once: true });
+
+  // Buttons
+  if (scrollLeftBtn) scrollLeftBtn.addEventListener('click', () => promoCarousel.scrollBy({ left: -slideStep(), behavior: 'smooth' }));
+  if (scrollRightBtn) scrollRightBtn.addEventListener('click', () => promoCarousel.scrollBy({ left: slideStep(), behavior: 'smooth' }));
+
+  // Recenter: sirf jab scroll settle ho jaye aur user ungli/mouse se pakad kar na ho
+  let touching = false;
+  let settleTimer = null;
+
+  const recenter = () => {
+    if (touching) return;
+    const w = setWidth();
+    if (!w) return;
+    const k = Math.round(promoCarousel.scrollLeft / w);   // abhi kaunse set mein hain (0..4)
+    if (k !== 2) jumpTo(promoCarousel.scrollLeft + (2 - k) * w);
+  };
+
+  const scheduleRecenter = () => {
+    clearTimeout(settleTimer);
+    settleTimer = setTimeout(recenter, 160);
+  };
+
+  promoCarousel.addEventListener('scroll', scheduleRecenter, { passive: true });
+  if ('onscrollend' in window) promoCarousel.addEventListener('scrollend', recenter, { passive: true });
+
+  promoCarousel.addEventListener('touchstart', () => { touching = true; }, { passive: true });
+  const touchDone = () => { touching = false; scheduleRecenter(); };
+  promoCarousel.addEventListener('touchend', touchDone, { passive: true });
+  promoCarousel.addEventListener('touchcancel', touchDone, { passive: true });
+  promoCarousel.addEventListener('pointerdown', () => { touching = true; }, { passive: true });
+  window.addEventListener('pointerup', () => { if (touching) { touching = false; scheduleRecenter(); } }, { passive: true });
+
+  // ---- Center-focus effect (mobile): beech wala bada, side wale 10% chhote + halke ----
+  const focusMQ = window.matchMedia("(max-width: 768px)");
+  const reduceMQ = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let centers = [], stepPx = 1, padLeft = 0, focusRaf = 0;
+
+  const measureFocus = () => {
+    const list = Array.from(slides());
+    const first = list[0].offsetLeft;
+    padLeft = parseFloat(getComputedStyle(promoCarousel).paddingLeft) || 0;
+    centers = list.map((el) => (el.offsetLeft - first) + padLeft + el.offsetWidth / 2);
+    stepPx = slideStep() || 1;
+  };
+
+  const applyFocus = () => {
+    focusRaf = 0;
+    const list = slides();
+    if (!focusMQ.matches || reduceMQ.matches) {
+      for (let i = 0; i < list.length; i++) { list[i].style.transform = ''; list[i].style.opacity = ''; }
+      return;
+    }
+    const mid = promoCarousel.scrollLeft + promoCarousel.clientWidth / 2;
+    for (let i = 0; i < list.length; i++) {
+      const d = Math.abs(centers[i] - mid) / stepPx;       // 0 = bilkul center, 1 = ek slide door
+      if (d > 1.6) { list[i].style.transform = 'scale(0.9)'; list[i].style.opacity = '0.6'; continue; }
+      const t = Math.min(d, 1);
+      const e = t * t * (3 - 2 * t);                       // smoothstep -> natural easing
+      list[i].style.transform = `scale(${(1 - 0.1 * e).toFixed(4)})`;
+      list[i].style.opacity = (1 - 0.4 * e).toFixed(3);
+    }
+  };
+  const requestFocus = () => { if (!focusRaf) focusRaf = requestAnimationFrame(applyFocus); };
+
+  const refreshFocus = () => { measureFocus(); applyFocus(); };
+  promoCarousel.addEventListener('scroll', requestFocus, { passive: true });
+  window.addEventListener('resize', () => setTimeout(refreshFocus, 200), { passive: true });
+  window.addEventListener('load', refreshFocus, { once: true });
+  if (focusMQ.addEventListener) focusMQ.addEventListener('change', refreshFocus);
+  refreshFocus();
+
+  // Resize / rotate par set width badal jaati hai -> dobara beech mein
+  let resizeTimer;
+  window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(goToMiddle, 150); }, { passive: true });
 }
 
 // =========================================================
