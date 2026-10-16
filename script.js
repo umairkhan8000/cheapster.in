@@ -989,10 +989,26 @@ const uploadLabel = document.querySelector(".upload-img-label");
 const uploadThumb = document.getElementById("uploadThumb");
 const uploadIcon = uploadLabel ? uploadLabel.querySelector("svg") : null;
 let cutTimer;
+let previewObjectUrl = null;
+let uploadToken = 0;
+
+function revokePreviewUrl() {
+  if (previewObjectUrl) { try { URL.revokeObjectURL(previewObjectUrl); } catch (e) {} previewObjectUrl = null; }
+}
+
+if (uploadThumb) {
+  // agar blob preview load na ho (jaise HEIC), to compressed copy se dikhayenge
+  uploadThumb.addEventListener("error", () => {
+    if (!uploadThumb.getAttribute("src")) return;
+    uploadThumb.dataset.broken = "1";
+    if (selectedProductBase64 && uploadThumb.src !== selectedProductBase64) setImagePreview(selectedProductBase64);
+  });
+}
 
 // Preview ab upload icon ke andar hi dikhta hai
 function setImagePreview(dataUrl) {
   if (!uploadLabel || !uploadThumb) return;
+  uploadThumb.dataset.broken = "0";
   uploadThumb.src = dataUrl;
   uploadThumb.hidden = false;
   if (uploadIcon) uploadIcon.style.display = "none";
@@ -1001,6 +1017,8 @@ function setImagePreview(dataUrl) {
 }
 
 function clearImagePreview() {
+  uploadToken++;
+  revokePreviewUrl();
   selectedProductBase64 = null;
   if (productImageInput) productImageInput.value = "";
   clearTimeout(cutTimer);
@@ -1052,10 +1070,17 @@ if (productImageInput) {
 
     if (!file.type.startsWith("image/")) { showToast("Please choose an image file.", "⚠️"); e.target.value = ""; return; }
 
+    // preview turant file se dikhao (compression ka wait nahi)
+    const myToken = ++uploadToken;
+    revokePreviewUrl();
+    try { previewObjectUrl = URL.createObjectURL(file); setImagePreview(previewObjectUrl); } catch (err) {}
+
     const reader = new FileReader();
     reader.onload = () => {
+      if (myToken !== uploadToken) return; // user ne beech me hata diya
       const img = new Image();
       img.onload = () => {
+        if (myToken !== uploadToken) return;
         try {
           const MAX_WIDTH = 800;
           const MAX_HEIGHT = 800;
@@ -1077,18 +1102,21 @@ if (productImageInput) {
           const canvas = document.createElement("canvas");
           canvas.width = width;
           canvas.height = height;
-          canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+          const ctx2d = canvas.getContext("2d");
+          ctx2d.fillStyle = "#ffffff"; // transparent PNG/WebP JPEG me black na ban jaye
+          ctx2d.fillRect(0, 0, width, height);
+          ctx2d.drawImage(img, 0, 0, width, height);
           
           // Quality 0.6 = 60% JPEG Quality -> Greatly reduces 10MB images
           selectedProductBase64 = canvas.toDataURL("image/jpeg", 0.6);
         } catch (err) {
           selectedProductBase64 = reader.result;
         }
-        setImagePreview(selectedProductBase64);
+        if (!uploadThumb || uploadThumb.dataset.broken === "1" || !uploadThumb.getAttribute("src")) setImagePreview(selectedProductBase64);
         showToast("Product image attached! Ready to hunt.", "📸");
         aiSearchInput.focus();
       };
-      img.onerror = () => { selectedProductBase64 = reader.result; setImagePreview(selectedProductBase64); };
+      img.onerror = () => { if (myToken !== uploadToken) return; selectedProductBase64 = reader.result; if (!uploadThumb || uploadThumb.dataset.broken === "1" || !uploadThumb.getAttribute("src")) setImagePreview(selectedProductBase64); };
       img.src = reader.result;
     };
     reader.readAsDataURL(file);
