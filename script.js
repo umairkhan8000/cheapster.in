@@ -520,6 +520,7 @@ function closeModal(id) {
     if (!document.querySelector(".modal-overlay:not([hidden])")) document.body.classList.remove("modal-open");
     if (lastFocusedEl && document.contains(lastFocusedEl)) { try { lastFocusedEl.focus({ preventScroll: true }); } catch (e) {} }
   }
+  if (id === "dealHunterModal") restoreDealCard();
   syncMobileNav();
 
   // Ensure Welcome Modal logic works even on 'X' click
@@ -555,8 +556,9 @@ document.querySelectorAll(".modal-overlay").forEach((overlay) => {
 // Close on Escape key for ALL modals
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
-    const openOverlay = document.querySelector(".modal-overlay:not([hidden])");
-    if (openOverlay) closeModal(openOverlay.id);
+    const openOverlays = document.querySelectorAll(".modal-overlay:not([hidden])");
+    const topOverlay = openOverlays[openOverlays.length - 1];
+    if (topOverlay) closeModal(topOverlay.id);
   }
 });
 
@@ -616,7 +618,10 @@ function syncMobileNav() {
   const nav = document.getElementById("mobileNav");
   if (!nav) return;
   const isOpen = (id) => { const m = document.getElementById(id); return !!(m && !m.hidden); };
-  const active = isOpen("allBrandsModal") ? "mnavDirectory" : isOpen("formModal") ? "mnavReward" : "mnavHome";
+  const active = isOpen("allBrandsModal") ? "mnavDirectory"
+    : isOpen("formModal") ? "mnavReward"
+    : (isOpen("dealHunterModal") || isOpen("couponResultsModal")) ? "mnavDeals"
+    : "mnavHome";
   nav.querySelectorAll(".mnav-item").forEach((b) => {
     const on = b.id === active;
     b.classList.toggle("active", on);
@@ -624,17 +629,25 @@ function syncMobileNav() {
   });
 }
 
-// Login <-> Logout label + icon
-function setMobileAuthUI(loggedIn) {
-  const b = document.getElementById("mnavAuth");
-  if (!b) return;
-  const label = b.querySelector(".mnav-label");
-  const icoIn = b.querySelector(".mnav-ico-in");
-  const icoOut = b.querySelector(".mnav-ico-out");
-  if (label) label.textContent = loggedIn ? "Logout" : "Login";
-  if (icoIn) icoIn.hidden = loggedIn;
-  if (icoOut) icoOut.hidden = !loggedIn;
-  b.setAttribute("aria-label", loggedIn ? "Logout" : "Login");
+// ---- Deals popup: page ka .deal-card (search + photo upload + Find Deals) popup mein shift hota hai ----
+// Same element move hota hai (clone nahi), isliye search, image preview aur saari JS logic waisi hi chalti hai.
+const dealCardEl = document.querySelector(".deal-wrap .deal-card");
+const dealCardHome = dealCardEl ? dealCardEl.parentNode : null;
+
+function openDealPopup() {
+  const slot = document.getElementById("dealPopupSlot");
+  if (dealCardEl && dealCardHome && slot) {
+    dealCardHome.style.minHeight = dealCardHome.offsetHeight + "px"; // peeche page jump na kare
+    slot.appendChild(dealCardEl);
+  }
+  openModal("dealHunterModal");
+}
+
+function restoreDealCard() {
+  if (dealCardEl && dealCardHome && dealCardEl.parentNode !== dealCardHome) {
+    dealCardHome.appendChild(dealCardEl);
+    dealCardHome.style.minHeight = "";
+  }
 }
 
 (function mobileBottomNav() {
@@ -644,6 +657,7 @@ function setMobileAuthUI(loggedIn) {
   const homeBtn = document.getElementById("mnavHome");
   const dirBtn = document.getElementById("mnavDirectory");
   const rewardBtn = document.getElementById("mnavReward");
+  const dealsBtn = document.getElementById("mnavDeals");
 
   if (homeBtn) homeBtn.addEventListener("click", () => {
     haptic();
@@ -654,6 +668,7 @@ function setMobileAuthUI(loggedIn) {
     openModal("allBrandsModal");
   });
   if (rewardBtn) rewardBtn.addEventListener("click", () => openModal("formModal"));
+  if (dealsBtn) dealsBtn.addEventListener("click", openDealPopup);
 
   // Keyboard khulne par bar chhupa do
   const isField = (el) => !!el && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName);
@@ -731,13 +746,6 @@ if (authBtn && window.auth) {
   authBtn.addEventListener("click", handleLogin);
   if (menuLoginBtn) menuLoginBtn.addEventListener("click", handleLogin);
 
-  // Bottom nav: logged out -> login, logged in -> logout (hamburger jaisa hi kaam)
-  const mnavAuth = document.getElementById("mnavAuth");
-  if (mnavAuth) mnavAuth.addEventListener("click", () => {
-    haptic();
-    if (currentUser) window.auth.signOut(); else handleLogin();
-  });
-
   window.auth.getRedirectResult().catch(() => {});
 
   const googleIcon = document.getElementById("googleIcon");
@@ -746,7 +754,6 @@ if (authBtn && window.auth) {
 
   window.auth.onAuthStateChanged((user) => {
       currentUser = user;
-      setMobileAuthUI(!!user);
       if (user) {
         authBtnText.textContent = user.displayName ? user.displayName.split(" ")[0] : "Account";
         authBtn.title = user.displayName || "Signed in";
@@ -783,8 +790,6 @@ if (authBtn && window.auth) {
   const alertNotConfigured = () => showToast("Login isn't configured yet.", "⚠️");
   authBtn.addEventListener("click", alertNotConfigured);
   if (menuLoginBtn) menuLoginBtn.addEventListener("click", alertNotConfigured);
-  const mnavAuthFallback = document.getElementById("mnavAuth");
-  if (mnavAuthFallback) mnavAuthFallback.addEventListener("click", alertNotConfigured);
 }
 
 // ---------- GOOGLE APPS SCRIPT MASTER URL ----------
