@@ -281,7 +281,7 @@ a { color: inherit; text-decoration: none; }
   background: radial-gradient(circle at 85% 0%, rgba(205, 161, 92, 0.20) 0%, transparent 50%), radial-gradient(circle at 8% 100%, rgba(28, 63, 102, 0.55) 0%, transparent 55%), linear-gradient(135deg, rgba(28, 63, 102, 0.78) 0%, rgba(17, 24, 38, 0.98) 62%), var(--obsidian-raised);
   display: grid;
   grid-template-columns: minmax(0, 1fr) 380px;
-  grid-template-rows: 1fr repeat(5, auto) 1fr;
+  grid-template-rows: 1fr repeat(4, auto) 1fr;
   column-gap: 40px;
   align-items: center;
   text-align: left;
@@ -300,11 +300,6 @@ a { color: inherit; text-decoration: none; }
 .deal-card-title span { display: block; margin-top: 6px; background: linear-gradient(135deg, var(--champagne-bright) 0%, var(--champagne) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .deal-card-sub { grid-column: 1; grid-row: 4; max-width: 520px; margin: 12px 0 0; color: var(--muted); font-size: 14px; font-weight: 600; line-height: 1.6; }
 
-.deal-foot { grid-column: 1; grid-row: 6; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line-gold); display: flex; justify-content: flex-start; color: var(--muted); font-size: 12.5px; font-weight: 700; }
-.deal-foot span { padding: 0 14px; }
-.deal-foot span:first-child { padding-left: 0; }
-.deal-foot span + span { border-left: 1px solid var(--line-gold); }
-.deal-foot strong { color: #fff; font-weight: 800; }
 
 /* Perfect Alignment & Centered Search Shell */
 .deal-card .ai-search-shell { 
@@ -425,7 +420,7 @@ a { color: inherit; text-decoration: none; }
 
   /* DEAL HUNTER MOBILE OVERRIDE */
   /* promo codes on the left, chip + title + sub on the right (like Festive Rewards), search + footer full width below */
-  .deal-card { grid-template-columns: minmax(0, 1fr) 118px; grid-template-rows: auto auto 1fr auto auto; column-gap: 10px; align-content: start; align-items: start; text-align: left; padding: 24px 14px 20px; border-radius: 22px; }
+  .deal-card { grid-template-columns: minmax(0, 1fr) 118px; grid-template-rows: auto auto 1fr auto; column-gap: 10px; align-content: start; align-items: start; text-align: left; padding: 24px 14px 20px; border-radius: 22px; }
 
   .deal-promos { grid-column: 2; grid-row: 1 / span 3; width: 118px; height: 178px; align-self: center; }
   .deal-promo { width: 50px; height: 50px; padding: 3px; gap: 3px; border-radius: 11px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(205, 161, 92, 0.25); }
@@ -444,8 +439,6 @@ a { color: inherit; text-decoration: none; }
 
   .deal-card-right { grid-column: 1 / -1; grid-row: 4; max-width: 100%; height: auto; width: 100%; margin-top: 16px; }
 
-  .deal-foot { grid-column: 1 / -1; grid-row: 5; width: 100%; justify-content: center; margin-top: 14px; padding-top: 18px; border-top: 1px solid var(--line-gold); }
-  .deal-foot span:first-child { padding-left: 14px; }
 
   /* SEARCH BOX MAIN CONTAINER */
   .deal-card .ai-search-shell {
