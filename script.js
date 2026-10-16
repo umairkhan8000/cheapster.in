@@ -179,6 +179,10 @@ let searchQuery = "";
 
 const haptic = () => { if (navigator.vibrate) navigator.vibrate(40); };
 
+// Ek time par sirf EK toast: naya aate hi purana turant replace ho jaata hai (list nahi banti)
+let activeToast = null;
+let toastTimer = null;
+
 function showToast(message, icon = "✨") {
   haptic();
   let container = document.getElementById("toastContainer");
@@ -189,14 +193,27 @@ function showToast(message, icon = "✨") {
     document.body.appendChild(container);
   }
 
+  // purana toast + uska timer hata do
+  if (toastTimer) { clearTimeout(toastTimer); toastTimer = null; }
+  if (activeToast) { activeToast.remove(); activeToast = null; }
+  container.replaceChildren();
+
   const toast = document.createElement("div");
   toast.className = "toast-msg";
-  toast.innerHTML = `<span style="font-size:16px;">${icon}</span>${message}`;
+  const iconEl = document.createElement("span");
+  iconEl.style.fontSize = "16px";
+  iconEl.textContent = icon;
+  toast.append(iconEl, document.createTextNode(message));
   container.appendChild(toast);
+  activeToast = toast;
 
-  setTimeout(() => {
+  toastTimer = setTimeout(() => {
     toast.classList.add("toast-exit");
-    toast.addEventListener("animationend", () => toast.remove());
+    toast.addEventListener("animationend", () => {
+      toast.remove();
+      if (activeToast === toast) activeToast = null;
+    }, { once: true });
+    toastTimer = null;
   }, 3500);
 }
 
