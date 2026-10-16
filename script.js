@@ -864,9 +864,6 @@ if (installBtn && isAndroid) {
 }
 
 // ---------- Promo Banners Carousel (seamless infinite loop) ----------
-// Approach: 5 identical sets [clone][clone][ORIGINAL][clone][clone]. User hamesha beech wale
-// set se shuru karta hai. Loop ka "jump" sirf tab hota hai jab scroll puri tarah ruk jaye
-// (momentum/snap khatam), aur jump exact 1 set ka hota hai -> user ko kabhi glitch nahi dikhta.
 const promoCarousel = document.getElementById('promoCarousel');
 const scrollLeftBtn = document.getElementById('scrollLeftBtn');
 const scrollRightBtn = document.getElementById('scrollRightBtn');
@@ -876,7 +873,6 @@ if (promoCarousel) {
   const count = originalSlides.length;
   promoCarousel.querySelectorAll("img").forEach((im) => { im.decoding = "async"; });
 
-  // Clones: 2 sets right + 2 sets left (aria-hidden, links tab-order se bahar)
   const makeClone = (node) => {
     const c = node.cloneNode(true);
     c.setAttribute("aria-hidden", "true");
@@ -890,7 +886,6 @@ if (promoCarousel) {
   }
 
   const slides = () => promoCarousel.children;
-  // Exact (sub-pixel safe) distances — clientWidth+gap rounding se drift hota tha
   const slideStep = () => slides()[1].offsetLeft - slides()[0].offsetLeft;
   const setWidth = () => slides()[count].offsetLeft - slides()[0].offsetLeft;
 
@@ -898,7 +893,6 @@ if (promoCarousel) {
     promoCarousel.style.scrollSnapType = 'none';
     promoCarousel.style.scrollBehavior = 'auto';
     promoCarousel.scrollLeft = left;
-    // 2 frames baad snap + smooth wapas (position already exact snap point par hai)
     requestAnimationFrame(() => requestAnimationFrame(() => {
       promoCarousel.style.scrollSnapType = '';
       promoCarousel.style.scrollBehavior = '';
@@ -907,15 +901,12 @@ if (promoCarousel) {
 
   const goToMiddle = () => jumpTo(setWidth() * 2);
 
-  // Beech wale set par start
   goToMiddle();
   window.addEventListener("load", goToMiddle, { once: true });
 
-  // Buttons
   if (scrollLeftBtn) scrollLeftBtn.addEventListener('click', () => promoCarousel.scrollBy({ left: -slideStep(), behavior: 'smooth' }));
   if (scrollRightBtn) scrollRightBtn.addEventListener('click', () => promoCarousel.scrollBy({ left: slideStep(), behavior: 'smooth' }));
 
-  // Recenter: sirf jab scroll settle ho jaye aur user ungli/mouse se pakad kar na ho
   let touching = false;
   let settleTimer = null;
 
@@ -923,7 +914,7 @@ if (promoCarousel) {
     if (touching) return;
     const w = setWidth();
     if (!w) return;
-    const k = Math.round(promoCarousel.scrollLeft / w);   // abhi kaunse set mein hain (0..4)
+    const k = Math.round(promoCarousel.scrollLeft / w);  
     if (k !== 2) jumpTo(promoCarousel.scrollLeft + (2 - k) * w);
   };
 
@@ -942,7 +933,6 @@ if (promoCarousel) {
   promoCarousel.addEventListener('pointerdown', () => { touching = true; }, { passive: true });
   window.addEventListener('pointerup', () => { if (touching) { touching = false; scheduleRecenter(); } }, { passive: true });
 
-  // ---- Center-focus effect (mobile): beech wala bada, side wale 10% chhote + halke ----
   const focusMQ = window.matchMedia("(max-width: 768px)");
   const reduceMQ = window.matchMedia("(prefers-reduced-motion: reduce)");
   let centers = [], stepPx = 1, padLeft = 0, focusRaf = 0;
@@ -964,10 +954,10 @@ if (promoCarousel) {
     }
     const mid = promoCarousel.scrollLeft + promoCarousel.clientWidth / 2;
     for (let i = 0; i < list.length; i++) {
-      const d = Math.abs(centers[i] - mid) / stepPx;       // 0 = bilkul center, 1 = ek slide door
+      const d = Math.abs(centers[i] - mid) / stepPx;       
       if (d > 1.6) { list[i].style.transform = 'scale(0.9)'; list[i].style.opacity = '0.6'; continue; }
       const t = Math.min(d, 1);
-      const e = t * t * (3 - 2 * t);                       // smoothstep -> natural easing
+      const e = t * t * (3 - 2 * t);                       
       list[i].style.transform = `scale(${(1 - 0.1 * e).toFixed(4)})`;
       list[i].style.opacity = (1 - 0.4 * e).toFixed(3);
     }
@@ -981,13 +971,12 @@ if (promoCarousel) {
   if (focusMQ.addEventListener) focusMQ.addEventListener('change', refreshFocus);
   refreshFocus();
 
-  // Resize / rotate par set width badal jaati hai -> dobara beech mein
   let resizeTimer;
   window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(goToMiddle, 150); }, { passive: true });
 }
 
 // =========================================================
-// GEMINI AI COUPON HUNTER (Upgraded with Live Search & Smart Errors)
+// GEMINI AI COUPON HUNTER (Upgraded with Smart Links & Compression)
 // =========================================================
 
 let selectedProductBase64 = null;
@@ -1009,7 +998,29 @@ const loadingNotes = [
   "Almost there — sorting the best deals for you…"
 ];
 
-// --- Image Upload Handler ---
+// --- ADVANCED SMART DEEP LINKING (Category Redirect) ---
+function getDeepLink(brandName, userQuery) {
+  const matchedStore = findStoreByName(brandName);
+  
+  if (!userQuery) {
+    return matchedStore ? matchedStore.link : `https://www.google.com/search?q=${encodeURIComponent(brandName)}`;
+  }
+  
+  const query = encodeURIComponent(userQuery.trim());
+  const brand = brandName.toLowerCase();
+  
+  const searchUrls = {
+    myntra: `https://www.myntra.com/${query}`,
+    flipkart: `https://www.flipkart.com/search?q=${query}`,
+    amazon: `https://www.amazon.in/s?k=${query}`,
+    ajio: `https://www.ajio.com/search/?text=${query}`,
+    nykaa: `https://www.nykaa.com/search/result/?q=${query}`
+  };
+  
+  return searchUrls[brand] || `https://www.google.com/search?q=${brand}+${query}`; 
+}
+
+// --- Image Upload Handler WITH 90% COMPRESSION ---
 if (productImageInput) {
   productImageInput.addEventListener("change", (e) => {
     const file = e.target.files[0];
@@ -1019,17 +1030,33 @@ if (productImageInput) {
 
     const reader = new FileReader();
     reader.onload = () => {
-      // Badi phone photo ko chhota (max 1024px JPEG) karke bhejte hain -> fast + backend limit safe
       const img = new Image();
       img.onload = () => {
         try {
-          const max = 1024;
-          const scale = Math.min(1, max / Math.max(img.width, img.height));
+          const MAX_WIDTH = 800;
+          const MAX_HEIGHT = 800;
+          let width = img.width;
+          let height = img.height;
+          
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height = Math.round(height * (MAX_WIDTH / width));
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width = Math.round(width * (MAX_HEIGHT / height));
+              height = MAX_HEIGHT;
+            }
+          }
+          
           const canvas = document.createElement("canvas");
-          canvas.width = Math.round(img.width * scale);
-          canvas.height = Math.round(img.height * scale);
-          canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
-          selectedProductBase64 = canvas.toDataURL("image/jpeg", 0.82);
+          canvas.width = width;
+          canvas.height = height;
+          canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+          
+          // Quality 0.6 = 60% JPEG Quality -> Greatly reduces 10MB images
+          selectedProductBase64 = canvas.toDataURL("image/jpeg", 0.6);
         } catch (err) {
           selectedProductBase64 = reader.result;
         }
@@ -1081,13 +1108,12 @@ async function triggerSecureAIHunt() {
     return;
   }
 
-  // Deal Hunter sirf logged-in users ke liye (reward form jaisa hi simple toast)
+  // Deal Hunter sirf logged-in users ke liye
   if (!currentUser) {
     showToast("Please login with Google first.", "🔒");
     return;
   }
 
-  // Double-tap / spam se bachao (AI request mehngi hoti hai)
   if (huntInFlight) return;
   if (Date.now() - lastHuntAt < 4000) { showToast("Please wait a few seconds before searching again.", "⏳"); return; }
   huntInFlight = true;
@@ -1106,7 +1132,6 @@ async function triggerSecureAIHunt() {
   if (container) container.innerHTML = "";
   if (title) title.textContent = query ? `Coupons for "${query}"` : "Coupons for Uploaded Image";
 
-  // Start Rotating Notes
   if (animText) {
     let noteIndex = 0;
     animText.textContent = loadingNotes[0];
@@ -1120,8 +1145,7 @@ async function triggerSecureAIHunt() {
   }
 
   try {
-    // Server ko sirf query + optional image bhejte hain (prompt/payload server par hai)
-    const idToken = await currentUser.getIdToken();   // server isse verify karta hai
+    const idToken = await currentUser.getIdToken();  
     const requestBody = { action: "huntCoupons", query: query, idToken: idToken };
 
     if (selectedProductBase64) {
@@ -1154,7 +1178,7 @@ async function triggerSecureAIHunt() {
     // Free memory
     selectedProductBase64 = null;
     productImageInput.value = "";
-    imagePreviewBadge.hidden = true;
+    if (imagePreviewBadge) imagePreviewBadge.hidden = true;
 
   } catch (err) {
     console.error("AI Hunter Error:", err);
@@ -1169,7 +1193,6 @@ async function triggerSecureAIHunt() {
   }
 }
 
-// --- Render AI Results (safe: koi bhi AI text HTML ki tarah execute nahi hota) ---
 function safeHttpUrl(url) {
   try {
     const u = new URL(url, location.href);
@@ -1217,6 +1240,9 @@ function renderAICards(rawText) {
 
   const frag = document.createDocumentFragment();
 
+  // Active query to fuel smart deep links
+  const userQuery = aiSearchInput ? aiSearchInput.value.trim() : "";
+
   lines.forEach((line) => {
     const match = line.match(/^([^-:]+)[-:]\s*(\S+)\s+(.+)$/);
     let brandName = "Promo Deal", code = "CLICK2APPLY", desc = line;
@@ -1228,7 +1254,9 @@ function renderAICards(rawText) {
     }
 
     const matchedStore = findStoreByName(brandName);
-    const storeUrl = safeHttpUrl(matchedStore ? matchedStore.link : `https://www.google.com/search?q=${encodeURIComponent(brandName + " store")}`);
+    
+    // SMART LINKING APPLIED HERE
+    const storeUrl = safeHttpUrl(getDeepLink(brandName, userQuery));
     const logoSrc = matchedStore && matchedStore.logo ? matchedStore.logo : null;
 
     const card = document.createElement("div");
@@ -1276,7 +1304,7 @@ function renderAICards(rawText) {
       link.rel = (storeUrl.includes("amazon.in") || storeUrl.includes("amzn.to")) ? "noopener noskim" : "noopener";
       link.className = "coupon-action-btn";
       link.textContent = hasCode ? "Copy & Shop ↗" : "Shop Now ↗";
-      // Copy & Shop: pehle code copy, phir link khud naye tab mein khulta hai (popup block nahi hota)
+      
       if (hasCode) {
         link.addEventListener("click", () => {
           copyText(code).then((ok) => showToast(ok ? `Code ${code} copied! Opening store…` : "Opening store — please copy the code manually.", ok ? "📋" : "⚠️"));
@@ -1310,7 +1338,7 @@ function renderAICards(rawText) {
   container.appendChild(frag);
 }
 
-// ---------- Offscreen animations pause (reward banner floating logos) ----------
+// ---------- Offscreen animations pause ----------
 (function pauseOffscreenAnimations() {
   const wrap = document.querySelector(".reward-banner-wrap");
   if (!wrap || !("IntersectionObserver" in window)) return;
