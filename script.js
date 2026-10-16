@@ -509,6 +509,7 @@ function openModal(id) {
     const dlg = modal.querySelector(".modal");
     if (dlg) { dlg.setAttribute("tabindex", "-1"); try { dlg.focus({ preventScroll: true }); } catch (e) {} }
   }
+  syncMobileNav();
 }
 
 function closeModal(id) {
@@ -519,6 +520,7 @@ function closeModal(id) {
     if (!document.querySelector(".modal-overlay:not([hidden])")) document.body.classList.remove("modal-open");
     if (lastFocusedEl && document.contains(lastFocusedEl)) { try { lastFocusedEl.focus({ preventScroll: true }); } catch (e) {} }
   }
+  syncMobileNav();
 
   // Ensure Welcome Modal logic works even on 'X' click
   if (id === "welcomeModal") {
@@ -609,6 +611,56 @@ document.querySelectorAll("[data-open-all-brands]").forEach((btn) => {
   });
 });
 
+// ---------- Mobile bottom nav (phones) ----------
+function syncMobileNav() {
+  const nav = document.getElementById("mobileNav");
+  if (!nav) return;
+  const isOpen = (id) => { const m = document.getElementById(id); return !!(m && !m.hidden); };
+  const active = isOpen("allBrandsModal") ? "mnavDirectory" : isOpen("formModal") ? "mnavReward" : "mnavHome";
+  nav.querySelectorAll(".mnav-item").forEach((b) => {
+    const on = b.id === active;
+    b.classList.toggle("active", on);
+    if (on) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current");
+  });
+}
+
+// Login <-> Logout label + icon
+function setMobileAuthUI(loggedIn) {
+  const b = document.getElementById("mnavAuth");
+  if (!b) return;
+  const label = b.querySelector(".mnav-label");
+  const icoIn = b.querySelector(".mnav-ico-in");
+  const icoOut = b.querySelector(".mnav-ico-out");
+  if (label) label.textContent = loggedIn ? "Logout" : "Login";
+  if (icoIn) icoIn.hidden = loggedIn;
+  if (icoOut) icoOut.hidden = !loggedIn;
+  b.setAttribute("aria-label", loggedIn ? "Logout" : "Login");
+}
+
+(function mobileBottomNav() {
+  const nav = document.getElementById("mobileNav");
+  if (!nav) return;
+
+  const homeBtn = document.getElementById("mnavHome");
+  const dirBtn = document.getElementById("mnavDirectory");
+  const rewardBtn = document.getElementById("mnavReward");
+
+  if (homeBtn) homeBtn.addEventListener("click", () => {
+    haptic();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  if (dirBtn) dirBtn.addEventListener("click", () => {
+    buildAllBrandsList();
+    openModal("allBrandsModal");
+  });
+  if (rewardBtn) rewardBtn.addEventListener("click", () => openModal("formModal"));
+
+  // Keyboard khulne par bar chhupa do
+  const isField = (el) => !!el && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName);
+  document.addEventListener("focusin", (e) => { if (isField(e.target)) document.body.classList.add("kb-open"); });
+  document.addEventListener("focusout", () => document.body.classList.remove("kb-open"));
+})();
+
 if (allBrandsSearch) {
   allBrandsSearch.addEventListener("input", debounce((e) => {
     const q = e.target.value.toLowerCase().trim();
@@ -678,6 +730,14 @@ if (authBtn && window.auth) {
 
   authBtn.addEventListener("click", handleLogin);
   if (menuLoginBtn) menuLoginBtn.addEventListener("click", handleLogin);
+
+  // Bottom nav: logged out -> login, logged in -> logout (hamburger jaisa hi kaam)
+  const mnavAuth = document.getElementById("mnavAuth");
+  if (mnavAuth) mnavAuth.addEventListener("click", () => {
+    haptic();
+    if (currentUser) window.auth.signOut(); else handleLogin();
+  });
+
   window.auth.getRedirectResult().catch(() => {});
 
   const googleIcon = document.getElementById("googleIcon");
@@ -686,6 +746,7 @@ if (authBtn && window.auth) {
 
   window.auth.onAuthStateChanged((user) => {
       currentUser = user;
+      setMobileAuthUI(!!user);
       if (user) {
         authBtnText.textContent = user.displayName ? user.displayName.split(" ")[0] : "Account";
         authBtn.title = user.displayName || "Signed in";
@@ -722,6 +783,8 @@ if (authBtn && window.auth) {
   const alertNotConfigured = () => showToast("Login isn't configured yet.", "⚠️");
   authBtn.addEventListener("click", alertNotConfigured);
   if (menuLoginBtn) menuLoginBtn.addEventListener("click", alertNotConfigured);
+  const mnavAuthFallback = document.getElementById("mnavAuth");
+  if (mnavAuthFallback) mnavAuthFallback.addEventListener("click", alertNotConfigured);
 }
 
 // ---------- GOOGLE APPS SCRIPT MASTER URL ----------
