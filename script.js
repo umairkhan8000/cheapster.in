@@ -1084,7 +1084,6 @@ async function triggerSecureAIHunt() {
   // Deal Hunter sirf logged-in users ke liye (reward form jaisa hi simple toast)
   if (!currentUser) {
     showToast("Please login with Google first.", "🔒");
-    if (authBtn && window.auth) authBtn.click();
     return;
   }
 
@@ -1221,6 +1220,7 @@ function renderAICards(rawText) {
   lines.forEach((line) => {
     const match = line.match(/^([^-:]+)[-:]\s*(\S+)\s+(.+)$/);
     let brandName = "Promo Deal", code = "CLICK2APPLY", desc = line;
+    const hasCode = !!match;
     if (match) {
       brandName = match[1].trim();
       code = match[2].trim();
@@ -1275,7 +1275,13 @@ function renderAICards(rawText) {
       link.target = "_blank";
       link.rel = (storeUrl.includes("amazon.in") || storeUrl.includes("amzn.to")) ? "noopener noskim" : "noopener";
       link.className = "coupon-action-btn";
-      link.textContent = "Shop Now ↗";
+      link.textContent = hasCode ? "Copy & Shop ↗" : "Shop Now ↗";
+      // Copy & Shop: pehle code copy, phir link khud naye tab mein khulta hai (popup block nahi hota)
+      if (hasCode) {
+        link.addEventListener("click", () => {
+          copyText(code).then((ok) => showToast(ok ? `Code ${code} copied! Opening store…` : "Opening store — please copy the code manually.", ok ? "📋" : "⚠️"));
+        });
+      }
       card.appendChild(link);
     }
 
