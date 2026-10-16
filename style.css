@@ -601,3 +601,9 @@ hr { border-color: var(--line-gold) !important; }
 .footer-affiliate-note { margin: 12px 0 0 !important; font-size: 12.5px !important; font-weight: 700 !important; color: var(--champagne-bright) !important; }
 .cat-pill:focus-visible, .see-all-btn:focus-visible, .btn:focus-visible, .coupon-code-badge:focus-visible { outline: 2px solid var(--champagne-bright); outline-offset: 2px; }
 .btn:disabled { opacity: .65; cursor: not-allowed; transform: none; }
+
+
+/* Carousel center-focus (mobile): scale/opacity JS se scroll ke saath chalta hai */
+@media (max-width: 768px) {
+  .promo-slide { transform-origin: center center; will-change: transform, opacity; backface-visibility: hidden; transition: border-color .25s ease; }
+}
