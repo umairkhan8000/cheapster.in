@@ -607,3 +607,12 @@ hr { border-color: var(--line-gold) !important; }
 @media (max-width: 768px) {
   .promo-slide { transform-origin: center center; will-change: transform, opacity; backface-visibility: hidden; transition: border-color .25s ease; }
 }
+
+
+/* Promo cards: logo + text upar, full-width button neeche (code crop nahi hoga) */
+.coupon-card-item { display: grid; grid-template-columns: 52px minmax(0, 1fr); grid-template-areas: "logo info" "btn btn"; align-items: start; column-gap: 14px; row-gap: 12px; padding: 14px; }
+.coupon-card-item .coupon-logo-box { grid-area: logo; width: 52px; height: 52px; }
+.coupon-card-item .coupon-card-info { grid-area: info; min-width: 0; overflow: visible; }
+.coupon-card-item .coupon-action-btn { grid-area: btn; width: 100%; justify-content: center; padding: 12px 16px; font-size: 13px; }
+.coupon-card-item .coupon-code-badge { max-width: 100%; white-space: normal; overflow-wrap: anywhere; word-break: break-word; line-height: 1.35; }
+.coupon-card-item .coupon-desc { overflow-wrap: anywhere; }
