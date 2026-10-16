@@ -279,26 +279,28 @@ a { color: inherit; text-decoration: none; }
   padding: 44px 56px; 
   border-radius: 28px; 
   background: radial-gradient(circle at 85% 0%, rgba(205, 161, 92, 0.20) 0%, transparent 50%), radial-gradient(circle at 8% 100%, rgba(28, 63, 102, 0.55) 0%, transparent 55%), linear-gradient(135deg, rgba(28, 63, 102, 0.78) 0%, rgba(17, 24, 38, 0.98) 62%), var(--obsidian-raised);
-  display: flex;
+  display: grid;
+  grid-template-columns: 380px minmax(0, 1fr);
+  grid-template-rows: 1fr repeat(5, auto) 1fr;
+  column-gap: 40px;
   align-items: center;
-  justify-content: space-between;
-  gap: 40px;
   text-align: left;
-  border: 1px solid var(--line-gold); 
+  border: 1px solid var(--line-gold);
   box-shadow: 0 28px 64px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(236, 205, 143, 0.14);
   position: relative;
   overflow: hidden;
 }
 .deal-card::before { content: ""; position: absolute; top: -1px; left: 12%; right: 12%; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne-bright), transparent); }
-.deal-card-left { flex: 1; max-width: 520px; z-index: 2; position: relative; }
-.deal-card-right { flex: 1; max-width: 560px; width: 100%; z-index: 2; position: relative; display: flex; align-items: center; }
+/* Left column = floating promo codes; right column = chip, title, sub, search, footer (stacked) */
+.deal-card-left { display: contents; }
+.deal-card-right { grid-column: 2; grid-row: 5; width: 100%; max-width: 560px; margin-top: 24px; z-index: 2; position: relative; display: flex; align-items: center; }
 
-.deal-chip { margin: 0; }
-.deal-card-title { margin: 18px 0 0; font-family: 'Manrope', 'DM Sans', sans-serif; font-size: clamp(30px, 4.4vw, 46px); font-weight: 800; line-height: 1.1; letter-spacing: -0.8px; color: #fff; }
+.deal-chip { grid-column: 2; grid-row: 2; justify-self: start; margin: 0; }
+.deal-card-title { grid-column: 2; grid-row: 3; margin: 18px 0 0; font-family: 'Manrope', 'DM Sans', sans-serif; font-size: clamp(24px, 2.9vw, 34px); font-weight: 800; line-height: 1.12; letter-spacing: -0.6px; color: #fff; }
 .deal-card-title span { display: block; margin-top: 6px; background: linear-gradient(135deg, var(--champagne-bright) 0%, var(--champagne) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.deal-card-sub { max-width: 100%; margin: 14px 0 0; color: var(--muted); font-size: 15px; font-weight: 600; line-height: 1.6; }
+.deal-card-sub { grid-column: 2; grid-row: 4; max-width: 520px; margin: 12px 0 0; color: var(--muted); font-size: 14px; font-weight: 600; line-height: 1.6; }
 
-.deal-foot { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line-gold); display: flex; justify-content: flex-start; color: var(--muted); font-size: 12.5px; font-weight: 700; }
+.deal-foot { grid-column: 2; grid-row: 6; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line-gold); display: flex; justify-content: flex-start; color: var(--muted); font-size: 12.5px; font-weight: 700; }
 .deal-foot span { padding: 0 14px; }
 .deal-foot span:first-child { padding-left: 0; }
 .deal-foot span + span { border-left: 1px solid var(--line-gold); }
@@ -342,6 +344,29 @@ a { color: inherit; text-decoration: none; }
 }
 .upload-img-label:hover { background: rgba(205, 161, 92, 0.15); border-color: var(--champagne); }
 .deal-card .btn-hunt-coupons { height: 48px; padding: 0 24px; font-size: 14px; font-weight: 800; border-radius: 100px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+/* ===== Floating promo codes (same size + float animation as Festive Rewards icons) ===== */
+.deal-promos { grid-column: 1; grid-row: 1 / -1; align-self: center; position: relative; z-index: 1; width: 380px; height: 350px; }
+.deal-promo { position: absolute; width: 112px; height: 112px; padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; background: #fff; color: #14100a; border-radius: 26px; box-shadow: 0 18px 38px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(205, 161, 92, 0.25); transform: rotate(var(--r)); animation: rewardFloat 6s ease-in-out infinite; will-change: transform; text-align: center; }
+.deal-promo::before { content: ""; position: absolute; inset: 7px; border: 1.5px dashed var(--champagne); border-radius: 19px; pointer-events: none; }
+.deal-promo small { font-size: 9px; font-weight: 800; letter-spacing: 1.6px; color: #a8792f; }
+.deal-promo b { font-family: 'Manrope', 'DM Sans', sans-serif; font-size: 16px; font-weight: 800; letter-spacing: 0.4px; line-height: 1; color: #14100a; }
+.dp-1 { --r: -7deg; top: 0; left: 20px; }
+.dp-2 { --r: 5deg; top: 30px; left: 214px; animation-delay: -1.5s; }
+.dp-3 { --r: -4deg; top: 122px; left: 0; animation-delay: -3s; }
+.dp-4 { --r: 7deg; top: 152px; left: 190px; animation-delay: -4.5s; }
+.dp-5 { --r: -5deg; top: 238px; left: 80px; animation-delay: -6s; }
+.deal-wrap.anim-paused .deal-promo { animation-play-state: paused; }
+
+/* Tablet: shrink the promo column so text still fits */
+@media (min-width: 769px) and (max-width: 1000px) {
+  .deal-card { grid-template-columns: 252px minmax(0, 1fr); column-gap: 24px; padding: 36px 32px; }
+  .deal-promos { zoom: 0.66; }
+}
+
+/* Welcome popup: no outer frame, only the banner */
+.premium-modal.welcome-modal { padding: 0; background: transparent; border: none; box-shadow: none; border-radius: 0; }
+.welcome-modal .modal-close { z-index: 5; }
 
 /* ===== Ultra-smooth scrolling inside popups ===== */
 .modal-overlay { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(4, 6, 10, 0.88); overscroll-behavior: contain; }
@@ -394,16 +419,27 @@ a { color: inherit; text-decoration: none; }
   .rl-4 { top: 68px; left: 56px; }
 
   /* DEAL HUNTER MOBILE OVERRIDE */
-  .deal-card { flex-direction: column; text-align: center; padding: 28px 16px 20px; border-radius: 22px; gap: 16px; display: flex; }
-  .deal-card-left { display: contents; }
+  /* promo codes on the left, chip + title + sub on the right (like Festive Rewards), search + footer full width below */
+  .deal-card { grid-template-columns: 118px minmax(0, 1fr); grid-template-rows: auto auto 1fr auto auto; column-gap: 10px; align-content: start; align-items: start; text-align: left; padding: 24px 14px 20px; border-radius: 22px; }
 
-  .deal-chip { margin: 0 auto; order: 1; }
-  .deal-card-title { font-size: clamp(24px, 5vw, 32px); margin-top: 10px; order: 2; }
-  .deal-card-sub { margin: 10px auto 0; font-size: 13.5px; order: 3; }
+  .deal-promos { grid-column: 1; grid-row: 1 / span 3; width: 118px; height: 178px; align-self: center; }
+  .deal-promo { width: 50px; height: 50px; padding: 3px; gap: 0; border-radius: 11px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(205, 161, 92, 0.25); }
+  .deal-promo::before { inset: 3px; border-width: 1px; border-radius: 8px; }
+  .deal-promo small { display: none; }
+  .deal-promo b { font-size: 8.5px; letter-spacing: 0; }
+  .dp-1 { top: 0; left: 4px; }
+  .dp-2 { top: 16px; left: 62px; }
+  .dp-3 { top: 58px; left: 0; }
+  .dp-4 { top: 76px; left: 60px; }
+  .dp-5 { top: 126px; left: 30px; }
 
-  .deal-card-right { max-width: 100%; height: auto; order: 4; width: 100%; }
+  .deal-chip { grid-column: 2; grid-row: 1; justify-self: start; align-self: start; padding: 5px 10px; font-size: 9px; letter-spacing: 1.1px; gap: 6px; }
+  .deal-card-title { grid-column: 2; grid-row: 2; font-size: 19px; line-height: 1.15; margin-top: 10px; letter-spacing: -0.3px; }
+  .deal-card-sub { grid-column: 2; grid-row: 3; margin: 8px 0 0; font-size: 11.5px; line-height: 1.5; }
 
-  .deal-foot { order: 5; width: 100%; justify-content: center; margin-top: 14px; padding-top: 18px; border-top: 1px solid var(--line-gold); }
+  .deal-card-right { grid-column: 1 / -1; grid-row: 4; max-width: 100%; height: auto; width: 100%; margin-top: 16px; }
+
+  .deal-foot { grid-column: 1 / -1; grid-row: 5; width: 100%; justify-content: center; margin-top: 14px; padding-top: 18px; border-top: 1px solid var(--line-gold); }
   .deal-foot span:first-child { padding-left: 14px; }
 
   /* SEARCH BOX MAIN CONTAINER */
