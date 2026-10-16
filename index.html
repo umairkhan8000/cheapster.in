@@ -152,26 +152,58 @@
       </div>
     </section>
 
-    <!-- IN-PAGE REWARD BANNER -->
-    <div class="reward-banner-wrap">
-      <div class="reward-banner">
-        <div class="reward-copy">
-          <span class="reward-chip"><span class="pulse-dot"></span>FESTIVE REWARDS</span>
-          <h2 class="reward-title">1000+ lucky winners.<span>50% Cashback</span></h2>
-          <p class="reward-sub">100% free entry. No purchase necessary.</p>
-          <button type="button" class="btn reward-btn" id="bannerClaimBtn">
-            <span style="font-size: 18px; margin-right: 4px;">🎁</span>
-            <span>Claim Reward</span>
-          </button>
+    <!-- DEAL HUNTER (Wide Split Layout) -->
+    <section class="deal-wrap" aria-label="Deal Hunter">
+      <div class="deal-card">
+      
+        <!-- Left Side: Content & Footer -->
+        <div class="deal-card-left">
+          <span class="reward-chip deal-chip"><span class="pulse-dot"></span>DEAL HUNTER</span>
+          <h2 class="deal-card-title">Find coupons and offers<span>for any product</span></h2>
+          <p class="deal-card-sub">Search a product, or upload its photo. We hunt the best live coupon codes for you.</p>
+          <div class="deal-foot">
+            <span><strong id="heroStoreCount">0</strong> trending shopping sites</span>
+            <span>One secure portal</span>
+          </div>
         </div>
-        <div class="reward-logos" aria-hidden="true">
-          <div class="reward-logo rl-1"><img src="hd-logos/amazon.png" alt=""></div>
-          <div class="reward-logo rl-2"><img src="hd-logos/flipkart.png" alt=""></div>
-          <div class="reward-logo rl-3"><img src="hd-logos/myntra.png" alt=""></div>
-          <div class="reward-logo rl-4"><img src="hd-logos/nykaa.png" alt=""></div>
+
+        <!-- Right Side: Search & AI Elements -->
+        <div class="deal-card-right">
+          <div class="search-shell ai-search-shell">
+            <span class="search-leading" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2">
+                <circle cx="10.8" cy="10.8" r="6.8"></circle>
+                <path d="M16 16L21 21"></path>
+              </svg>
+            </span>
+
+            <input id="searchInput" class="search-input" type="text" autocomplete="off" placeholder="Search products, category..." aria-label="Search product coupons">
+
+            <div id="imagePreviewBadge" class="img-preview-badge" hidden>
+              <span class="preview-text">📷</span>
+              <button type="button" id="removeImgBtn" aria-label="Remove image">×</button>
+            </div>
+
+            <div class="search-actions-group">
+              <label for="productImageInput" class="upload-img-label" title="Upload Product Image">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="4" ry="4"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+              </label>
+              <input type="file" id="productImageInput" accept="image/*" style="display: none;">
+
+              <button type="button" id="searchCouponBtn" class="btn btn-gold btn-hunt-coupons">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#14100a" stroke-width="2" style="margin-right: 4px;"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="M16 16L21 21"></path></svg>
+                <span>Find Deals</span>
+              </button>
+            </div>
+          </div>
         </div>
+
       </div>
-    </div>
+    </section>
 
     <!-- DIRECTORY GRID -->
     <section class="directory-section reveal-on-scroll" id="directory">
@@ -208,58 +240,26 @@
     </section>
   </main>
 
-  <!-- DEAL HUNTER (Wide Split Layout) -->
-  <section class="deal-wrap" aria-label="Deal Hunter">
-    <div class="deal-card">
-      
-      <!-- Left Side: Content & Footer -->
-      <div class="deal-card-left">
-        <span class="reward-chip deal-chip"><span class="pulse-dot"></span>DEAL HUNTER</span>
-        <h2 class="deal-card-title">Find coupons and offers<span>for any product</span></h2>
-        <p class="deal-card-sub">Search a product, or upload its photo. We hunt the best live coupon codes for you.</p>
-        <div class="deal-foot">
-          <span><strong id="heroStoreCount">0</strong> trending shopping sites</span>
-          <span>One secure portal</span>
-        </div>
+  <!-- IN-PAGE REWARD BANNER -->
+  <div class="reward-banner-wrap">
+    <div class="reward-banner">
+      <div class="reward-copy">
+        <span class="reward-chip"><span class="pulse-dot"></span>FESTIVE REWARDS</span>
+        <h2 class="reward-title">1000+ lucky winners.<span>50% Cashback</span></h2>
+        <p class="reward-sub">100% free entry. No purchase necessary.</p>
+        <button type="button" class="btn reward-btn" id="bannerClaimBtn">
+          <span style="font-size: 18px; margin-right: 4px;">🎁</span>
+          <span>Claim Reward</span>
+        </button>
       </div>
-
-      <!-- Right Side: Search & AI Elements -->
-      <div class="deal-card-right">
-        <div class="search-shell ai-search-shell">
-          <span class="search-leading" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2">
-              <circle cx="10.8" cy="10.8" r="6.8"></circle>
-              <path d="M16 16L21 21"></path>
-            </svg>
-          </span>
-
-          <input id="searchInput" class="search-input" type="text" autocomplete="off" placeholder="Search products, category..." aria-label="Search product coupons">
-
-          <div id="imagePreviewBadge" class="img-preview-badge" hidden>
-            <span class="preview-text">📷</span>
-            <button type="button" id="removeImgBtn" aria-label="Remove image">×</button>
-          </div>
-
-          <div class="search-actions-group">
-            <label for="productImageInput" class="upload-img-label" title="Upload Product Image">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="18" height="18" rx="4" ry="4"></rect>
-                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                <polyline points="21 15 16 10 5 21"></polyline>
-              </svg>
-            </label>
-            <input type="file" id="productImageInput" accept="image/*" style="display: none;">
-
-            <button type="button" id="searchCouponBtn" class="btn btn-gold btn-hunt-coupons">
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#14100a" stroke-width="2" style="margin-right: 4px;"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="M16 16L21 21"></path></svg>
-              <span>Find Deals</span>
-            </button>
-          </div>
-        </div>
+      <div class="reward-logos" aria-hidden="true">
+        <div class="reward-logo rl-1"><img src="hd-logos/amazon.png" alt=""></div>
+        <div class="reward-logo rl-2"><img src="hd-logos/flipkart.png" alt=""></div>
+        <div class="reward-logo rl-3"><img src="hd-logos/myntra.png" alt=""></div>
+        <div class="reward-logo rl-4"><img src="hd-logos/nykaa.png" alt=""></div>
       </div>
-
     </div>
-  </section>
+  </div>
 
   <!-- TRUST POINTS -->
   <section class="trust-wrap" aria-label="Trust">
