@@ -342,7 +342,12 @@ a { color: inherit; text-decoration: none; }
   transition: background-color .2s ease, border-color .2s ease; 
   flex-shrink: 0;
 }
+.upload-img-label { position: relative; overflow: hidden; }
 .upload-img-label:hover { background: rgba(205, 161, 92, 0.15); border-color: var(--champagne); }
+.upload-img-label.has-image { border-color: var(--champagne); padding: 0; }
+.upload-thumb { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.upload-cut { position: absolute; inset: 0; display: none; place-items: center; background: rgba(9, 13, 20, 0.72); color: #fff; font-size: 26px; font-weight: 800; line-height: 1; }
+.upload-img-label.confirm-remove .upload-cut { display: grid; }
 .deal-card .btn-hunt-coupons { height: 48px; padding: 0 24px; font-size: 14px; font-weight: 800; border-radius: 100px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
 /* ===== Floating promo codes (same size + float animation as Festive Rewards icons) ===== */
