@@ -1235,20 +1235,6 @@ function dealsFromResponse(data) {
   });
 }
 
-async function sendCouponFeedback(brand, code, worked) {
-  try {
-    if (!currentUser) return false;
-    const idToken = await currentUser.getIdToken();
-    const r = await fetch(GOOGLE_SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain" },
-      body: JSON.stringify({ action: "couponFeedback", idToken: idToken, brand: brand, code: code, worked: worked })
-    });
-    const d = await r.json();
-    return !d.error;
-  } catch (e) { return false; }
-}
-
 function renderAICards(data) {
   const container = document.getElementById("couponCardsList");
   if (!container) return;
@@ -1267,19 +1253,6 @@ function renderAICards(data) {
   }
 
   const frag = document.createDocumentFragment();
-
-  // Kya pehchana gaya (photo ya text se) — user ka bharosa badhata hai
-  const det = data && data.detected;
-  if (det && (det.productBrand || det.product || det.category)) {
-    const bar = document.createElement("div");
-    bar.style.cssText = "font-size:12px; color:var(--muted); padding:4px 2px 10px;";
-    const parts = [];
-    if (det.productBrand) parts.push(det.productBrand);
-    if (det.product) parts.push(det.product);
-    if (det.category) parts.push("in " + det.category);
-    bar.textContent = "🔍 Detected: " + parts.join(" · ");
-    frag.appendChild(bar);
-  }
 
   const userQuery = (data && data.detectedQuery) || (aiSearchInput ? aiSearchInput.value.trim() : "");
 
@@ -1348,38 +1321,12 @@ function renderAICards(data) {
 
     info.append(tag, badgeWrap, descEl);
 
-    // Trust line: kitni sources / users ne confirm kiya
-    const bits = [];
-    if (!hasCode && deal.type === "bank") bits.push("🏦 Bank / card offer");
-    if (hasCode && deal.sources >= 2) bits.push("✔ Found on " + deal.sources + " sources");
-    else if (hasCode && deal.sources === 1) bits.push("Found on 1 source");
-    if (deal.userOk > 0) bits.push("👍 " + deal.userOk + " user" + (deal.userOk > 1 ? "s" : "") + " confirmed");
-    if (bits.length) {
+    // Sirf bina code wale bank offers par chhota label
+    if (!hasCode && deal.type === "bank") {
       const meta = document.createElement("p");
       meta.style.cssText = "margin:2px 0 0; font-size:11px; color:var(--muted);";
-      meta.textContent = bits.join(" · ");
+      meta.textContent = "🏦 Bank / card offer";
       info.appendChild(meta);
-    }
-
-    // Worked / Didn't work feedback
-    if (hasCode) {
-      const fb = document.createElement("div");
-      fb.style.cssText = "margin-top:6px; display:flex; gap:6px; align-items:center; font-size:11px; color:var(--muted);";
-      const label = document.createElement("span");
-      label.textContent = "Did it work?";
-      const mkBtn = (txt, worked) => {
-        const b = document.createElement("button");
-        b.type = "button";
-        b.textContent = txt;
-        b.style.cssText = "border:1px solid rgba(255,255,255,0.18); background:transparent; color:inherit; border-radius:999px; padding:2px 8px; font-size:11px; cursor:pointer;";
-        b.addEventListener("click", async () => {
-          fb.textContent = "Thanks for the feedback!";
-          sendCouponFeedback(brandName, code, worked);
-        });
-        return b;
-      };
-      fb.append(label, mkBtn("👍 Worked", true), mkBtn("👎 Not working", false));
-      info.appendChild(fb);
     }
 
     card.append(logoBox, info);
