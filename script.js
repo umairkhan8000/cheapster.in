@@ -1072,13 +1072,6 @@ const scrollRightBtn = document.getElementById('scrollRightBtn');
 if (promoCarousel) {
   const originalSlides = Array.from(promoCarousel.children);
   const count = originalSlides.length;
-  promoCarousel.querySelectorAll("img").forEach((im) => {
-    im.decoding = "async";
-    const done = () => im.classList.add("is-loaded");
-    if (im.complete) done(); // loaded ya pehle hi error ho chuka => dikha do
-    else { im.addEventListener("load", done, { once: true }); im.addEventListener("error", done, { once: true }); }
-  });
-
   const makeClone = (node) => {
     const c = node.cloneNode(true);
     c.setAttribute("aria-hidden", "true");
@@ -1090,6 +1083,16 @@ if (promoCarousel) {
     originalSlides.forEach((slide) => promoCarousel.appendChild(makeClone(slide)));
     originalSlides.slice().reverse().forEach((slide) => promoCarousel.insertBefore(makeClone(slide), promoCarousel.firstChild));
   }
+
+  // Saari banner images (clones bhi): eager load + load hote hi fade-in.
+  // Pehle sirf originals par is-loaded lagta tha, clones (jo left/right mein dikhte hain) opacity:0 par atke rehte the.
+  promoCarousel.querySelectorAll("img").forEach((im) => {
+    im.loading = "eager";
+    im.decoding = "async";
+    const done = () => im.classList.add("is-loaded");
+    if (im.complete) done();
+    else { im.addEventListener("load", done, { once: true }); im.addEventListener("error", done, { once: true }); }
+  });
 
   const slides = () => promoCarousel.children;
   const slideStep = () => slides()[1].offsetLeft - slides()[0].offsetLeft;
