@@ -751,3 +751,11 @@ html.carousel-ready .promo-carousel-wrapper { animation: enterCarousel .8s cubic
 /* Popups: smooth fade + halka rise */
 .modal-overlay:not([hidden]) { animation: overlayIn .2s ease-out; }
 .modal-overlay:not([hidden]) > .modal { animation: modalIn .28s cubic-bezier(.22, .8, .3, 1); }
+
+
+/* ===== Contact form: login gate ===== */
+.contact-auth { display: flex; flex-direction: column; gap: 10px; align-items: stretch; margin: 0 0 14px; padding: 12px 14px; border-radius: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line-gold); }
+.contact-auth-text { margin: 0; font-size: 13px; line-height: 1.5; color: var(--muted); overflow-wrap: anywhere; }
+.contact-auth-text strong { color: var(--champagne-bright); }
+.contact-auth.is-in .contact-login-btn { display: none; }
+.contact-login-btn { width: 100%; }
