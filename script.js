@@ -622,7 +622,7 @@ function syncMobileNav() {
   if (!nav) return;
   const isOpen = (id) => { const m = document.getElementById(id); return !!(m && !m.hidden); };
   const active = isOpen("allBrandsModal") ? "mnavDirectory"
-    : isOpen("formModal") ? "mnavReward"
+    : isOpen("contactModal") ? "mnavContact"
     : (isOpen("dealHunterModal") || isOpen("couponResultsModal")) ? "mnavDeals"
     : "mnavHome";
   nav.querySelectorAll(".mnav-item").forEach((b) => {
@@ -659,7 +659,7 @@ function restoreDealCard() {
 
   const homeBtn = document.getElementById("mnavHome");
   const dirBtn = document.getElementById("mnavDirectory");
-  const rewardBtn = document.getElementById("mnavReward");
+  const contactBtn = document.getElementById("mnavContact");
   const dealsBtn = document.getElementById("mnavDeals");
 
   if (homeBtn) homeBtn.addEventListener("click", () => {
@@ -670,7 +670,7 @@ function restoreDealCard() {
     buildAllBrandsList();
     openModal("allBrandsModal");
   });
-  if (rewardBtn) rewardBtn.addEventListener("click", () => openModal("formModal"));
+  if (contactBtn) contactBtn.addEventListener("click", () => openModal("contactModal"));
   if (dealsBtn) dealsBtn.addEventListener("click", openDealPopup);
 
   // Keyboard khulne par bar chhupa do
@@ -757,11 +757,14 @@ if (authBtn && window.auth) {
 
   window.auth.onAuthStateChanged((user) => {
       currentUser = user;
+      updateContactAuthUI();
       if (user) {
         authBtnText.textContent = user.displayName ? user.displayName.split(" ")[0] : "Account";
         authBtn.title = user.displayName || "Signed in";
         const nameField = document.getElementById("fullName");
         if (nameField && !nameField.value) nameField.value = user.displayName || "";
+        const contactNameField = document.getElementById("contactName");
+        if (contactNameField && !contactNameField.value) contactNameField.value = user.displayName || "";
         if (googleIcon) googleIcon.hidden = true;
         if (authAvatarImg && authAvatarFallback) {
           if (user.photoURL) {
@@ -847,18 +850,52 @@ if (rewardForm) {
 }
 
 // ---------- Contact Form (Web3Forms) ----------
+// Login mandatory: email Google login se aata hai (alag input nahi), taaki hum reply/resolution de sakein.
 const WEB3FORMS_ACCESS_KEY = "5f013235-2314-452d-8f2e-2064a1f2d2e0";
 const contactForm = document.getElementById("contactForm");
 
+function updateContactAuthUI() {
+  const box = document.getElementById("contactAuth");
+  const text = document.getElementById("contactAuthText");
+  const btn = document.getElementById("contactSubmitBtn");
+  if (!box || !text) return;
+  const loggedIn = !!(currentUser && currentUser.email);
+  box.classList.toggle("is-in", loggedIn);
+  if (loggedIn) {
+    text.textContent = "";
+    text.append("✉️ We'll reply to ");
+    const em = document.createElement("strong");
+    em.textContent = currentUser.email;   // textContent => safe
+    text.append(em);
+  } else {
+    text.textContent = "🔒 Please login with Google to send us a message. We'll reply on your Google email.";
+  }
+  if (btn && !btn.disabled) btn.textContent = loggedIn ? "Send Message" : "Login to Send Message";
+}
+
 if (contactForm) {
+  updateContactAuthUI();
+  const contactLoginBtn = document.getElementById("contactLoginBtn");
+  const triggerLogin = () => {
+    const headerLogin = document.getElementById("authBtn");
+    if (headerLogin) headerLogin.click();   // wahi Google login flow
+  };
+  if (contactLoginBtn) contactLoginBtn.addEventListener("click", triggerLogin);
+
   contactForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+
+      // 1) Login pehle (typed text safe rehta hai, login ke baad user wahi se send kar sakta hai)
+      if (!currentUser) { showToast("Please login with Google to send your message.", "🔒"); triggerLogin(); return; }
+      if (!currentUser.email) { showToast("Your Google account has no email. Please try another account.", "⚠️"); return; }
+
       if (!contactForm.checkValidity()) { contactForm.reportValidity(); return; }
 
-      const submitBtn = contactForm.querySelector('button[type="submit"]');
-      const name = document.getElementById("contactName").value;
+      const submitBtn = document.getElementById("contactSubmitBtn");
+      const name = document.getElementById("contactName").value.trim();
       const issue = document.getElementById("contactIssueText").value;
       const message = document.getElementById("contactMessage").value;
+      const email = currentUser.email;
 
       if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Sending..."; }
       haptic();
@@ -867,16 +904,20 @@ if (contactForm) {
         const res = await fetch("https://api.web3forms.com/submit", {
               method: "POST",
               headers: { "Content-Type": "application/json", Accept: "application/json" },
-              body: JSON.stringify({ access_key: WEB3FORMS_ACCESS_KEY, subject: `Cheapster Support: ${issue}`, from_name: "Cheapster.in Contact Form", name: name, issue: issue, message: message })
+              // `email` Web3Forms mein reply-to ban jata hai -> inbox se Reply dabate hi user ko jayega
+              body: JSON.stringify({ access_key: WEB3FORMS_ACCESS_KEY, subject: `Cheapster Support: ${issue}`, from_name: "Cheapster.in Contact Form", name: name, email: email, issue: issue, message: message })
         });
         const data = await res.json();
         if (data.success) {
-          showToast("Message sent! We'll get back to you soon.", "✅");
+          showToast("Message sent! We'll reply on " + email, "✅");
           contactForm.reset();
+          // reset ke baad naam wapas prefill (login same hai)
+          const cn = document.getElementById("contactName");
+          if (cn && currentUser) cn.value = currentUser.displayName || "";
           closeModal("contactModal");
         } else { showToast("Something went wrong. Please try again.", "❌"); }
       } catch (err) { showToast("Network error. Please try again.", "❌"); } 
-      finally { if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Send Message"; } }
+      finally { if (submitBtn) { submitBtn.disabled = false; } updateContactAuthUI(); }
   });
 }
 
