@@ -759,3 +759,6 @@ html.carousel-ready .promo-carousel-wrapper { animation: enterCarousel .8s cubic
 .contact-auth-text strong { color: var(--champagne-bright); }
 .contact-auth.is-in .contact-login-btn { display: none; }
 .contact-login-btn { width: 100%; }
+
+/* Logged-out: box ke bina sirf login button */
+.contact-auth:not(.is-in) { padding: 0; background: none; border: none; }
