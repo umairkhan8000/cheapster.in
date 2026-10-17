@@ -493,7 +493,7 @@
         <p><strong>Changes &amp; Governing Law:</strong> We may update these Terms and the Privacy section from time to time; the latest version on this page applies, and continuing to use Cheapster.in means you accept it. These Terms are governed by the laws of India.</p>
 
         <h3>Privacy Policy</h3>
-        <p><strong>Information we collect:</strong> When you sign in with Google, we receive your name, email address and a Google user ID (through Firebase Authentication). When you use Deal Hunter, we receive the text you search for and, only if you choose to upload one, a product photo. When you write to us through the Contact form, we receive your name, the issue you select and your message. Like most websites, we also collect basic usage and device information (such as pages viewed and browser type) through analytics.</p>
+        <p><strong>Information we collect:</strong> When you sign in with Google, we receive your name, email address and a Google user ID (through Firebase Authentication). When you use Deal Hunter, we receive the text you search for and, only if you choose to upload one, a product photo. When you write to us through the Contact form (which requires signing in with Google), we receive your name, the email address of your Google account, the issue you select and your message, so that we can reply to you. Like most websites, we also collect basic usage and device information (such as pages viewed and browser type) through analytics.</p>
         <p>Your name and number are collected securely and used solely for winner notification and verification. We strictly do not sell, rent, or share your personal data with third-party marketing agencies. If you sign in with Google, we use only your name and email to verify your entry and prevent duplicate submissions. The only public use of your data is announcing a winner's first name and reward amount on our official Instagram, as described in our Giveaway & Payout Policy — your phone number is never made public.</p>
         <p><strong>How Deal Hunter uses your data:</strong> Your search text, your optional photo and a secure sign-in token (which only confirms that you are logged in) are sent to our backend, which uses a Google AI model with web search to find promo codes for you. Uploaded photos are used only to process your search and are never published. Please upload product photos only — avoid images that show people, personal documents or any other sensitive information.</p>
         <p><strong>Third-party services:</strong> To run the site we use trusted third parties, each with its own privacy policy: Google (sign-in via Firebase Authentication, Analytics, Fonts, AI services, and Apps Script / Sheets for our backend), Cuelinks (affiliate link tracking, so that we can be credited when you shop through our links), and Web3Forms (to deliver Contact form messages to our support inbox). If you choose to open WhatsApp or Instagram from our site, those apps handle your information under their own terms.</p>
@@ -521,6 +521,10 @@
       <div class="divider-label"><span>SEND US A MESSAGE</span></div>
 
       <form id="contactForm" novalidate>
+        <div class="contact-auth" id="contactAuth">
+          <p class="contact-auth-text" id="contactAuthText">🔒 Please login with Google to send us a message. We'll reply on your Google email.</p>
+          <button class="btn btn-google contact-login-btn" type="button" id="contactLoginBtn">Login with Google</button>
+        </div>
         <div class="field">
           <label for="contactName">Name</label>
           <input id="contactName" type="text" maxlength="100" autocomplete="name" placeholder="Your name" required>
@@ -542,8 +546,8 @@
           <label for="contactMessage">Message</label>
           <textarea id="contactMessage" rows="3" maxlength="1200" placeholder="Tell us how we can help..." required></textarea>
         </div>
-        <button class="btn btn-gold btn-wide" type="submit">
-          Send Message
+        <button class="btn btn-gold btn-wide" type="submit" id="contactSubmitBtn">
+          Login to Send Message
         </button>
       </form>
     </div>
@@ -559,13 +563,13 @@
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg>
       <span class="mnav-label">Deals</span>
     </button>
-    <button type="button" class="mnav-item" id="mnavReward">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v8h14v-8"/><path d="M12 8v12"/><path d="M12 8c-1-3-4-4.5-5-3s1 3 5 3Z"/><path d="M12 8c1-3 4-4.5 5-3s-1 3-5 3Z"/></svg>
-      <span class="mnav-label">Rewards</span>
-    </button>
     <button type="button" class="mnav-item" id="mnavDirectory">
       <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>
       <span class="mnav-label">Directory</span>
+    </button>
+    <button type="button" class="mnav-item" id="mnavContact">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 7l8.5 6.5L20.5 7"/></svg>
+      <span class="mnav-label">Contact Us</span>
     </button>
   </nav>
 
