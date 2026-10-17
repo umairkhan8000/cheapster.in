@@ -821,3 +821,9 @@ html.js:not(.imgs-safe) .promo-carousel img:not(.is-loaded) { opacity: 0; }
 .store-logo.is-loaded, .promo-carousel img.is-loaded { animation: imgIn .4s ease backwards; }
 .store-logo-frame.is-loading { background: #e8ecf1; }
 html.js .promo-slide { background-color: #101c30; }
+
+
+/* Popup focus ring hatao: JS popup khulne par .modal par focus karta hai, browser uspar white outline dikha deta tha */
+.modal-overlay .modal,
+.modal-overlay .modal:focus,
+.modal-overlay .modal:focus-visible { outline: none; }
