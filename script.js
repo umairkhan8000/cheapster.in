@@ -238,9 +238,14 @@ function debounce(fn, delay = 160) {
   };
 }
 
+// WebP-first: pehle hd-logos/<naam>.webp try hota hai, na mile to original .png (existing onerror chain).
+// Sab .webp upload hone ke baad ye ~90% kam data lagata hai. Band karna ho to false kar do.
+const USE_WEBP_LOGOS = true;
+
 function buildLogoChain(store) {
   const chain = [];
   if (store.logo) {
+    if (USE_WEBP_LOGOS && /\.png$/i.test(store.logo)) chain.push(store.logo.replace(/\.png$/i, ".webp"));
     chain.push(store.logo);
   }
   return chain;
@@ -318,6 +323,10 @@ function buildCard(store, index) {
   img.loading = index < 12 ? "eager" : "lazy";
   img.decoding = "async";
 
+  // Placeholder (halka grey frame) -> image load hote hi smooth fade-in (pop-in nahi)
+  frame.classList.add("is-loading");
+  img.addEventListener("load", () => { img.classList.add("is-loaded"); frame.classList.remove("is-loading"); });
+
   const bgColors = ["#1c3f66", "#0d2138", "#142a44"];
   const bg = bgColors[index % bgColors.length];
 
@@ -368,27 +377,66 @@ function buildCard(store, index) {
   return card;
 }
 
-let storeAnchorsReady = false;
 let storeCardMap = new Map();
+let shownCards = [];
 
-function ensureStoreAnchors() {
-  if (storeAnchorsReady || !grid) return;
-
-  const fragment = document.createDocumentFragment();
-  stores.forEach((store, index) => {
-      const card = buildCard(store, index);
-      if (!card) return;
-      storeCardMap.set(store.name, card);
-      fragment.appendChild(card);
-  });
-
-  grid.appendChild(fragment);
-  storeAnchorsReady = true;
+function prefersReducedMotion() {
+  return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 }
 
-function renderUI() {
+// Card sirf zaroorat par banta hai (pehle load par saare 107 ek saath bante the = heavy task)
+function cardFor(store) {
+  let card = storeCardMap.get(store.name);
+  if (!card) {
+    card = buildCard(store, stores.indexOf(store));
+    if (!card) return null;
+    storeCardMap.set(store.name, card);
+  }
+  return card;
+}
+
+// Baaki cards idle time mein (chhote chunks) DOM mein add hote hain, hidden; DOM pehle jaisa hi rehta hai
+const runIdle = (cb) => ("requestIdleCallback" in window) ? requestIdleCallback(cb, { timeout: 1500 }) : setTimeout(cb, 120);
+function fillRemainingCards() {
   if (!grid) return;
-  ensureStoreAnchors();
+  const pending = stores.filter((st) => !storeCardMap.has(st.name));
+  let i = 0;
+  const step = () => {
+    const frag = document.createDocumentFragment();
+    const end = Math.min(i + 10, pending.length);
+    for (; i < end; i++) {
+      if (storeCardMap.has(pending[i].name)) continue;
+      const card = cardFor(pending[i]);
+      if (card) { card.hidden = true; frag.appendChild(card); }
+    }
+    grid.appendChild(frag);
+    if (i < pending.length) runIdle(step);
+  };
+  if (pending.length) runIdle(step);
+}
+window.addEventListener("load", () => setTimeout(fillRemainingCards, 400), { once: true });
+
+// Category / search badalne par cards halke stagger ke saath aate hain (sirf pehle 18, baaki off-screen)
+function playCardEnter(cards) {
+  if (prefersReducedMotion() || !grid) return;
+  const n = Math.min(cards.length, 18);
+  for (let i = 0; i < n; i++) cards[i].classList.remove("card-enter");
+  void grid.offsetWidth; // animation restart
+  for (let i = 0; i < n; i++) {
+    const c = cards[i];
+    c.style.setProperty("--i", i);
+    c.classList.add("card-enter");
+    c.addEventListener("animationend", function done(e) {
+      if (e.target !== c) return;
+      c.classList.remove("card-enter");
+      c.style.removeProperty("--i");
+      c.removeEventListener("animationend", done);
+    });
+  }
+}
+
+function renderUI(animate = false) {
+  if (!grid) return;
 
   let filtered = stores.filter((store) => {
         const matchesCat = searchQuery !== "" || inCategory(store, currentCategory);
@@ -402,12 +450,20 @@ function renderUI() {
     filtered.sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  storeCardMap.forEach((card) => { card.hidden = true; });
+  const wanted = [];
+  filtered.forEach((store) => { const card = cardFor(store); if (card) wanted.push(card); });
 
-  filtered.forEach((store) => {
-      const card = storeCardMap.get(store.name);
-      if (card) { card.hidden = false; grid.appendChild(card); }
-  });
+  // Same list + same order => DOM ko chhua hi nahi
+  const same = wanted.length === shownCards.length && wanted.every((c, i) => c === shownCards[i]);
+  if (!same) {
+    const keep = new Set(wanted);
+    shownCards.forEach((c) => { if (!keep.has(c)) c.hidden = true; });
+    const frag = document.createDocumentFragment();
+    wanted.forEach((c) => { c.hidden = false; frag.appendChild(c); });
+    grid.appendChild(frag); // ek hi batch => ek hi reflow
+    shownCards = wanted;
+    if (animate) playCardEnter(wanted);
+  }
 
   const heroStoreCount = document.getElementById("heroStoreCount");
   if (heroStoreCount) heroStoreCount.textContent = stores.length;
@@ -439,7 +495,7 @@ function renderCategoryNav() {
             left: navScroll.scrollLeft + (pr.left - nr.left) - (nr.width - pr.width) / 2,
             behavior: "smooth"
           });
-          renderUI();
+          renderUI(true);
       });
       navScroll.appendChild(pill);
   });
@@ -451,7 +507,7 @@ const brandSearchInput = document.getElementById("brandSearchInput");
 if (brandSearchInput) {
   brandSearchInput.addEventListener("input", debounce((e) => {
     searchQuery = e.target.value.toLowerCase().trim();
-    renderUI();
+    renderUI(true);
   }));
 }
 
@@ -502,11 +558,30 @@ if (document.getElementById("currentYear")) {
 
 // --- FIX 1: Welcome Modal Infinite Loop Logic ---
 let lastFocusedEl = null;
+const modalCloseTimers = new Map();
+const MODAL_CLOSE_MS = 200;
+
+function afterModalHidden(id) {
+  if (id === "dealHunterModal") restoreDealCard();
+  if (id === "formModal") {
+    const form = document.getElementById("rewardForm");
+    const success = document.getElementById("successView");
+    if (form && success) {
+      form.reset();
+      form.hidden = false;
+      success.hidden = true;
+    }
+  }
+}
+
 function openModal(id) {
   haptic();
   const modal = document.getElementById(id);
   if (modal) {
     lastFocusedEl = document.activeElement;
+    // agar abhi band hone ka animation chal raha ho to cancel karo
+    clearTimeout(modalCloseTimers.get(id)); modalCloseTimers.delete(id);
+    modal.classList.remove("is-closing");
     modal.hidden = false;
     document.body.classList.add("modal-open");
     const dlg = modal.querySelector(".modal");
@@ -519,26 +594,30 @@ function closeModal(id) {
   haptic();
   const modal = document.getElementById(id);
   if (modal) {
-    modal.hidden = true;
-    if (!document.querySelector(".modal-overlay:not([hidden])")) document.body.classList.remove("modal-open");
+    if (modal.hidden) {
+      afterModalHidden(id);
+    } else if (!modal.classList.contains("is-closing")) {
+      if (prefersReducedMotion()) {
+        modal.hidden = true;
+        afterModalHidden(id);
+      } else {
+        modal.classList.add("is-closing"); // fade-out; baad mein hide
+        modalCloseTimers.set(id, setTimeout(() => {
+          modal.hidden = true;
+          modal.classList.remove("is-closing");
+          modalCloseTimers.delete(id);
+          afterModalHidden(id);
+        }, MODAL_CLOSE_MS));
+      }
+    }
+    if (!document.querySelector(".modal-overlay:not([hidden]):not(.is-closing)")) document.body.classList.remove("modal-open");
     if (lastFocusedEl && document.contains(lastFocusedEl)) { try { lastFocusedEl.focus({ preventScroll: true }); } catch (e) {} }
   }
-  if (id === "dealHunterModal") restoreDealCard();
   syncMobileNav();
 
   // Ensure Welcome Modal logic works even on 'X' click
   if (id === "welcomeModal") {
     safeStore.set("cheapster_welcome_seen", "1");
-  }
-
-  if (id === "formModal") {
-    const form = document.getElementById("rewardForm");
-    const success = document.getElementById("successView");
-    if (form && success) {
-      form.reset();
-      form.hidden = false;
-      success.hidden = true;
-    }
   }
 }
 
@@ -559,7 +638,7 @@ document.querySelectorAll(".modal-overlay").forEach((overlay) => {
 // Close on Escape key for ALL modals
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
-    const openOverlays = document.querySelectorAll(".modal-overlay:not([hidden])");
+    const openOverlays = document.querySelectorAll(".modal-overlay:not([hidden]):not(.is-closing)");
     const topOverlay = openOverlays[openOverlays.length - 1];
     if (topOverlay) closeModal(topOverlay.id);
   }
@@ -620,7 +699,7 @@ document.querySelectorAll("[data-open-all-brands]").forEach((btn) => {
 function syncMobileNav() {
   const nav = document.getElementById("mobileNav");
   if (!nav) return;
-  const isOpen = (id) => { const m = document.getElementById(id); return !!(m && !m.hidden); };
+  const isOpen = (id) => { const m = document.getElementById(id); return !!(m && !m.hidden && !m.classList.contains("is-closing")); };
   const active = isOpen("allBrandsModal") ? "mnavDirectory"
     : isOpen("contactModal") ? "mnavContact"
     : (isOpen("dealHunterModal") || isOpen("couponResultsModal")) ? "mnavDeals"
@@ -698,17 +777,26 @@ const hamburgerBtn = document.getElementById("hamburgerBtn");
 const headerDropdown = document.getElementById("headerDropdown");
 
 if (hamburgerBtn && headerDropdown) {
+  let dropdownTimer = null;
   function closeHeaderDropdown() {
-    headerDropdown.hidden = true;
+    if (headerDropdown.hidden || headerDropdown.classList.contains("is-closing")) return;
     hamburgerBtn.setAttribute("aria-expanded", "false");
+    if (prefersReducedMotion()) { headerDropdown.hidden = true; return; }
+    headerDropdown.classList.add("is-closing");
+    dropdownTimer = setTimeout(() => { headerDropdown.hidden = true; headerDropdown.classList.remove("is-closing"); }, 160);
   }
 
   hamburgerBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       haptic();
-      const isOpen = !headerDropdown.hidden;
+      const isOpen = !headerDropdown.hidden && !headerDropdown.classList.contains("is-closing");
       if (isOpen) { closeHeaderDropdown(); } 
-      else { headerDropdown.hidden = false; hamburgerBtn.setAttribute("aria-expanded", "true"); }
+      else {
+        clearTimeout(dropdownTimer);
+        headerDropdown.classList.remove("is-closing");
+        headerDropdown.hidden = false;
+        hamburgerBtn.setAttribute("aria-expanded", "true");
+      }
   });
 
   headerDropdown.querySelectorAll("button").forEach((btn) => {
@@ -992,7 +1080,12 @@ const scrollRightBtn = document.getElementById('scrollRightBtn');
 if (promoCarousel) {
   const originalSlides = Array.from(promoCarousel.children);
   const count = originalSlides.length;
-  promoCarousel.querySelectorAll("img").forEach((im) => { im.decoding = "async"; });
+  promoCarousel.querySelectorAll("img").forEach((im) => {
+    im.decoding = "async";
+    const done = () => im.classList.add("is-loaded");
+    if (im.complete) done(); // loaded ya pehle hi error ho chuka => dikha do
+    else { im.addEventListener("load", done, { once: true }); im.addEventListener("error", done, { once: true }); }
+  });
 
   const makeClone = (node) => {
     const c = node.cloneNode(true);
@@ -1589,3 +1682,31 @@ function renderAICards(data) {
     }, { rootMargin: "100px" }).observe(wrap);
   });
 })();
+
+// ---------- Scroll reveal: neeche ke sections screen par aate hi smooth fade-up ----------
+(function scrollReveal() {
+  if (!("IntersectionObserver" in window)) return;
+  const targets = document.querySelectorAll(
+    ".directory-section .section-top, #storeGrid, .directory-section .see-all-row, .reward-banner-wrap, .trust-wrap, .site-footer"
+  );
+  const vh = window.innerHeight || 800;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      // jo screen ke upar nikal chuka ho (reload ke baad mid-page) use bina animation seedha dikhao
+      if (en.isIntersecting || en.boundingClientRect.top < 0) {
+        en.target.classList.add("in-view");
+        io.unobserve(en.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: "0px 0px -6% 0px" });
+  targets.forEach((el) => {
+    if (el.getBoundingClientRect().top < vh * 0.92) return; // pehle se dikh raha hai => hide/flash nahi
+    el.classList.add("reveal");
+    io.observe(el);
+  });
+})();
+
+// ---------- "See all shopping sites" popup pehle se idle time mein ready (tap par heavy build nahi) ----------
+window.addEventListener("load", () => {
+  setTimeout(() => runIdle(() => { try { buildAllBrandsList(); } catch (e) {} }), 1800);
+}, { once: true });
