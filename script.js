@@ -857,20 +857,17 @@ const contactForm = document.getElementById("contactForm");
 function updateContactAuthUI() {
   const box = document.getElementById("contactAuth");
   const text = document.getElementById("contactAuthText");
-  const btn = document.getElementById("contactSubmitBtn");
   if (!box || !text) return;
   const loggedIn = !!(currentUser && currentUser.email);
   box.classList.toggle("is-in", loggedIn);
+  text.textContent = "";
   if (loggedIn) {
-    text.textContent = "";
     text.append("✉️ We'll reply to ");
     const em = document.createElement("strong");
     em.textContent = currentUser.email;   // textContent => safe
     text.append(em);
-  } else {
-    text.textContent = "🔒 Please login with Google to send us a message. We'll reply on your Google email.";
   }
-  if (btn && !btn.disabled) btn.textContent = loggedIn ? "Send Message" : "Login to Send Message";
+  text.hidden = !loggedIn;   // logged-out: sirf "Login with Google" button dikhe
 }
 
 if (contactForm) {
@@ -885,8 +882,8 @@ if (contactForm) {
   contactForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      // 1) Login pehle (typed text safe rehta hai, login ke baad user wahi se send kar sakta hai)
-      if (!currentUser) { showToast("Please login with Google to send your message.", "🔒"); triggerLogin(); return; }
+      // 1) Login pehle: baaki features (reward form) jaisa hi toast; typed text safe rehta hai
+      if (!currentUser) { showToast("Please login with Google first.", "🔒"); return; }
       if (!currentUser.email) { showToast("Your Google account has no email. Please try another account.", "⚠️"); return; }
 
       if (!contactForm.checkValidity()) { contactForm.reportValidity(); return; }
@@ -917,7 +914,7 @@ if (contactForm) {
           closeModal("contactModal");
         } else { showToast("Something went wrong. Please try again.", "❌"); }
       } catch (err) { showToast("Network error. Please try again.", "❌"); } 
-      finally { if (submitBtn) { submitBtn.disabled = false; } updateContactAuthUI(); }
+      finally { if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Send Message"; } updateContactAuthUI(); }
   });
 }
 
