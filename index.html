@@ -10,6 +10,7 @@
   <script>
     document.documentElement.classList.add('js');
     setTimeout(function () { document.documentElement.classList.add('carousel-ready'); }, 2500);
+    setTimeout(function () { document.documentElement.classList.add('imgs-safe'); }, 3500); // JS fail ho to banners hamesha dikhein
   </script>
   <title>Cheapster.in — Shop Smart. Discover More.</title>
 
@@ -409,6 +410,7 @@
       <div id="couponLoader" class="coupon-loader-box" hidden>
         <div class="loader-spinner"></div>
         <p id="loadingTextAnim" style="font-weight: 600; color: var(--champagne-bright); margin-top: 15px;">Fetching offers for you… this might take a minute.</p>
+        <div class="coupon-skeleton" aria-hidden="true"><span></span><span></span><span></span></div>
       </div>
 
       <div id="couponCardsList" class="coupon-cards-container"></div>
