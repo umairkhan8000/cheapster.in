@@ -706,7 +706,6 @@ hr { border-color: var(--line-gold) !important; }
     background: rgba(9, 13, 20, 0.97);
     border-top: 1px solid var(--line-gold);
     box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.45);
-    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
   }
   .mobile-nav::before { content: ""; position: absolute; top: -1px; left: 14%; right: 14%; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne-bright), transparent); opacity: 0.8; pointer-events: none; }
 
@@ -762,3 +761,63 @@ html.carousel-ready .promo-carousel-wrapper { animation: enterCarousel .8s cubic
 
 /* Logged-out: box ke bina sirf login button */
 .contact-auth:not(.is-in) { padding: 0; background: none; border: none; }
+
+
+/* =========================================================
+   SMOOTHNESS PACK 2
+   (close animations, filter transition, scroll reveal,
+    results stagger + skeleton, tap feedback)
+   ========================================================= */
+
+/* 1) Popup / dropdown: band hone par bhi animation */
+@keyframes overlayOut { to { opacity: 0; } }
+@keyframes modalOut { to { opacity: 0; transform: translateY(10px) scale(0.985); } }
+@keyframes dropIn { from { opacity: 0; transform: translateY(-6px) scale(0.97); } }
+@keyframes dropOut { to { opacity: 0; transform: translateY(-6px) scale(0.97); } }
+.modal-overlay.is-closing { animation: overlayOut .2s ease-in forwards; pointer-events: none; }
+.modal-overlay.is-closing > .modal { animation: modalOut .2s ease-in forwards; }
+.header-dropdown:not([hidden]) { animation: dropIn .18s cubic-bezier(.22, .8, .3, 1); transform-origin: top right; }
+.header-dropdown.is-closing { animation: dropOut .16s ease-in forwards; pointer-events: none; }
+
+/* 2) Category / search filter: cards halke stagger ke saath */
+@keyframes cardIn { from { opacity: 0; transform: translateY(14px) scale(0.98); } }
+.store-card.card-enter { animation: cardIn .4s cubic-bezier(.22, .8, .3, 1) backwards; animation-delay: calc(var(--i, 0) * 28ms); }
+
+/* 3) Scroll reveal (JS sirf neeche wale sections par .reveal lagata hai) */
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.22, .8, .3, 1), transform .7s cubic-bezier(.22, .8, .3, 1); }
+.reveal.in-view { opacity: 1; transform: none; }
+
+/* 4) Deal Hunter: loading skeleton + results stagger */
+@keyframes shimmer { from { background-position: 120% 0; } to { background-position: -120% 0; } }
+.coupon-skeleton { display: grid; gap: 10px; margin-top: 18px; }
+.coupon-skeleton span { display: block; height: 74px; border-radius: 14px; background: linear-gradient(100deg, rgba(255,255,255,0.04) 30%, rgba(255,255,255,0.10) 50%, rgba(255,255,255,0.04) 70%); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; }
+.coupon-skeleton span:nth-child(2) { opacity: .75; }
+.coupon-skeleton span:nth-child(3) { opacity: .5; }
+.coupon-cards-container > * { animation: enterUp .45s cubic-bezier(.22, .8, .3, 1) backwards; }
+.coupon-cards-container > *:nth-child(2) { animation-delay: .06s; }
+.coupon-cards-container > *:nth-child(3) { animation-delay: .12s; }
+.coupon-cards-container > *:nth-child(4) { animation-delay: .18s; }
+.coupon-cards-container > *:nth-child(5) { animation-delay: .24s; }
+.coupon-cards-container > *:nth-child(6) { animation-delay: .30s; }
+.coupon-cards-container > *:nth-child(7) { animation-delay: .36s; }
+.coupon-cards-container > *:nth-child(8) { animation-delay: .42s; }
+.coupon-cards-container > *:nth-child(n+9) { animation-delay: .48s; }
+
+/* 5) Touch par press feedback + 300ms tap delay hatao */
+button, a, input, select, textarea, label, summary, [role="button"] { touch-action: manipulation; }
+.btn:active, .cat-pill:active, .see-all-btn:active, .coupon-action-btn:active, .hamburger-btn:active,
+.header-dropdown button:active, .coupon-code-badge[role="button"]:active, #authBtn:active, #headerOfferBtn:active { transform: scale(0.96); }
+.store-card:active { transform: scale(0.975); }
+.cat-pill, .see-all-btn, .coupon-action-btn, .hamburger-btn, .header-dropdown button, .coupon-code-badge, #authBtn, #headerOfferBtn { transition-property: transform, background-color, border-color, color, box-shadow, opacity; transition-duration: .15s; transition-timing-function: ease; }
+
+/* 6) Render-skip: screen ke bahar ke cards ka layout/paint browser skip karta hai (height 'auto' yaad rakhta hai => no jump) */
+.store-card { content-visibility: auto; contain-intrinsic-size: auto 225px; }
+
+
+/* ===== Image loading: placeholder + smooth fade-in (logos & banners) ===== */
+@keyframes imgIn { from { opacity: 0; } }
+html.js .store-logo:not(.is-loaded) { opacity: 0; }
+html.js:not(.imgs-safe) .promo-carousel img:not(.is-loaded) { opacity: 0; }
+.store-logo.is-loaded, .promo-carousel img.is-loaded { animation: imgIn .4s ease backwards; }
+.store-logo-frame.is-loading { background: #e8ecf1; }
+html.js .promo-slide { background-color: #101c30; }
