@@ -286,6 +286,26 @@ const grid = document.getElementById("storeGrid");
   }, { passive: true });
 })();
 
+// Slow / kharab network: logo fail ho to khud 3 baar dobara try (1.2s, 2.4s, 3.6s baad).
+// Phir bhi na aaye to initials dikhte hain, aur net wapas aate hi ("online") dobara apne aap try hota hai.
+const LOGO_MAX_RETRY = 3;
+const failedLogos = new Set();
+function loadWithRetry(img, url, onFail) {
+  let tries = 0;
+  const attempt = () => { img.src = tries ? url + (url.indexOf("?") > -1 ? "&" : "?") + "r=" + tries : url; };
+  const fail = () => {
+    tries++;
+    if (tries <= LOGO_MAX_RETRY) { setTimeout(attempt, 1200 * tries); return; }
+    img.onerror = null;
+    failedLogos.add(restart);
+    onFail();
+  };
+  const restart = () => { failedLogos.delete(restart); tries = 0; img.onerror = fail; attempt(); };
+  img.onerror = fail;
+  attempt();
+}
+window.addEventListener("online", () => { Array.from(failedLogos).forEach((fn) => fn()); });
+
 function buildCard(store, index) {
   const url = store.link || (store.domain ? `https://www.${store.domain}` : null);
   if (!url) return null;
@@ -312,7 +332,8 @@ function buildCard(store, index) {
   const img = document.createElement("img");
   img.className = "store-logo";
   img.alt = store.name;
-  img.loading = index < 12 ? "eager" : "lazy";
+  img.loading = "eager"; // lazy nahi: slow net par logo late/gayab na ho; hidden cards ke logo bhi background mein pehle se aa jaate hain
+  if (index >= 12) img.fetchPriority = "low"; // pehli screen ke logos/banners ko priority
   img.decoding = "async";
 
   // Placeholder (halka grey frame) -> image load hote hi smooth fade-in (pop-in nahi)
@@ -331,17 +352,7 @@ function buildCard(store, index) {
     `%3C/text%3E%3C/svg%3E`;
 
   if (chain.length > 0) {
-    let currentStep = 0;
-    img.onerror = () => {
-      currentStep++;
-      if (currentStep < chain.length) {
-        img.src = chain[currentStep];
-      } else {
-        img.onerror = null;
-        img.src = svgFallback;
-      }
-    };
-    img.src = chain[0];
+    loadWithRetry(img, chain[0], () => { img.src = svgFallback; });
   } else {
     img.src = svgFallback;
   }
@@ -1579,8 +1590,9 @@ function renderAICards(data) {
     logoBox.className = "coupon-logo-box";
     if (logoSrc) {
       const im = document.createElement("img");
-      im.src = logoSrc; im.alt = brandName; im.loading = "lazy"; im.decoding = "async";
-      im.onerror = () => { im.style.display = "none"; };
+      im.alt = brandName; im.loading = "eager"; im.decoding = "async";
+      im.addEventListener("load", () => { im.style.display = ""; });
+      loadWithRetry(im, logoSrc, () => { im.style.display = "none"; });
       logoBox.appendChild(im);
     } else {
       logoBox.style.cssText = "background:var(--sapphire); color:var(--champagne-bright); font-size:16px; font-weight:800;";
